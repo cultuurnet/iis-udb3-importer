@@ -9,8 +9,10 @@
         "deralex/yaml-config-service-provider": "~1.0",
         "knplabs/console-service-provider": "~1.0",
         "monolog/monolog": "~1.11",
-        "nicolopignatelli/valueobjects": "^4.1",
+        "nicolopignatelli/valueobjects": "~2.0",
         "cultuurnet/iis-udb3-store": "0.x-dev",
+        "cultuurnet/cdb": "~2.2.0",
+        "cultuurnet/udb3": "~0.1",
         "sabre/xml": "^1.4.2"
     },
     "require-dev": {
