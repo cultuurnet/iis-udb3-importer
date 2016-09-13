@@ -13,7 +13,7 @@ $app->register(
     new ConsoleServiceProvider(),
     [
         'console.name'              => 'Importer',
-        'console.version'           => '1.0.0',
+        'console.version'           => '0.0.1',
         'console.project_directory' => __DIR__.'/..'
     ]
 );

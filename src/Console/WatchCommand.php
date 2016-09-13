@@ -11,6 +11,12 @@ use Knp\Command\Command;
 
 class WatchCommand extends Command
 {
+    protected function configure()
+    {
+        $this
+            ->setName('importer')
+            ->setDescription('Start the importer by watching the folder.');
+    }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {

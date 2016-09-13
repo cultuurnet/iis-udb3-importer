@@ -25,12 +25,12 @@
     },
     "autoload": {
         "psr-4": {
-            "CultuurNet\\UDB3\\IIS\\Importer\\": "src/"
+            "CultuurNet\\UDB3\\IISImporter\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "CultuurNet\\UDB3\\IIS\\Importer\\": "tests/"
+            "CultuurNet\\UDB3\\IISImporter\\": "tests/"
         }
     },
     "minimum-stability": "dev",
