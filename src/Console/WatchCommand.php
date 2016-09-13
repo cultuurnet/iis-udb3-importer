@@ -45,7 +45,8 @@ class WatchCommand extends Command
             'import_files',
             function (FilesystemEvent $filesystemEvent) {
                 if ($filesystemEvent->getTypeString() == 'create'||$filesystemEvent->getTypeString() == 'modify') {
-                    // file gets created/updated
+                    $xmlString = file_get_contents($filesystemEvent->getResource());
+                    echo $xmlString;
                 }
             }
         );
