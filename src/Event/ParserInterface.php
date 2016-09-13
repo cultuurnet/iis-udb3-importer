@@ -6,7 +6,7 @@
  * Time: 14:20
  */
 
-namespace CultuurNet\UDB3\IISImporter;
+namespace CultuurNet\UDB3\IISImporter\Event;
 
 interface ParserInterface
 {

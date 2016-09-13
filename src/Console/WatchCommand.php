@@ -8,9 +8,25 @@ namespace CultuurNet\UDB3\IISImporter\Console;
 use Lurker\Event\FilesystemEvent;
 use Lurker\ResourceWatcher;
 use Knp\Command\Command;
+use CultuurNet\UDB3\IISImporter\Event;
 
 class WatchCommand extends Command
 {
+    /**
+     * @var $ParserRepository
+     */
+    protected $parser;
+
+    /**
+     * WatchCommand constructor.
+     * @param Event\ParserInterface $parserRepository
+     */
+    public function __construct(Event\ParserInterface $parserRepository)
+    {
+        $this->parser = $parserRepository;
+        parent::__construct();
+    }
+
     protected function configure()
     {
         $this
