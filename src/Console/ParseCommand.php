@@ -10,14 +10,15 @@ use ValueObjects\String\String;
 
 class ParseCommand extends Command
 {
-    protected  function configure()
+    protected function configure()
     {
         $this->validNamespaces = [
             'http://www.cultuurdatabank.com/XMLSchema/CdbXSD/3.3/FINAL' => __DIR__ . '/../CdbXmlSchemes/CdbXSD3.3.xsd',
         ];
     }
 
-    private function getValidNameSpaces(){
+    private function getValidNameSpaces()
+    {
         return [
             'http://www.cultuurdatabank.com/XMLSchema/CdbXSD/3.3/FINAL' => __DIR__ . '/../CdbXmlSchemes/CdbXSD3.3.xsd',
         ];
@@ -57,7 +58,7 @@ class ParseCommand extends Command
         return $dom;
     }
 
-    protected  function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $xml = $input; //To check
         $this->loadDOM($xml);
