@@ -8,15 +8,14 @@
 
 namespace CultuurNet\UDB3\IISImporter\Event;
 
-
-class Parser implements  ParserInterface
+class Parser implements ParserInterface
 {
     /**
      * @param string $xml_string
      * @return boolean
      */
-    public function validate($xml_string){
+    public function validate($xmlString)
+    {
         return true;
     }
-
 }
