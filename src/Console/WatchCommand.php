@@ -44,9 +44,12 @@ class WatchCommand extends Command
         $watcher->addListener(
             'import_files',
             function (FilesystemEvent $filesystemEvent) {
-                if ($filesystemEvent->getTypeString() == 'create'||$filesystemEvent->getTypeString() == 'modify') {
+                if ($filesystemEvent->getTypeString() == 'create' ||
+                    $filesystemEvent->getTypeString() == 'modify') {
                     $xmlString = file_get_contents($filesystemEvent->getResource());
                     echo $xmlString;
+                    $parser =$this->parser;
+                    $parser->validate($xmlString);
                 }
             }
         );

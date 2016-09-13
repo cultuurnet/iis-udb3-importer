@@ -16,6 +16,7 @@ class Parser implements ParserInterface
      */
     public function validate($xmlString)
     {
+        $this->loadDOM($xmlString);
         return true;
     }
 
