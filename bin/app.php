@@ -21,7 +21,6 @@ $app->register(
 /** @var \Knp\Console\Application $consoleApp */
 $consoleApp = $app['console'];
 
-$consoleApp->add(new \CultuurNet\UDB3\IISImporter\Console\WatchCommand());
-
+$consoleApp->add(new WatchCommand());
 
 $consoleApp->run();
