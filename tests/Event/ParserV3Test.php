@@ -9,8 +9,6 @@
 
 namespace CultuurNet\UDB3\IISImporter\Event;
 
-use phpDocumentor\Reflection\Types\This;
-
 class ParserV3Test extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -25,24 +23,25 @@ class ParserV3Test extends \PHPUnit_Framework_TestCase
 
     public function testInvalidXml()
     {
-        $invalidXmlString = 'Bla';
+        $invalidXmlString = file_get_contents(__DIR__ . '/../NotReallyXml.xml');
         $this->assertFalse($this->parser->validate($invalidXmlString));
     }
 
     public function testNotCdbxml()
     {
-
+        $genericXml = file_get_contents(__DIR__ . '/../NotACdbxml.xml');
+        $this->assertFalse($this->parser->validate($genericXml));
     }
 
     public function testDeprecatedCdbxml()
     {
         $deprecated = file_get_contents(__DIR__ . '/../deprecated.xml');
         $this->assertFalse($this->parser->validate($deprecated));
-
     }
 
     public function testCorrectCdbxml()
     {
-
+        $valid = file_get_contents(__DIR__ . '/../CorrectVersion3.xml');
+        $this->assertTrue($this->parser->validate($valid));
     }
 }
