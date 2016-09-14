@@ -47,8 +47,7 @@ class WatchCommand extends Command
                 if ($filesystemEvent->getTypeString() == 'create' ||
                     $filesystemEvent->getTypeString() == 'modify') {
                     $xmlString = file_get_contents($filesystemEvent->getResource());
-                    echo $xmlString;
-                    $parser =$this->parser;
+                    $parser = $this->parser;
                     $parser->validate($xmlString);
                 }
             }
