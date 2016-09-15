@@ -20,7 +20,10 @@ $app->register(
 
 /** @var \Knp\Console\Application $consoleApp */
 $consoleApp = $app['console'];
+
 $parser = new \CultuurNet\UDB3\IISImporter\Event\ParserV3();
-$consoleApp->add(new WatchCommand($parser));
+$storeRepository = new \CultuurNet\UDB3\IISImporter\Event\StoreRepository();
+
+$consoleApp->add(new WatchCommand($parser, $storeRepository));
 
 $consoleApp->run();
