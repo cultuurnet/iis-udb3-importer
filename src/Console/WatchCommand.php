@@ -13,17 +13,24 @@ use CultuurNet\UDB3\IISImporter\Event;
 class WatchCommand extends Command
 {
     /**
-     * @var $ParserRepository
+     * @var Event\ParserInterface
      */
     protected $parser;
 
     /**
-     * WatchCommand constructor.
-     * @param Event\ParserInterface $parserRepository
+     * @var Event\StoreInterface
      */
-    public function __construct(Event\ParserInterface $parserRepository)
+    protected $store;
+
+    /**
+     * WatchCommand constructor.
+     * @param Event\ParserInterface $parser
+     * @param Event\StoreInterface $store
+     */
+    public function __construct(Event\ParserInterface $parser, Event\StoreInterface $store)
     {
-        $this->parser = $parserRepository;
+        $this->parser = $parser;
+        $this->store = $store;
         parent::__construct();
     }
 

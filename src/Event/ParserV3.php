@@ -26,6 +26,11 @@ class ParserV3 implements ParserInterface
         }
     }
 
+    public function split($xmlString)
+    {
+        // TODO: Implement split() method.
+    }
+
     private function getValidNameSpaces()
     {
         return [

@@ -18,4 +18,6 @@ interface ParserInterface
      * @return boolean
      **/
     public function validate($xmlString);
+
+    public function split($xmlString);
 }
