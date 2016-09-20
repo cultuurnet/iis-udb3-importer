@@ -35,12 +35,12 @@ class ParserV3 implements ParserInterface
         $arrXml = array();
         $reader = new \XMLReader();
         $reader->xml($xmlString);
-        while( $reader->read() ) {
-            if( $reader->localName === 'event' && $reader->nodeType === 1 ) {
+        while ($reader->read()) {
+            if ($reader->localName === 'event' && $reader->nodeType === 1) {
                 $arrXml[] = $reader->readOuterXml();
             }
         }
-        print_r( $arrXml );
+        print_r($arrXml);
 
         return $arrXml;
 
