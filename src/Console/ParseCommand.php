@@ -10,6 +10,9 @@ use ValueObjects\String\String;
 
 class ParseCommand extends Command
 {
+    /**
+     *
+     */
     protected function configure()
     {
         $this->validNamespaces = [

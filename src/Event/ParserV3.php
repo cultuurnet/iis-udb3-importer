@@ -26,8 +26,14 @@ class ParserV3 implements ParserInterface
         }
     }
 
+    /**
+     * @param string $xmlString
+     * @return \ValueObjects\String\
+     */
     public function split($xmlString)
     {
+        $r = new \XMLReader();
+
         // TODO: Implement split() method.
     }
 
