@@ -32,7 +32,17 @@ class ParserV3 implements ParserInterface
      */
     public function split($xmlString)
     {
-        $r = new \XMLReader();
+        $arrXml = array();
+        $reader = new \XMLReader();
+        $reader->xml($xmlString);
+        while( $reader->read() ) {
+            if( $reader->localName === 'event' && $reader->nodeType === 1 ) {
+                $arrXml[] = $reader->readOuterXml();
+            }
+        }
+        print_r( $arrXml );
+
+        return $arrXml;
 
         // TODO: Implement split() method.
     }
