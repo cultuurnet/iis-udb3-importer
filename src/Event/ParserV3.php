@@ -12,6 +12,21 @@ use \CultuurNet\UDB3\IISImporter\Exceptions;
 
 class ParserV3 implements ParserInterface
 {
+    private function getXmlDeclaration()
+    {
+        return '<?xml version="1.0" encoding="utf-8"?>';
+    }
+
+    private function getCdbxmlStartTag()
+    {
+        return '<cdbxml xsi:schemaLocation="http://www.cultuurdatabank.com/XMLSchema/CdbXSD/3.3/FINAL http://www.cultuurdatabank.com/XMLSchema/CdbXSD/3.3/FINAL/CdbXSD.xsd" xmlns="http://www.cultuurdatabank.com/XMLSchema/CdbXSD/3.3/FINAL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
+    }
+
+    private function getCdbxmlEndTag()
+    {
+        return  '</cdbxml>';
+    }
+
     /**
      * @param string $xmlString
      * @return boolean
@@ -32,19 +47,19 @@ class ParserV3 implements ParserInterface
      */
     public function split($xmlString)
     {
-        $arrXml = array();
+        $eventList = array();
         $reader = new \XMLReader();
         $reader->xml($xmlString);
         while ($reader->read()) {
             if ($reader->localName === 'event' && $reader->nodeType === 1) {
-                $arrXml[] = $reader->readOuterXml();
+                $eventList[] = $this->getXmlDeclaration() .
+                    $this->getCdbxmlStartTag() .
+                    $reader->readOuterXml() .
+                    $this->getCdbxmlEndTag();
             }
         }
-        print_r($arrXml);
 
-        return $arrXml;
-
-        // TODO: Implement split() method.
+        return $eventList;
     }
 
     private function getValidNameSpaces()
