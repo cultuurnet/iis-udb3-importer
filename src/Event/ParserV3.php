@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jonas
- * Date: 13.09.16
- * Time: 15:48
- */
 
 namespace CultuurNet\UDB3\IISImporter\Event;
 
@@ -12,24 +6,8 @@ use \CultuurNet\UDB3\IISImporter\Exceptions;
 
 class ParserV3 implements ParserInterface
 {
-    private function getXmlDeclaration()
-    {
-        return '<?xml version="1.0" encoding="utf-8"?>';
-    }
-
-    private function getCdbxmlStartTag()
-    {
-        return '<cdbxml xsi:schemaLocation="http://www.cultuurdatabank.com/XMLSchema/CdbXSD/3.3/FINAL http://www.cultuurdatabank.com/XMLSchema/CdbXSD/3.3/FINAL/CdbXSD.xsd" xmlns="http://www.cultuurdatabank.com/XMLSchema/CdbXSD/3.3/FINAL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
-    }
-
-    private function getCdbxmlEndTag()
-    {
-        return  '</cdbxml>';
-    }
-
     /**
-     * @param string $xmlString
-     * @return boolean
+     * @inheritdoc
      */
     public function validate($xmlString)
     {
@@ -42,14 +20,13 @@ class ParserV3 implements ParserInterface
     }
 
     /**
-     * @param string $xmlString
-     * @return string[]
+     * @inheritdoc
      */
     public function split($xmlString)
     {
         $eventList = array();
         $reader = new \XMLReader();
-        $reader->xml($xmlString);
+        $reader->XML($xmlString);
         while ($reader->read()) {
             if ($reader->localName === 'event' && $reader->nodeType === 1) {
                 $singleEvent = $this->getXmlDeclaration() .
@@ -67,6 +44,9 @@ class ParserV3 implements ParserInterface
         return $eventList;
     }
 
+    /**
+     * @return array
+     */
     private function getValidNameSpaces()
     {
         return [
@@ -74,6 +54,34 @@ class ParserV3 implements ParserInterface
         ];
     }
 
+    /**
+     * @return string
+     */
+    private function getXmlDeclaration()
+    {
+        return '<?xml version="1.0" encoding="utf-8"?>';
+    }
+
+    /**
+     * @return string
+     */
+    private function getCdbxmlStartTag()
+    {
+        return '<cdbxml xsi:schemaLocation="http://www.cultuurdatabank.com/XMLSchema/CdbXSD/3.3/FINAL http://www.cultuurdatabank.com/XMLSchema/CdbXSD/3.3/FINAL/CdbXSD.xsd" xmlns="http://www.cultuurdatabank.com/XMLSchema/CdbXSD/3.3/FINAL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
+    }
+
+    /**
+     * @return string
+     */
+    private function getCdbxmlEndTag()
+    {
+        return  '</cdbxml>';
+    }
+
+    /**
+     * @param $xml
+     * @return \DOMDocument
+     */
     private function loadDOM($xml)
     {
         $dom = new \DOMDocument();
