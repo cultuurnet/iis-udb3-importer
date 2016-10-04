@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 
+use CultuurNet\UDB3\IISImporter\Event\ParserV3;
+use CultuurNet\UDB3\IISStore\ReadModel\Index\StoreRepository;
 use Knp\Provider\ConsoleServiceProvider;
 use CultuurNet\UDB3\IISImporter\Console\WatchCommand;
 
@@ -21,8 +23,8 @@ $app->register(
 /** @var \Knp\Console\Application $consoleApp */
 $consoleApp = $app['console'];
 
-$parser = new \CultuurNet\UDB3\IISImporter\Event\ParserV3();
-$store = new \CultuurNet\UDB3\IISStore\ReadModel\Index\StoreRepository();
+$parser = new ParserV3();
+$store = new StoreRepository();
 $consoleApp->add(new WatchCommand($parser, $store));
 
 $consoleApp->run();
