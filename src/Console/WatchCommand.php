@@ -74,7 +74,10 @@ class WatchCommand extends Command
                             $singleEvent = $singleXml->asXML();
                         }
 
+                        $storeRepository->storeRelations($cdbid, $externalId);
                         $storeRepository->storeEventXml($cdbid, $singleEvent);
+                        $storeRepository->storeStatus($cdbid, null, null, null);
+
                     }
                 }
             }
