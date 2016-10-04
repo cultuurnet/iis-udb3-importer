@@ -9,6 +9,10 @@ use Lurker\Event\FilesystemEvent;
 use Lurker\ResourceWatcher;
 use Knp\Command\Command;
 use CultuurNet\UDB3\IISImporter\Event;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use CultuurNet\UDB3\IISStore\ReadModel\Index\RepositoryInterface;
+use ValueObjects\Identity;
 
 class WatchCommand extends Command
 {
@@ -18,16 +22,16 @@ class WatchCommand extends Command
     protected $parser;
 
     /**
-     * @var Event\StoreInterface
+     * @var RepositoryInterface
      */
     protected $store;
 
     /**
      * WatchCommand constructor.
      * @param Event\ParserInterface $parser
-     * @param Event\StoreInterface $store
+     * @param RepositoryInterface $store
      */
-    public function __construct(Event\ParserInterface $parser, Event\StoreInterface $store)
+    public function __construct(Event\ParserInterface $parser, RepositoryInterface $store)
     {
         $this->parser = $parser;
         $this->store = $store;
@@ -41,7 +45,7 @@ class WatchCommand extends Command
             ->setDescription('Start the importer by watching the folder.');
     }
 
-    protected function execute() //(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $app = $this->getSilexApplication();
 
@@ -61,8 +65,16 @@ class WatchCommand extends Command
 
                     $storeRepository = $this->store;
 
-                    foreach ($eventList as $singleEvent) {
-                        $storeRepository->save($singleEvent);
+                    foreach ($eventList as $externalId => $singleEvent) {
+                        $cdbid = $storeRepository->getEventCdbid($externalId);
+                        if (!$cdbid) {
+                            $cdbid = Identity\UUID::generateAsString();
+                            $singleXml = simplexml_load_string($singleEvent);
+                            $singleXml->event[0]['cdbid'] =$cdbid;
+                            $singleEvent = $singleXml->asXML();
+                        }
+
+                        $storeRepository->storeEventXml($cdbid, $singleEvent);
                     }
                 }
             }

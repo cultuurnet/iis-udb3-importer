@@ -43,7 +43,7 @@ class ParserV3 implements ParserInterface
 
     /**
      * @param string $xmlString
-     * @return \ValueObjects\String\
+     * @return string[]
      */
     public function split($xmlString)
     {
@@ -52,10 +52,15 @@ class ParserV3 implements ParserInterface
         $reader->xml($xmlString);
         while ($reader->read()) {
             if ($reader->localName === 'event' && $reader->nodeType === 1) {
-                $eventList[] = $this->getXmlDeclaration() .
+                $singleEvent = $this->getXmlDeclaration() .
                     $this->getCdbxmlStartTag() .
                     $reader->readOuterXml() .
                     $this->getCdbxmlEndTag();
+
+                $singleXml = simplexml_load_string($singleEvent);
+                $externalId = $singleXml->event[0]['externalid'];
+
+                $eventList[$externalId] = $singleEvent;
             }
         }
 
