@@ -60,24 +60,27 @@ class WatchCommand extends Command
                     $xmlString = file_get_contents($filesystemEvent->getResource());
 
                     $parser = $this->parser;
-                    $parser->validate($xmlString);
-                    $eventList = $parser->split($xmlString);
+                    if ($parser->validate($xmlString)) {
+                        $eventList = $parser->split($xmlString);
 
-                    $storeRepository = $this->store;
+                        $storeRepository = $this->store;
 
-                    foreach ($eventList as $externalId => $singleEvent) {
-                        $cdbid = $storeRepository->getEventCdbid($externalId);
-                        if (!$cdbid) {
-                            $cdbid = Identity\UUID::generateAsString();
-                            $singleXml = simplexml_load_string($singleEvent);
-                            $singleXml->event[0]['cdbid'] =$cdbid;
-                            $singleEvent = $singleXml->asXML();
+                        foreach ($eventList as $externalId => $singleEvent) {
+                            $cdbid = $storeRepository->getEventCdbid($externalId);
+                            if (!$cdbid) {
+                                $cdbid = Identity\UUID::generateAsString();
+                                $singleXml = simplexml_load_string($singleEvent);
+                                $singleXml->event[0]['cdbid'] = $cdbid;
+                                $singleEvent = $singleXml->asXML();
+                            }
+
+                            $storeRepository->storeRelations($cdbid, $externalId);
+                            $storeRepository->storeEventXml($cdbid, $singleEvent);
+                            $storeRepository->storeStatus($cdbid, null, null, null);
+
                         }
-
-                        $storeRepository->storeRelations($cdbid, $externalId);
-                        $storeRepository->storeEventXml($cdbid, $singleEvent);
-                        $storeRepository->storeStatus($cdbid, null, null, null);
-
+                    } else {
+                        echo 'Invalid file uploaded';
                     }
                 }
             }
