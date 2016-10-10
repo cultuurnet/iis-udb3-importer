@@ -75,12 +75,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/cultuurnet/iis-udb3-store.git",
-                "reference": "14b5ed4c839389c7d9a076972c4881a52237d535"
+                "reference": "a4d936a61635a3b9f1ddad42ccad46423de42ca2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cultuurnet/iis-udb3-store/zipball/14b5ed4c839389c7d9a076972c4881a52237d535",
-                "reference": "14b5ed4c839389c7d9a076972c4881a52237d535",
+                "url": "https://api.github.com/repos/cultuurnet/iis-udb3-store/zipball/a4d936a61635a3b9f1ddad42ccad46423de42ca2",
+                "reference": "a4d936a61635a3b9f1ddad42ccad46423de42ca2",
                 "shasum": ""
             },
             "require": {
@@ -102,7 +102,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "CultuurNet\\UDB3\\IIStore\\": "src/"
+                    "CultuurNet\\UDB3\\IISStore\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -110,7 +110,7 @@
                 "Apache-2.0"
             ],
             "description": "A PHP library to interact with IIS-UDB3 CdbXml store.",
-            "time": "2016-10-04 09:46:48"
+            "time": "2016-10-04 12:00:40"
         },
         {
             "name": "deralex/yaml-config-service-provider",
@@ -837,7 +837,7 @@
             ],
             "authors": [
                 {
-                    "name": "KnpLabs",
+                    "name": "Knplabs",
                     "homepage": "http://knplabs.com"
                 }
             ],

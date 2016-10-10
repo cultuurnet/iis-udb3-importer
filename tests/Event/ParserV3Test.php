@@ -1,12 +1,5 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: jonas
- * Date: 14.09.16
- * Time: 10:02
- */
-
 namespace CultuurNet\UDB3\IISImporter\Event;
 
 class ParserV3Test extends \PHPUnit_Framework_TestCase

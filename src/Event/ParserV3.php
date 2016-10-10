@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jonas
- * Date: 13.09.16
- * Time: 15:48
- */
 
 namespace CultuurNet\UDB3\IISImporter\Event;
 
@@ -67,6 +61,9 @@ class ParserV3 implements ParserInterface
         return $eventList;
     }
 
+    /**
+     * @return array
+     */
     private function getValidNameSpaces()
     {
         return [

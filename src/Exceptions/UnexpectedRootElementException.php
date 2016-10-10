@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jonas
- * Date: 14/09/16
- * Time: 10:44
- */
 
 namespace CultuurNet\UDB3\IISImporter\Exceptions;
 
