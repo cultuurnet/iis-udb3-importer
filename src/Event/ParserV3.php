@@ -74,7 +74,7 @@ class ParserV3 implements ParserInterface
         ];
     }
 
-    private function loadDOM($xml)
+    public function loadDOM($xml)
     {
         $dom = new \DOMDocument();
         $dom->preserveWhiteSpace = false;
