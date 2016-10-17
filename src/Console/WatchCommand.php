@@ -9,7 +9,7 @@ use Knp\Command\Command;
 use CultuurNet\UDB3\IISImporter\Event;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use CultuurNet\UDB3\IISStore\ReadModel\Index\RepositoryInterface;
+use CultuurNet\UDB3\IISStore\Stores\RepositoryInterface;
 use ValueObjects\Identity;
 
 class WatchCommand extends Command

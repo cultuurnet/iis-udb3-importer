@@ -2,7 +2,7 @@
 <?php
 
 use CultuurNet\UDB3\IISImporter\Event\ParserV3;
-use CultuurNet\UDB3\IISStore\ReadModel\Index\StoreRepository;
+use CultuurNet\UDB3\IISStore\Stores\StoreRepository;
 use Knp\Provider\ConsoleServiceProvider;
 use CultuurNet\UDB3\IISImporter\Console\WatchCommand;
 
