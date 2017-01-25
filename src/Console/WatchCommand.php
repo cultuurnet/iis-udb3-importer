@@ -86,6 +86,7 @@ class WatchCommand extends Command
                 }
             }
         );
+        echo 'start looking for files';
 
         $watcher->start();
     }
