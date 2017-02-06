@@ -35,7 +35,7 @@ class ParserV3 implements ParserInterface
                     $this->getCdbxmlEndTag();
 
                 $singleXml = simplexml_load_string($singleEvent);
-                $externalId = (string)$singleXml->event[0]['externalid'];
+                $externalId = (string) $singleXml->event[0]['externalid'];
 
                 $eventList[$externalId] = $singleEvent;
             }
