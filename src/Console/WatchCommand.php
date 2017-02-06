@@ -11,6 +11,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use CultuurNet\UDB3\IISStore\Stores\RepositoryInterface;
 use ValueObjects\Identity;
+use ValueObjects\String\String as StringLiteral;
 
 class WatchCommand extends Command
 {
@@ -67,7 +68,8 @@ class WatchCommand extends Command
                         $storeRepository = $this->store;
 
                         foreach ($eventList as $externalId => $singleEvent) {
-                            $cdbid = $storeRepository->getEventCdbid($externalId);
+                            $externalIdLiteral = new StringLiteral($externalId);
+                            $cdbid = $storeRepository->getEventCdbid($externalIdLiteral);
                             if (!$cdbid) {
                                 $cdbid = Identity\UUID::generateAsString();
                                 $singleXml = simplexml_load_string($singleEvent);

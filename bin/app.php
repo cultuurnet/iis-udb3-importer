@@ -41,9 +41,14 @@ $connection = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $co
 
 $table_name = new StringLiteral('TODO');
 
-$loggingRepository = new StoreLoggingDBALRepository($connection, $table_name);
-$relationsRepository = new StoreRelationsDBALRepository($connection, $table_name);
-$xmlRepository = new StoreXmlDBALRepository($connection, $table_name);
+$logging_table = new StringLiteral('logging');
+$relation_table = new StringLiteral('relation');
+$xml_table = new StringLiteral('xml');
+
+
+$loggingRepository = new StoreLoggingDBALRepository($connection, $logging_table);
+$relationsRepository = new StoreRelationsDBALRepository($connection, $relation_table);
+$xmlRepository = new StoreXmlDBALRepository($connection, $xml_table);
 
 $store = new StoreRepository($loggingRepository, $relationsRepository, $xmlRepository);
 $consoleApp->add(new WatchCommand($parser, $store));
