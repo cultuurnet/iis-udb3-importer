@@ -75,8 +75,8 @@ class WatchCommand extends Command
                             $isUpdate = true;
                             if (!$cdbid) {
                                 $isUpdate = false;
-                                $cdbid_string = Identity\UUID::generateAsString();
-                                $cdbid = UUID::fromNative($cdbid_string);
+                                $cdbidString = Identity\UUID::generateAsString();
+                                $cdbid = UUID::fromNative($cdbidString);
                                 $singleXml = simplexml_load_string($singleEvent);
                                 $singleXml->event[0]['cdbid'] = $cdbid;
                                 $singleEvent = new String($singleXml->asXML());
