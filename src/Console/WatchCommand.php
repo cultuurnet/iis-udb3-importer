@@ -11,7 +11,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use CultuurNet\UDB3\IISStore\Stores\RepositoryInterface;
 use ValueObjects\Identity;
+use ValueObjects\Identity\UUID;
 use ValueObjects\String\String as StringLiteral;
+use ValueObjects\String\String;
 
 class WatchCommand extends Command
 {
@@ -70,15 +72,18 @@ class WatchCommand extends Command
                         foreach ($eventList as $externalId => $singleEvent) {
                             $externalIdLiteral = new StringLiteral($externalId);
                             $cdbid = $storeRepository->getEventCdbid($externalIdLiteral);
+                            $isUpdate = true;
                             if (!$cdbid) {
-                                $cdbid = Identity\UUID::generateAsString();
+                                $isUpdate = false;
+                                $cdbid_string = Identity\UUID::generateAsString();
+                                $cdbid = UUID::fromNative($cdbid_string);
                                 $singleXml = simplexml_load_string($singleEvent);
                                 $singleXml->event[0]['cdbid'] = $cdbid;
-                                $singleEvent = $singleXml->asXML();
+                                $singleEvent = new String($singleXml->asXML());
+                                $storeRepository->storeRelations($cdbid, $externalIdLiteral);
                             }
 
-                            $storeRepository->storeRelations($cdbid, $externalId);
-                            $storeRepository->storeEventXml($cdbid, $singleEvent);
+                            $storeRepository->storeEventXml($cdbid, $singleEvent, $isUpdate);
                             $storeRepository->storeStatus($cdbid, null, null, null);
 
                         }

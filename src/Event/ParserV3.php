@@ -3,6 +3,7 @@
 namespace CultuurNet\UDB3\IISImporter\Event;
 
 use \CultuurNet\UDB3\IISImporter\Exceptions;
+use ValueObjects\String\String as StringLiteral;
 
 class ParserV3 implements ParserInterface
 {
@@ -37,7 +38,7 @@ class ParserV3 implements ParserInterface
                 $singleXml = simplexml_load_string($singleEvent);
                 $externalId = (string) $singleXml->event[0]['externalid'];
 
-                $eventList[$externalId] = $singleEvent;
+                $eventList[$externalId] = new StringLiteral($singleEvent);
             }
         }
 
