@@ -56,7 +56,6 @@ class Watcher implements WatcherInterface
         $this->resourceWatcher->addListener(
             $this->trackingId->toNative(),
             function (FilesystemEvent $filesystemEvent) {
-                echo 'blub' . PHP_EOL;
                 if ($filesystemEvent->getTypeString() == 'create' ||
                     $filesystemEvent->getTypeString() == 'modify') {
                     $xmlString = file_get_contents($filesystemEvent->getResource());
