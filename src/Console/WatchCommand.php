@@ -3,6 +3,7 @@
 namespace CultuurNet\UDB3\IISImporter\Console;
 
 use CultuurNet\UDB3\IISImporter\Event\ParserInterface;
+use CultuurNet\UDB3\IISImporter\Event\WatcherInterface;
 use Lurker\Event\FilesystemEvent;
 use Lurker\ResourceWatcher;
 use Knp\Command\Command;
@@ -27,14 +28,21 @@ class WatchCommand extends Command
     protected $store;
 
     /**
+     * @var WatcherInterface
+     */
+    protected $aWatcher;
+
+    /**
      * WatchCommand constructor.
      * @param ParserInterface $parser
      * @param RepositoryInterface $store
+     * @param WatcherInterface $aWatcher
      */
-    public function __construct(ParserInterface $parser, RepositoryInterface $store)
+    public function __construct(ParserInterface $parser, RepositoryInterface $store, WatcherInterface $aWatcher)
     {
         $this->parser = $parser;
         $this->store = $store;
+        $this->aWatcher = $aWatcher;
         parent::__construct();
     }
 
@@ -52,52 +60,9 @@ class WatchCommand extends Command
     {
         $app = $this->getSilexApplication();
 
-        $watcher = new ResourceWatcher();
-        $watcher->track('import_files', $app['config']['input_folder']);
+        $this->aWatcher->track($app['config']['input_folder']);
+        $this->aWatcher->configureListener($this->parser, $this->store);
 
-        $watcher->addListener(
-            'import_files',
-            function (FilesystemEvent $filesystemEvent) {
-                if ($filesystemEvent->getTypeString() == 'create' ||
-                    $filesystemEvent->getTypeString() == 'modify') {
-                    $xmlString = file_get_contents($filesystemEvent->getResource());
-
-                    $parser = $this->parser;
-                    if ($parser->validate($xmlString)) {
-                        $eventList = $parser->split($xmlString);
-
-                        $storeRepository = $this->store;
-
-                        foreach ($eventList as $externalId => $singleEvent) {
-                            $externalIdLiteral = new StringLiteral($externalId);
-                            $cdbid = $storeRepository->getEventCdbid($externalIdLiteral);
-                            $isUpdate = true;
-                            if (!$cdbid) {
-                                $isUpdate = false;
-                                $cdbidString = Identity\UUID::generateAsString();
-                                $cdbid = UUID::fromNative($cdbidString);
-                                $singleXml = simplexml_load_string($singleEvent);
-                                $singleXml->event[0]['cdbid'] = $cdbid;
-                                $singleEvent = new StringLiteral($singleXml->asXML());
-                                $storeRepository->saveRelation($cdbid, $externalIdLiteral);
-                            }
-
-                            if ($isUpdate) {
-                                $storeRepository->updateEventXml($cdbid, $singleEvent);
-                                $storeRepository->saveUpdated($cdbid, new \DateTime());
-                            } else {
-                                $storeRepository->saveEventXml($cdbid, $singleEvent);
-                                $storeRepository->saveCreated($cdbid, new \DateTime());
-                            }
-                        }
-                    } else {
-                        echo 'Invalid file uploaded';
-                    }
-                }
-            }
-        );
-        echo 'start looking for files';
-
-        $watcher->start();
+        $this->aWatcher->start();
     }
 }

@@ -2,6 +2,7 @@
 <?php
 
 use CultuurNet\UDB3\IISImporter\Event\ParserV3;
+use CultuurNet\UDB3\IISImporter\Event\Watcher;
 use CultuurNet\UDB3\IISStore\Stores\StoreRepository;
 use Knp\Provider\ConsoleServiceProvider;
 use CultuurNet\UDB3\IISImporter\Console\WatchCommand;
@@ -39,8 +40,6 @@ $connectionParams = array(
 );
 $connection = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);
 
-$table_name = new StringLiteral('TODO');
-
 $logging_table = new StringLiteral('logging');
 $relation_table = new StringLiteral('relation');
 $xml_table = new StringLiteral('xml');
@@ -51,6 +50,10 @@ $relationsRepository = new StoreRelationDBALRepository($connection, $relation_ta
 $xmlRepository = new StoreXmlDBALRepository($connection, $xml_table);
 
 $store = new StoreRepository($loggingRepository, $relationsRepository, $xmlRepository);
-$consoleApp->add(new WatchCommand($parser, $store));
+
+$trackingId = new StringLiteral('import_files');
+$watcher = new Watcher($trackingId);
+
+$consoleApp->add(new WatchCommand($parser, $store, $watcher));
 
 $consoleApp->run();
