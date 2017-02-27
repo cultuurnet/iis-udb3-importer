@@ -3,7 +3,7 @@
 namespace CultuurNet\UDB3\IISImporter\Event;
 
 use \CultuurNet\UDB3\IISImporter\Exceptions;
-use ValueObjects\String\String as StringLiteral;
+use ValueObjects\StringLiteral\StringLiteral;
 
 class ParserV3 implements ParserInterface
 {

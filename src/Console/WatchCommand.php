@@ -12,8 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use CultuurNet\UDB3\IISStore\Stores\RepositoryInterface;
 use ValueObjects\Identity;
 use ValueObjects\Identity\UUID;
-use ValueObjects\String\String as StringLiteral;
-use ValueObjects\String\String;
+use ValueObjects\StringLiteral\StringLiteral;
 
 class WatchCommand extends Command
 {
@@ -79,13 +78,17 @@ class WatchCommand extends Command
                                 $cdbid = UUID::fromNative($cdbidString);
                                 $singleXml = simplexml_load_string($singleEvent);
                                 $singleXml->event[0]['cdbid'] = $cdbid;
-                                $singleEvent = new String($singleXml->asXML());
-                                $storeRepository->storeRelations($cdbid, $externalIdLiteral);
+                                $singleEvent = new StringLiteral($singleXml->asXML());
+                                $storeRepository->saveRelation($cdbid, $externalIdLiteral);
                             }
 
-                            $storeRepository->storeEventXml($cdbid, $singleEvent, $isUpdate);
-                            $storeRepository->storeStatus($cdbid, null, null, null);
-
+                            if ($isUpdate) {
+                                $storeRepository->updateEventXml($cdbid, $singleEvent);
+                                $storeRepository->saveUpdated($cdbid, new \DateTime());
+                            } else {
+                                $storeRepository->saveEventXml($cdbid, $singleEvent);
+                                $storeRepository->saveCreated($cdbid, new \DateTime());
+                            }
                         }
                     } else {
                         echo 'Invalid file uploaded';

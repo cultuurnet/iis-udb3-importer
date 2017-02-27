@@ -6,9 +6,9 @@ use CultuurNet\UDB3\IISStore\Stores\StoreRepository;
 use Knp\Provider\ConsoleServiceProvider;
 use CultuurNet\UDB3\IISImporter\Console\WatchCommand;
 use CultuurNet\UDB3\IISStore\Stores\Doctrine\StoreLoggingDBALRepository;
-use CultuurNet\UDB3\IISStore\Stores\Doctrine\StoreRelationsDBALRepository;
+use CultuurNet\UDB3\IISStore\Stores\Doctrine\StoreRelationDBALRepository;
 use CultuurNet\UDB3\IISStore\Stores\Doctrine\StoreXmlDBALRepository;
-use ValueObjects\String\String as StringLiteral;
+use ValueObjects\StringLiteral\StringLiteral;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -47,7 +47,7 @@ $xml_table = new StringLiteral('xml');
 
 
 $loggingRepository = new StoreLoggingDBALRepository($connection, $logging_table);
-$relationsRepository = new StoreRelationsDBALRepository($connection, $relation_table);
+$relationsRepository = new StoreRelationDBALRepository($connection, $relation_table);
 $xmlRepository = new StoreXmlDBALRepository($connection, $xml_table);
 
 $store = new StoreRepository($loggingRepository, $relationsRepository, $xmlRepository);
