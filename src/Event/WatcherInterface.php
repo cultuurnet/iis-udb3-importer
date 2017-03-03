@@ -3,7 +3,6 @@
 namespace CultuurNet\UDB3\IISImporter\Event;
 
 use CultuurNet\UDB3\IISStore\Stores\RepositoryInterface;
-use CultuurNet\UDB3\IISStore\Stores\StoreRepository;
 
 interface WatcherInterface
 {

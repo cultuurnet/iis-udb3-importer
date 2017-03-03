@@ -30,19 +30,26 @@ class WatchCommand extends Command
     /**
      * @var WatcherInterface
      */
-    protected $aWatcher;
+    protected $watcher;
+
+    /**
+     * @var Event\PublishInterface
+     */
+    protected $publisher;
 
     /**
      * WatchCommand constructor.
      * @param ParserInterface $parser
      * @param RepositoryInterface $store
-     * @param WatcherInterface $aWatcher
+     * @param WatcherInterface $watcher
+     * @param Event\PublishInterface $publisher
      */
-    public function __construct(ParserInterface $parser, RepositoryInterface $store, WatcherInterface $aWatcher)
+    public function __construct(ParserInterface $parser, RepositoryInterface $store, WatcherInterface $watcher, Event\PublishInterface $publisher)
     {
         $this->parser = $parser;
         $this->store = $store;
-        $this->aWatcher = $aWatcher;
+        $this->watcher = $watcher;
+        $this->publisher = $publisher;
         parent::__construct();
     }
 
@@ -60,9 +67,8 @@ class WatchCommand extends Command
     {
         $app = $this->getSilexApplication();
 
-        $this->aWatcher->track($app['config']['input_folder']);
-        $this->aWatcher->configureListener($this->parser, $this->store);
-
-        $this->aWatcher->start();
+        $this->watcher->track($app['config']['input_folder']);
+        $this->watcher->configureListener($this->parser, $this->store);
+        $this->watcher->start();
     }
 }

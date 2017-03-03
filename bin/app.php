@@ -3,6 +3,7 @@
 
 use CultuurNet\UDB3\IISImporter\Event\ParserV3;
 use CultuurNet\UDB3\IISImporter\Event\Watcher;
+use CultuurNet\UDB3\IISImporter\Event\PublishAMQP;
 use CultuurNet\UDB3\IISStore\Stores\StoreRepository;
 use Knp\Provider\ConsoleServiceProvider;
 use CultuurNet\UDB3\IISImporter\Console\WatchCommand;
@@ -54,6 +55,8 @@ $store = new StoreRepository($loggingRepository, $relationsRepository, $xmlRepos
 $trackingId = new StringLiteral('import_files');
 $watcher = new Watcher($trackingId);
 
-$consoleApp->add(new WatchCommand($parser, $store, $watcher));
+$publisher = new PublishAMQP();
+
+$consoleApp->add(new WatchCommand($parser, $store, $watcher, $publisher));
 
 $consoleApp->run();

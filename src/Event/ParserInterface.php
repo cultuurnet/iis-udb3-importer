@@ -2,6 +2,9 @@
 
 namespace CultuurNet\UDB3\IISImporter\Event;
 
+use ValueObjects\Identity\UUID;
+use ValueObjects\StringLiteral\StringLiteral;
+
 interface ParserInterface
 {
     /**
