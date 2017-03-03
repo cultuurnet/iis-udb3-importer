@@ -71,16 +71,16 @@ class Watcher implements WatcherInterface
                                 $isUpdate = false;
                                 $cdbidString = Identity\UUID::generateAsString();
                                 $cdbid = UUID::fromNative($cdbidString);
-                                $singleXml = simplexml_load_string($singleEvent);
-                                $singleXml->event[0]['cdbid'] = $cdbid;
-                                $singleEvent = new StringLiteral($singleXml->asXML());
-                                $this->store->saveRelation($cdbid, $externalIdLiteral);
                             }
+                            $singleXml = simplexml_load_string($singleEvent);
+                            $singleXml->event[0]['cdbid'] = $cdbid;
+                            $singleEvent = new StringLiteral($singleXml->asXML());
 
                             if ($isUpdate) {
                                 $this->store->updateEventXml($cdbid, $singleEvent);
                                 $this->store->saveUpdated($cdbid, new \DateTime());
                             } else {
+                                $this->store->saveRelation($cdbid, $externalIdLiteral);
                                 $this->store->saveEventXml($cdbid, $singleEvent);
                                 $this->store->saveCreated($cdbid, new \DateTime());
                             }
