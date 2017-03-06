@@ -2,16 +2,14 @@
 
 namespace CultuurNet\UDB3\IISImporter\Event;
 
-use CultuurNet\BroadwayAMQP\AMQPPublisher;
-use \CultuurNet\UDB3\IISImporter\Exceptions;
-use ValueObjects\StringLiteral\StringLiteral;
+use ValueObjects\Identity\UUID;
 
 class PublishAMQP implements PublishInterface
 {
     /**
      * @inheritdoc
      */
-    public function publish(StringLiteral $cdbid)
+    public function publish(UUID $cdbid)
     {
         // TODO: Implement publish() method.
     }

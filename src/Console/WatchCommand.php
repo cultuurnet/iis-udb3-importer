@@ -3,17 +3,13 @@
 namespace CultuurNet\UDB3\IISImporter\Console;
 
 use CultuurNet\UDB3\IISImporter\Event\ParserInterface;
+use CultuurNet\UDB3\IISImporter\Event\PublishInterface;
 use CultuurNet\UDB3\IISImporter\Event\WatcherInterface;
-use Lurker\Event\FilesystemEvent;
-use Lurker\ResourceWatcher;
 use Knp\Command\Command;
 use CultuurNet\UDB3\IISImporter\Event;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use CultuurNet\UDB3\IISStore\Stores\RepositoryInterface;
-use ValueObjects\Identity;
-use ValueObjects\Identity\UUID;
-use ValueObjects\StringLiteral\StringLiteral;
 
 class WatchCommand extends Command
 {
@@ -33,7 +29,7 @@ class WatchCommand extends Command
     protected $watcher;
 
     /**
-     * @var Event\PublishInterface
+     * @var PublishInterface
      */
     protected $publisher;
 
@@ -42,10 +38,14 @@ class WatchCommand extends Command
      * @param ParserInterface $parser
      * @param RepositoryInterface $store
      * @param WatcherInterface $watcher
-     * @param Event\PublishInterface $publisher
+     * @param PublishInterface $publisher
      */
-    public function __construct(ParserInterface $parser, RepositoryInterface $store, WatcherInterface $watcher, Event\PublishInterface $publisher)
-    {
+    public function __construct(
+        ParserInterface $parser,
+        RepositoryInterface $store,
+        WatcherInterface $watcher,
+        PublishInterface $publisher
+    ) {
         $this->parser = $parser;
         $this->store = $store;
         $this->watcher = $watcher;

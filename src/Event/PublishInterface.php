@@ -2,13 +2,12 @@
 
 namespace CultuurNet\UDB3\IISImporter\Event;
 
-use CultuurNet\UDB3\IISStore\Stores\RepositoryInterface;
-use ValueObjects\StringLiteral\StringLiteral;
+use ValueObjects\Identity\UUID;
 
 interface PublishInterface
 {
     /**
-     * @param StringLiteral $cdbid
+     * @param UUID $cdbid
      */
-    public function publish(StringLiteral $cdbid);
+    public function publish(UUID $cdbid);
 }
