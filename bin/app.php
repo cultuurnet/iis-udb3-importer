@@ -1,16 +1,8 @@
 #!/usr/bin/env php
 <?php
 
-use CultuurNet\UDB3\IISImporter\Event\ParserV3;
-use CultuurNet\UDB3\IISImporter\Event\Watcher;
-use CultuurNet\UDB3\IISImporter\Event\PublishAMQP;
-use CultuurNet\UDB3\IISStore\Stores\StoreRepository;
 use Knp\Provider\ConsoleServiceProvider;
 use CultuurNet\UDB3\IISImporter\Console\WatchCommand;
-use CultuurNet\UDB3\IISStore\Stores\Doctrine\StoreLoggingDBALRepository;
-use CultuurNet\UDB3\IISStore\Stores\Doctrine\StoreRelationDBALRepository;
-use CultuurNet\UDB3\IISStore\Stores\Doctrine\StoreXmlDBALRepository;
-use ValueObjects\StringLiteral\StringLiteral;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -29,34 +21,13 @@ $app->register(
 /** @var \Knp\Console\Application $consoleApp */
 $consoleApp = $app['console'];
 
-$parser = new ParserV3();
-
-$config = new \Doctrine\DBAL\Configuration();
-$connectionParams = array(
-    'dbname' => $app['config']['database']['dbname'],
-    'user' => $app['config']['database']['user'],
-    'password' => $app['config']['database']['password'],
-    'host' => $app['config']['database']['host'],
-    'driver' => $app['config']['database']['driver'],
+$consoleApp->add(
+    new WatchCommand(
+        $app['iis.parser'],
+        $app['iis.dbal_store'],
+        $app['iis.watcher'],
+        $app['iis.publisher']
+    )
 );
-$connection = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);
-
-$logging_table = new StringLiteral('logging');
-$relation_table = new StringLiteral('relation');
-$xml_table = new StringLiteral('xml');
-
-
-$loggingRepository = new StoreLoggingDBALRepository($connection, $logging_table);
-$relationsRepository = new StoreRelationDBALRepository($connection, $relation_table);
-$xmlRepository = new StoreXmlDBALRepository($connection, $xml_table);
-
-$store = new StoreRepository($loggingRepository, $relationsRepository, $xmlRepository);
-
-$trackingId = new StringLiteral('import_files');
-$watcher = new Watcher($trackingId);
-
-$publisher = new PublishAMQP();
-
-$consoleApp->add(new WatchCommand($parser, $store, $watcher, $publisher));
 
 $consoleApp->run();
