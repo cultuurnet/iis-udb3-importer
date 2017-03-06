@@ -9,6 +9,7 @@ use CultuurNet\UDB3\IISStore\Stores\Doctrine\StoreXmlDBALRepository;
 use CultuurNet\UDB3\IISStore\Stores\StoreRepository;
 use DerAlex\Silex\YamlConfigServiceProvider;
 use Doctrine\DBAL\DriverManager;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
 use Silex\Application;
 use ValueObjects\StringLiteral\StringLiteral;
 
@@ -92,9 +93,24 @@ $app['iis.watcher'] = $app->share(
     }
 );
 
+$app['iis.amqp_connection'] = $app->share(
+    function(Application $app) {
+        $connection = new AMQPStreamConnection(
+            $app['config']['amqp.host'],
+            $app['config']['amqp.port'],
+            $app['config']['amqp.user'],
+            $app['config']['amqp.password'],
+            $app['config']['amqp.vhost']
+        );
+
+        return $connection;
+    }
+);
+
 $app['iis.publisher'] = $app->share(
-    function () {
-        return new PublishAMQP();
+    function (Application $app) {
+        $channel = new AMQPChannel($app['iis.amqp_connection']);
+        return new PublishAMQP($channel, $app['config']['publish']['exchange']);
     }
 );
 
