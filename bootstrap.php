@@ -10,6 +10,7 @@ use CultuurNet\UDB3\IISStore\Stores\StoreRepository;
 use DerAlex\Silex\YamlConfigServiceProvider;
 use Doctrine\DBAL\DriverManager;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Channel\AMQPChannel;
 use Silex\Application;
 use ValueObjects\StringLiteral\StringLiteral;
 
