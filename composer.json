@@ -9,14 +9,14 @@
         "deralex/yaml-config-service-provider": "~1.0",
         "knplabs/console-service-provider": "~1.0",
         "monolog/monolog": "~1.11",
-        "nicolopignatelli/valueobjects": "~2.0",
-        "cultuurnet/iis-udb3-store": "0.x-dev",
+        "nicolopignatelli/valueobjects": "~3.0",
+        "cultuurnet/iis-udb3-store": "~0.1",
         "cultuurnet/cdb": "~2.2.0",
-        "cultuurnet/udb3": "~0.1",
-        "sabre/xml": "^1.4.2"
+        "sabre/xml": "^1.4.2",
+        "henrikbjorn/lurker" : "~1.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.8",
+        "phpunit/phpunit": "~5.7",
         "escapestudios/symfony2-coding-standard": "~2.9",
         "squizlabs/php_codesniffer": "~2.5.1",
         "phing/phing": "~2.14",
@@ -24,12 +24,12 @@
     },
     "autoload": {
         "psr-4": {
-            "CultuurNet\\UDB3\\IIS\\Importer\\": "src/"
+            "CultuurNet\\UDB3\\IISImporter\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "CultuurNet\\UDB3\\IIS\\Importer\\": "tests/"
+            "CultuurNet\\UDB3\\IISImporter\\": "tests/"
         }
     },
     "minimum-stability": "dev",
