@@ -5,7 +5,7 @@ namespace CultuurNet\UDB3\IISImporter\AMQP;
 interface AMQPPropertiesFactoryInterface
 {
     /**
-     * @bool $isUpdate
+     * @param bool $isUpdate
      * @return array
      */
     public function createProperties($isUpdate);

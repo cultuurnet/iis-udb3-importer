@@ -1,21 +1,21 @@
 <?php
 
-namespace CultuurNet\UDB3\IISImporter\Event;
+namespace CultuurNet\UDB3\IISImporter\AMQP;
 
-use CultuurNet\UDB3\IISImporter\Url\UrlFactoryInterface;
 use ValueObjects\Identity\UUID;
 use ValueObjects\StringLiteral\StringLiteral;
 use ValueObjects\Web\Url;
 
 
-interface PublishInterface
+interface AMQPPublisherInterface
 {
     /**
      * @param UUID $cdbid
      * @param \DateTime $datetime
      * @param StringLiteral $author
      * @param Url $url
+     * @param bool $isUpdate
      * @return void
      */
-    public function publish(UUID $cdbid, \DateTime $datetime, StringLiteral $author, Url $url);
+    public function publish(UUID $cdbid, \DateTime $datetime, StringLiteral $author, Url $url, $isUpdate);
 };

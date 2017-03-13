@@ -1,7 +1,10 @@
 <?php
 
+use CultuurNet\UDB3\IISImporter\AMQP\AMQPBodyFactory;
+use CultuurNet\UDB3\IISImporter\AMQP\AMQPMessageFactory;
+use CultuurNet\UDB3\IISImporter\AMQP\AMQPPropertiesFactory;
+use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisher;
 use CultuurNet\UDB3\IISImporter\Event\ParserV3;
-use CultuurNet\UDB3\IISImporter\Event\PublishAMQP;
 use CultuurNet\UDB3\IISImporter\Event\Watcher;
 use CultuurNet\UDB3\IISStore\Stores\Doctrine\StoreLoggingDBALRepository;
 use CultuurNet\UDB3\IISStore\Stores\Doctrine\StoreRelationDBALRepository;
@@ -87,21 +90,14 @@ $app['iis.parser'] = $app->share(
     }
 );
 
-$app['iis.watcher'] = $app->share(
-    function () {
-        $trackingId = new StringLiteral('import_files');
-        return new Watcher($trackingId);
-    }
-);
-
 $app['iis.amqp_connection'] = $app->share(
     function(Application $app) {
         $connection = new AMQPStreamConnection(
-            $app['config']['amqp.host'],
-            $app['config']['amqp.port'],
-            $app['config']['amqp.user'],
-            $app['config']['amqp.password'],
-            $app['config']['amqp.vhost']
+            $app['config']['amqp']['host'],
+            $app['config']['amqp']['port'],
+            $app['config']['amqp']['user'],
+            $app['config']['amqp']['password'],
+            $app['config']['amqp']['vhost']
         );
 
         return $connection;
@@ -111,7 +107,24 @@ $app['iis.amqp_connection'] = $app->share(
 $app['iis.publisher'] = $app->share(
     function (Application $app) {
         $channel = new AMQPChannel($app['iis.amqp_connection']);
-        return new PublishAMQP($channel, $app['config']['publish']['exchange']);
+        return new AMQPPublisher(
+            $channel,
+            $app['config']['publish']['exchange'],
+            new AMQPMessageFactory(
+                new AMQPBodyFactory(),
+                new AMQPPropertiesFactory()
+            ));
+    }
+);
+
+$app['iis.watcher'] = $app->share(
+    function (Application $app) {
+        $trackingId = new StringLiteral('import_files');
+        return new Watcher(
+            $trackingId,
+            $app['iis.parser'],
+            $app['iis.dbal_store'],
+            $app['iis.publisher']);
     }
 );
 

@@ -1,18 +1,13 @@
 <?php
 
-namespace CultuurNet\UDB3\IISImporter\Event;
+namespace CultuurNet\UDB3\IISImporter\AMQP;
 
-use CultuurNet\UDB3\IISImporter\AMQP\AMQPMessageFactoryInterface;
-use CultuurNet\UDB3\IISImporter\Url\UrlFactoryInterface;
-use PhpAmqpLib\Connection\AMQPStreamConnection;
-use ValueObjects\DateTime\Date;
-use ValueObjects\DateTime\DateTime;
 use ValueObjects\Identity\UUID;
-use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Channel\AMQPChannel;
 use ValueObjects\StringLiteral\StringLiteral;
+use ValueObjects\Web\Url;
 
-class PublishAMQP implements PublishInterface
+class AMQPPublisher implements AMQPPublisherInterface
 {
     /**
      * @var AMQPChannel
@@ -47,10 +42,10 @@ class PublishAMQP implements PublishInterface
     /**
      * @inheritdoc
      */
-    public function publish(UUID $cdbid, \DateTime $dateTime, StringLiteral $author, Url $url)
+    public function publish(UUID $cdbid, \DateTime $dateTime, StringLiteral $author, Url $url, $isUpdate)
     {
         $this->channel->basic_publish(
-            $this->messageFactory->createMessage($cdbid, $dateTime, $author, $url),
+            $this->messageFactory->createMessage($cdbid, $dateTime, $author, $url, $isUpdate),
             $this->exchange
         );
     }
