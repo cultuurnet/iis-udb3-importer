@@ -21,6 +21,18 @@ class PublishAMQP implements PublishInterface
     private $exchange;
 
     /**
+     * @param AMQPChannel $channel
+     * @param StringLiteral $exchange
+     */
+    public function __construct(
+        AMQPChannel $channel,
+        StringLiteral $exchange
+    ) {
+        $this->channel = $channel;
+        $this->exchange = $exchange;
+    }
+
+    /**
      * @inheritdoc
      */
     public function publish(UUID $cdbid)
@@ -39,17 +51,5 @@ class PublishAMQP implements PublishInterface
     {
         //TODO check exact format;
         return new AMQPMessage($cdbid);
-    }
-
-    /**
-     * @param AMQPChannel $channel
-     * @param StringLiteral $exchange
-     */
-    public function __construct(
-        AMQPChannel $channel,
-        StringLiteral $exchange
-    ) {
-        $this->channel = $channel;
-        $this->exchange = $exchange;
     }
 }
