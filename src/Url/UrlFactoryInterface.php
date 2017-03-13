@@ -1,6 +1,6 @@
 <?php
 
-namespace CultuurNet\UDB3\IISImporter\URL;
+namespace CultuurNet\UDB3\IISImporter\Url;
 
 use ValueObjects\Identity\UUID;
 use ValueObjects\StringLiteral\StringLiteral;
@@ -9,9 +9,8 @@ use ValueObjects\Web\Url;
 interface UrlFactoryInterface
 {
     /**
-     * @param StringLiteral $baseUrl
      * @param UUID $cdbid
      * @return Url;
      */
-    public function generateUrl(StringLiteral $baseUrl, UUID $cdbid);
+    public function generateUrl(UUID $cdbid);
 }

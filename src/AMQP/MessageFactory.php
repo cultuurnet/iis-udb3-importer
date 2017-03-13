@@ -2,10 +2,12 @@
 
 namespace CultuurNet\UDB3\IISImporter\AMQP;
 
-use CultuurNet\UDB3\IISImporter\URL\UrlFactoryInterface;
+use CultuurNet\UDB3\IISImporter\Url\UrlFactoryInterface;
+use PhpAmqpLib\Message\AMQPMessage;
 use ValueObjects\DateTime\DateTime;
 use ValueObjects\Identity\UUID;
 use ValueObjects\StringLiteral\StringLiteral;
+use ValueObjects\Web\Url;
 
 class AMQPMessageFactory implements AMQPMessageFactoryInterface
 {
@@ -33,9 +35,11 @@ class AMQPMessageFactory implements AMQPMessageFactoryInterface
     /**
      * @inheritdoc
      */
-    public function createMessage(UUID $cdbid, DateTime $dateTime, StringLiteral $author, UrlFactoryInterface $urlFactory, $isUpdate = false)
+    public function createMessage(UUID $cdbid, DateTime $dateTime, StringLiteral $author, Url $url, $isUpdate = false)
     {
-        $this->amqpBody->createBody();
-        $this->amqpProperties->createProperties($isUpdate);
+        return new AMQPMessage(
+            $this->amqpBody->createBody($cdbid, $dateTime, $author, $url),
+            $this->amqpProperties->createProperties($isUpdate)
+        );
     }
 }
