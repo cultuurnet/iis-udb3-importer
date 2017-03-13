@@ -109,7 +109,7 @@ $app['iis.publisher'] = $app->share(
         $channel = new AMQPChannel($app['iis.amqp_connection']);
         return new AMQPPublisher(
             $channel,
-            $app['config']['publish']['exchange'],
+            new StringLiteral($app['config']['amqp']['publish']['exchange']),
             new AMQPMessageFactory(
                 new AMQPBodyFactory(),
                 new AMQPPropertiesFactory()
