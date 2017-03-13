@@ -104,9 +104,8 @@ class Watcher implements WatcherInterface
                             $baseUrl = new StringLiteral('http://test.import.com');
                             $author = new StringLiteral('importsUDB3');
                             $urlFactory = new UrlFactory($baseUrl);
-                            $this->publisher->publish($cdbid,$now,$author, $urlFactory->generateUrl($cdbid), $isUpdate);
-                            $this->store->savePublished($cdbid,$now);
-
+                            $this->publisher->publish($cdbid, $now, $author, $urlFactory->generateUrl($cdbid), $isUpdate);
+                            $this->store->savePublished($cdbid, $now);
                         }
                     } else {
                         echo 'Invalid file uploaded';

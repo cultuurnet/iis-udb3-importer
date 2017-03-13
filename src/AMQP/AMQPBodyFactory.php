@@ -17,7 +17,7 @@ class AMQPBodyFactory implements AMQPBodyFactoryInterface
             'eventid' => $cdbid->toNative(),
             'time' => $dateTime->format(\DateTime::ATOM),
             'author' => $author,
-            'url' => (string)$url,
+            'url' => (string) $url,
         ];
         return json_encode($bodyArray);
     }

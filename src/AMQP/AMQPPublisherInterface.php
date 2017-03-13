@@ -6,7 +6,6 @@ use ValueObjects\Identity\UUID;
 use ValueObjects\StringLiteral\StringLiteral;
 use ValueObjects\Web\Url;
 
-
 interface AMQPPublisherInterface
 {
     /**
@@ -18,4 +17,4 @@ interface AMQPPublisherInterface
      * @return void
      */
     public function publish(UUID $cdbid, \DateTime $datetime, StringLiteral $author, Url $url, $isUpdate);
-};
+}
