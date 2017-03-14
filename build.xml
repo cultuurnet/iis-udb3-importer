@@ -3,6 +3,7 @@
     <fileset id="php" dir=".">
         <include name="src/**/*.php"/>
         <include name="tests/**/*.php"/>
+        <exclude name="src/Console/*.php"/>
     </fileset>
 
     <target name="coding-standards">
