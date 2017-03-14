@@ -88,7 +88,7 @@ class Watcher implements WatcherInterface
                                 $cdbid = UUID::fromNative($cdbidString);
                             }
                             $singleXml = simplexml_load_string($singleEvent);
-                            $singleXml->event[0]['cdbid'] = $cdbid;
+                            $singleXml->event[0]['cdbid'] = $cdbid->toNative();
                             $singleEvent = new StringLiteral($singleXml->asXML());
 
                             if ($isUpdate) {
