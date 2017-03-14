@@ -42,10 +42,23 @@ class AMQPPublisher implements AMQPPublisherInterface
     /**
      * @inheritdoc
      */
-    public function publish(UUID $cdbid, \DateTime $dateTime, StringLiteral $author, Url $url, $isUpdate)
-    {
+    public function publish(
+        UUID $cdbid,
+        \DateTime $dateTime,
+        StringLiteral $author,
+        Url $url,
+        $isUpdate
+    ) {
+        $message = $this->messageFactory->createMessage(
+            $cdbid,
+            $dateTime,
+            $author,
+            $url,
+            $isUpdate
+        );
+
         $this->channel->basic_publish(
-            $this->messageFactory->createMessage($cdbid, $dateTime, $author, $url, $isUpdate),
+            $message,
             $this->exchange
         );
     }

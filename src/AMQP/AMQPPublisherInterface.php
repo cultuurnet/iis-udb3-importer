@@ -16,5 +16,11 @@ interface AMQPPublisherInterface
      * @param bool $isUpdate
      * @return void
      */
-    public function publish(UUID $cdbid, \DateTime $datetime, StringLiteral $author, Url $url, $isUpdate);
+    public function publish(
+        UUID $cdbid,
+        \DateTime $datetime,
+        StringLiteral $author,
+        Url $url,
+        $isUpdate
+    );
 }
