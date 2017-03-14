@@ -17,5 +17,11 @@ interface AMQPMessageFactoryInterface
      * @param bool $isUpdate
      * @return AMQPMessage
      */
-    public function createMessage(UUID $cdbid, \DateTime $dateTime, StringLiteral $author, Url $url, $isUpdate);
+    public function createMessage(
+        UUID $cdbid,
+        \DateTime $dateTime,
+        StringLiteral $author,
+        Url $url,
+        $isUpdate
+    );
 }

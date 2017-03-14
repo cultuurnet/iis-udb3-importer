@@ -24,8 +24,10 @@ class AMQPMessageFactory implements AMQPMessageFactoryInterface
      * @param AMQPBodyFactoryInterface $amqpBody
      * @param AMQPPropertiesFactoryInterface $amqpProperties
      */
-    public function __construct(AMQPBodyFactoryInterface $amqpBody, AMQPPropertiesFactoryInterface $amqpProperties)
-    {
+    public function __construct(
+        AMQPBodyFactoryInterface $amqpBody,
+        AMQPPropertiesFactoryInterface $amqpProperties
+    ) {
         $this->amqpBody = $amqpBody;
         $this->amqpProperties = $amqpProperties;
     }
@@ -33,8 +35,13 @@ class AMQPMessageFactory implements AMQPMessageFactoryInterface
     /**
      * @inheritdoc
      */
-    public function createMessage(UUID $cdbid, \DateTime $dateTime, StringLiteral $author, Url $url, $isUpdate)
-    {
+    public function createMessage(
+        UUID $cdbid,
+        \DateTime $dateTime,
+        StringLiteral $author,
+        Url $url,
+        $isUpdate
+    ) {
         return new AMQPMessage(
             $this->amqpBody->createBody($cdbid, $dateTime, $author, $url),
             $this->amqpProperties->createProperties($isUpdate)
