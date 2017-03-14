@@ -13,7 +13,7 @@ interface AMQPBodyFactoryInterface
      * @param \DateTime $dateTime
      * @param StringLiteral $author
      * @param Url $url
-     * @return void
+     * @return string
      */
     public function createBody(
         UUID $cdbid,
