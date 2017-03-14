@@ -9,11 +9,16 @@ use ValueObjects\Web\Url;
 interface AMQPBodyFactoryInterface
 {
     /**
-     * @param  UUID $cdbid
+     * @param UUID $cdbid
      * @param \DateTime $dateTime
      * @param StringLiteral $author
      * @param Url $url
-     * @return
+     * @return void
      */
-    public function createBody(UUID $cdbid, \Datetime $dateTime, StringLiteral $author, Url $url);
+    public function createBody(
+        UUID $cdbid,
+        \Datetime $dateTime,
+        StringLiteral $author,
+        Url $url
+    );
 }

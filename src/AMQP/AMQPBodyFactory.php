@@ -11,14 +11,19 @@ class AMQPBodyFactory implements AMQPBodyFactoryInterface
     /**
      * @inheritdoc
      */
-    public function createBody(UUID $cdbid, \DateTime $dateTime, StringLiteral $author, Url $url)
-    {
+    public function createBody(
+        UUID $cdbid,
+        \DateTime $dateTime,
+        StringLiteral $author,
+        Url $url
+    ) {
         $bodyArray = [
-            'eventid' => $cdbid->toNative(),
+            'eventId' => $cdbid->toNative(),
             'time' => $dateTime->format(\DateTime::ATOM),
-            'author' => $author,
+            'author' => $author->toNative(),
             'url' => (string) $url,
         ];
+
         return json_encode($bodyArray);
     }
 }
