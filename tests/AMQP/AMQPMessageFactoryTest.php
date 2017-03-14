@@ -55,12 +55,12 @@ class AMQPMessageFactoryTest extends \PHPUnit_Framework_TestCase
             'eventId' => $uuid->toNative(),
             'time' => $dateTime->format(\DateTime::ATOM),
             'author' => $author->toNative(),
-            'url' => (string) $url
+            'url' => (string) $url,
         ];
 
         $properties = [
             'delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT,
-            'content_type' => 'application/vnd.cultuurnet.udb2-events.event-created+json'
+            'content_type' => 'application/vnd.cultuurnet.udb2-events.event-created+json',
         ];
 
         $this->amqpBodyFactory->expects($this->once())

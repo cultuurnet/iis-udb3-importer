@@ -21,7 +21,7 @@ class AMQPPropertiesFactoryTest extends \PHPUnit_Framework_TestCase
         $this->amqpPropertiesFactory = new AMQPPropertiesFactory();
 
         $this->expectedProperties = [
-            'delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT
+            'delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT,
         ];
     }
 

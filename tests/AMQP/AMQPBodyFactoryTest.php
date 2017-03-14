@@ -40,7 +40,7 @@ class AMQPBodyFactoryTest extends \PHPUnit_Framework_TestCase
                 'eventId' => $uuid->toNative(),
                 'time' => $dateTime->format(\DateTime::ATOM),
                 'author' => $author->toNative(),
-                'url' => (string) $url
+                'url' => (string) $url,
             ]
         );
 
