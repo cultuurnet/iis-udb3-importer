@@ -9,7 +9,7 @@ use ValueObjects\Web\Url;
 class UrlFactory implements UrlFactoryInterface
 {
     /**
-     * @StringLiteral
+     * @var StringLiteral
      */
     private $baseUrl;
 
