@@ -6,6 +6,7 @@ use CultuurNet\UDB3\IISImporter\AMQP\AMQPPropertiesFactory;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisher;
 use CultuurNet\UDB3\IISImporter\Event\ParserV3;
 use CultuurNet\UDB3\IISImporter\Event\Watcher;
+use CultuurNet\UDB3\IISImporter\Url\UrlFactory;
 use CultuurNet\UDB3\IISStore\Stores\Doctrine\StoreLoggingDBALRepository;
 use CultuurNet\UDB3\IISStore\Stores\Doctrine\StoreRelationDBALRepository;
 use CultuurNet\UDB3\IISStore\Stores\Doctrine\StoreXmlDBALRepository;
@@ -104,7 +105,17 @@ $app['iis.amqp_connection'] = $app->share(
     }
 );
 
-$app['iis.publisher'] = $app->share(
+$app['iis.url_factory'] = $app->share(
+    function (Application $app) {
+        return new UrlFactory(
+            new StringLiteral(
+                $app['config']['amqp']['message']['base_url']
+            )
+        );
+    }
+);
+
+$app['iis.amqp_publisher'] = $app->share(
     function (Application $app) {
         $channel = new AMQPChannel($app['iis.amqp_connection']);
         return new AMQPPublisher(
@@ -124,7 +135,7 @@ $app['iis.watcher'] = $app->share(
             $trackingId,
             $app['iis.parser'],
             $app['iis.dbal_store'],
-            $app['iis.publisher']);
+            $app['iis.amqp_publisher']);
     }
 );
 

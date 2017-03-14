@@ -2,23 +2,24 @@ debug: true
 
 database:
   driver: pdo_mysql
-  dbname: ***
+  dbname: iis-import
   user: ***
   password: ***
   host: 127.0.0.1
 
 bootstrap: []
 
-input_folder: ***
+input_folder: /vagrant/import
 
 amqp:
-  host: example.com
+  host: udb3.dev
   port: 5672
-  user: foo
-  password: bar
-  vhost: example
+  user: vagrant
+  password: ***
+  vhost: udb3-vagrant
+  consumer_tag: udb3-vagrant
   publish:
-    exchange: udb2.e.prod
+    exchange: udb2.vagrant.x.entry
   message:
     base_url: http://iis-udb.dev/events
     author: importsUDB3
