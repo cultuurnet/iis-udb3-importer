@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Package" default="test">
     <fileset id="php" dir=".">
-        <include name="src/**/*.php"/>
+        <patternset>
+            <include name="src/**/*.php"/>
+            <exclude name="src/Console/*.php"/>
+        </patternset>
         <include name="tests/**/*.php"/>
     </fileset>
 

@@ -2,8 +2,8 @@
 
 namespace CultuurNet\UDB3\IISImporter\Console;
 
+use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisherInterface;
 use CultuurNet\UDB3\IISImporter\Event\ParserInterface;
-use CultuurNet\UDB3\IISImporter\Event\PublishInterface;
 use CultuurNet\UDB3\IISImporter\Event\WatcherInterface;
 use Knp\Command\Command;
 use CultuurNet\UDB3\IISImporter\Event;
@@ -29,7 +29,7 @@ class WatchCommand extends Command
     protected $watcher;
 
     /**
-     * @var PublishInterface
+     * @var AMQPPublisherInterface
      */
     protected $publisher;
 
@@ -38,13 +38,13 @@ class WatchCommand extends Command
      * @param ParserInterface $parser
      * @param RepositoryInterface $store
      * @param WatcherInterface $watcher
-     * @param PublishInterface $publisher
+     * @param AMQPPublisherInterface $publisher
      */
     public function __construct(
         ParserInterface $parser,
         RepositoryInterface $store,
         WatcherInterface $watcher,
-        PublishInterface $publisher
+        AMQPPublisherInterface $publisher
     ) {
         $this->parser = $parser;
         $this->store = $store;
@@ -68,7 +68,7 @@ class WatchCommand extends Command
         $app = $this->getSilexApplication();
 
         $this->watcher->track($app['config']['input_folder']);
-        $this->watcher->configureListener($this->parser, $this->store);
+        $this->watcher->configureListener();
         $this->watcher->start();
     }
 }

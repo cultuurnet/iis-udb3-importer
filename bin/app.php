@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 
+use CultuurNet\UDB3\IISImporter\Console\AMQPPublishCommand;
 use Knp\Provider\ConsoleServiceProvider;
 use CultuurNet\UDB3\IISImporter\Console\WatchCommand;
 
@@ -26,7 +27,14 @@ $consoleApp->add(
         $app['iis.parser'],
         $app['iis.dbal_store'],
         $app['iis.watcher'],
-        $app['iis.publisher']
+        $app['iis.amqp_publisher']
+    )
+);
+
+$consoleApp->add(
+    new AMQPPublishCommand(
+        $app['iis.url_factory'],
+        $app['iis.amqp_publisher']
     )
 );
 

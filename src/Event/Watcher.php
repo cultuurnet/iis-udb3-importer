@@ -2,6 +2,8 @@
 
 namespace CultuurNet\UDB3\IISImporter\Event;
 
+use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisherInterface;
+use CultuurNet\UDB3\IISImporter\Url\UrlFactory;
 use CultuurNet\UDB3\IISStore\Stores\RepositoryInterface;
 use ValueObjects\StringLiteral\StringLiteral;
 use Lurker\Event\FilesystemEvent;
@@ -32,11 +34,27 @@ class Watcher implements WatcherInterface
     protected $store;
 
     /**
-     * @param StringLiteral $trackingId
+     * @var AMQPPublisherInterface
      */
-    public function __construct(StringLiteral $trackingId)
-    {
+    protected $publisher;
+
+    /**
+     * @param StringLiteral $trackingId
+     * @param ParserInterface $parser
+     * @param RepositoryInterface $store
+     * @param AMQPPublisherInterface $publisher
+     */
+    public function __construct(
+        StringLiteral $trackingId,
+        ParserInterface $parser,
+        RepositoryInterface $store,
+        AMQPPublisherInterface $publisher
+    ) {
         $this->trackingId = $trackingId;
+        $this->parser = $parser;
+        $this->store = $store;
+        $this->publisher = $publisher;
+
         $this->resourceWatcher = new ResourceWatcher();
     }
 
@@ -48,11 +66,8 @@ class Watcher implements WatcherInterface
     /**
      * @inheritdoc
      */
-    public function configureListener(ParserInterface $parser, RepositoryInterface $store)
+    public function configureListener()
     {
-        $this->parser = $parser;
-        $this->store = $store;
-
         $this->resourceWatcher->addListener(
             $this->trackingId->toNative(),
             function (FilesystemEvent $filesystemEvent) {
@@ -73,7 +88,7 @@ class Watcher implements WatcherInterface
                                 $cdbid = UUID::fromNative($cdbidString);
                             }
                             $singleXml = simplexml_load_string($singleEvent);
-                            $singleXml->event[0]['cdbid'] = $cdbid;
+                            $singleXml->event[0]['cdbid'] = $cdbid->toNative();
                             $singleEvent = new StringLiteral($singleXml->asXML());
 
                             if ($isUpdate) {
@@ -84,6 +99,13 @@ class Watcher implements WatcherInterface
                                 $this->store->saveEventXml($cdbid, $singleEvent);
                                 $this->store->saveCreated($cdbid, new \DateTime());
                             }
+
+                            $now = new \DateTime();
+                            $baseUrl = new StringLiteral('http://test.import.com');
+                            $author = new StringLiteral('importsUDB3');
+                            $urlFactory = new UrlFactory($baseUrl);
+                            $this->publisher->publish($cdbid, $now, $author, $urlFactory->generateUrl($cdbid), $isUpdate);
+                            $this->store->savePublished($cdbid, $now);
                         }
                     } else {
                         echo 'Invalid file uploaded';

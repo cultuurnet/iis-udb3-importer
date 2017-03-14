@@ -2,8 +2,6 @@
 
 namespace CultuurNet\UDB3\IISImporter\Event;
 
-use CultuurNet\UDB3\IISStore\Stores\RepositoryInterface;
-
 interface WatcherInterface
 {
     /**
@@ -15,11 +13,8 @@ interface WatcherInterface
 
     /**
      * Adds the listener function
-     *
-     * @param ParserInterface $parser
-     * @param RepositoryInterface $store
      **/
-    public function configureListener(ParserInterface $parser, RepositoryInterface $store);
+    public function configureListener();
 
     /**
      * Starts the watcher
