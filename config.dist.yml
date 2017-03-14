@@ -19,5 +19,6 @@ amqp:
   vhost: example
   publish:
     exchange: udb2.e.prod
-
-base_url_output: output.uitdatabank.be
+  message:
+    base_url: http://iis-udb.dev/events
+    author: importsUDB3
