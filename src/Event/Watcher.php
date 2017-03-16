@@ -13,6 +13,9 @@ use ValueObjects\Identity\UUID;
 
 class Watcher implements WatcherInterface
 {
+    const SUCCESS_FOLDER = 'success';
+    const ERROR_FOLDER = 'error';
+
     /**
      * @var StringLiteral
      */
@@ -39,6 +42,11 @@ class Watcher implements WatcherInterface
     protected $publisher;
 
     /**
+     * @var string
+     */
+    protected $resource;
+
+    /**
      * @param StringLiteral $trackingId
      * @param ParserInterface $parser
      * @param RepositoryInterface $store
@@ -58,8 +66,12 @@ class Watcher implements WatcherInterface
         $this->resourceWatcher = new ResourceWatcher();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function track($resource)
     {
+        $this->resource = $resource;
         $this->resourceWatcher->track($this->trackingId->toNative(), $resource);
     }
 
@@ -108,11 +120,22 @@ class Watcher implements WatcherInterface
                             $this->store->savePublished($cdbid, $now);
                         }
                     } else {
-                        echo 'Invalid file uploaded';
+
                     }
                 }
             }
         );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function moveFile($file, $folder)
+    {
+        $path = $this->resource . '/' . $folder;
+        if (!file_exists($path) && !is_dir($path)) {
+            mkdir($path);
+        }
     }
 
     public function start()
