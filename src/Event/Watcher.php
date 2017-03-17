@@ -5,6 +5,8 @@ namespace CultuurNet\UDB3\IISImporter\Event;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisherInterface;
 use CultuurNet\UDB3\IISImporter\Url\UrlFactory;
 use CultuurNet\UDB3\IISStore\Stores\RepositoryInterface;
+use Lurker\Resource\DirectoryResource;
+use Lurker\Resource\ResourceInterface;
 use ValueObjects\StringLiteral\StringLiteral;
 use Lurker\Event\FilesystemEvent;
 use Lurker\ResourceWatcher;
@@ -42,9 +44,9 @@ class Watcher implements WatcherInterface
     protected $publisher;
 
     /**
-     * @var string
+     * @var ResourceInterface
      */
-    protected $resource;
+    protected $resourceFolder;
 
     /**
      * @param StringLiteral $trackingId
@@ -71,8 +73,9 @@ class Watcher implements WatcherInterface
      */
     public function track($resource)
     {
-        $this->resource = $resource;
-        $this->resourceWatcher->track($this->trackingId->toNative(), $resource);
+        $directoryResource = new DirectoryResource($resource);
+        $this->resourceFolder = $resource;
+        $this->resourceWatcher->track($this->trackingId->toNative(), $directoryResource);
     }
 
     /**
@@ -83,8 +86,12 @@ class Watcher implements WatcherInterface
         $this->resourceWatcher->addListener(
             $this->trackingId->toNative(),
             function (FilesystemEvent $filesystemEvent) {
-                if ($filesystemEvent->getTypeString() == 'create' ||
-                    $filesystemEvent->getTypeString() == 'modify') {
+                if ($filesystemEvent->isFileChange() &&
+                    ($filesystemEvent->getTypeString() == 'create' ||
+                    $filesystemEvent->getTypeString() == 'modify') &&
+                    !$this->isSubFolder($filesystemEvent->getResource())
+                ) {
+
                     $xmlString = file_get_contents($filesystemEvent->getResource());
 
                     if ($this->parser->validate($xmlString)) {
@@ -118,9 +125,10 @@ class Watcher implements WatcherInterface
                             $urlFactory = new UrlFactory($baseUrl);
                             $this->publisher->publish($cdbid, $now, $author, $urlFactory->generateUrl($cdbid), $isUpdate);
                             $this->store->savePublished($cdbid, $now);
+                            $this->moveFile((string) $filesystemEvent->getResource(), Watcher::SUCCESS_FOLDER);
                         }
                     } else {
-
+                        $this->moveFile((string) $filesystemEvent->getResource(), Watcher::ERROR_FOLDER);
                     }
                 }
             }
@@ -132,14 +140,27 @@ class Watcher implements WatcherInterface
      */
     public function moveFile($file, $folder)
     {
-        $path = $this->resource . '/' . $folder;
+        $path = $this->resourceFolder . '/' . $folder;
         if (!file_exists($path) && !is_dir($path)) {
             mkdir($path);
         }
+        $destination = str_replace($this->resourceFolder, $path, $file);
+        rename($file, $destination );
     }
 
     public function start()
     {
         $this->resourceWatcher->start();
+    }
+
+    /**
+     * @param ResourceInterface $resource
+     * @return bool
+     */
+    protected function isSubFolder(ResourceInterface $resource)
+    {
+        $path = (string) $resource;
+        return 0 === strpos($path, $this->resourceFolder . '/' . Watcher::ERROR_FOLDER) ||
+            0 === strpos($path, $this->resourceFolder . '/' . Watcher::SUCCESS_FOLDER);
     }
 }
