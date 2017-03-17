@@ -145,7 +145,7 @@ class Watcher implements WatcherInterface
             mkdir($path);
         }
         $destination = str_replace($this->resourceFolder, $path, $file);
-        rename($file, $destination );
+        rename($file, $destination);
     }
 
     public function start()
