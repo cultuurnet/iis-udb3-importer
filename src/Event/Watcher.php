@@ -75,6 +75,7 @@ class Watcher implements WatcherInterface
     {
         $directoryResource = new DirectoryResource($resource);
         $this->resourceFolder = $resource;
+        $this->checkFolder();
         $this->resourceWatcher->track($this->trackingId->toNative(), $directoryResource);
     }
 
@@ -91,45 +92,8 @@ class Watcher implements WatcherInterface
                     $filesystemEvent->getTypeString() == 'modify') &&
                     !$this->isSubFolder($filesystemEvent->getResource())
                 ) {
-
-                    $xmlString = file_get_contents($filesystemEvent->getResource());
-
-                    if ($this->parser->validate($xmlString)) {
-                        $eventList = $this->parser->split($xmlString);
-
-                        foreach ($eventList as $externalId => $singleEvent) {
-                            $externalIdLiteral = new StringLiteral($externalId);
-                            $cdbid = $this->store->getEventCdbid($externalIdLiteral);
-                            $isUpdate = true;
-                            if (!$cdbid) {
-                                $isUpdate = false;
-                                $cdbidString = Identity\UUID::generateAsString();
-                                $cdbid = UUID::fromNative($cdbidString);
-                            }
-                            $singleXml = simplexml_load_string($singleEvent);
-                            $singleXml->event[0]['cdbid'] = $cdbid->toNative();
-                            $singleEvent = new StringLiteral($singleXml->asXML());
-
-                            if ($isUpdate) {
-                                $this->store->updateEventXml($cdbid, $singleEvent);
-                                $this->store->saveUpdated($cdbid, new \DateTime());
-                            } else {
-                                $this->store->saveRelation($cdbid, $externalIdLiteral);
-                                $this->store->saveEventXml($cdbid, $singleEvent);
-                                $this->store->saveCreated($cdbid, new \DateTime());
-                            }
-
-                            $now = new \DateTime();
-                            $baseUrl = new StringLiteral('http://test.import.com');
-                            $author = new StringLiteral('importsUDB3');
-                            $urlFactory = new UrlFactory($baseUrl);
-                            $this->publisher->publish($cdbid, $now, $author, $urlFactory->generateUrl($cdbid), $isUpdate);
-                            $this->store->savePublished($cdbid, $now);
-                            $this->moveFile((string) $filesystemEvent->getResource(), Watcher::SUCCESS_FOLDER);
-                        }
-                    } else {
-                        $this->moveFile((string) $filesystemEvent->getResource(), Watcher::ERROR_FOLDER);
-                    }
+                    $xmlString = new StringLiteral(file_get_contents($filesystemEvent->getResource()));
+                    $this->consumeFile($xmlString, new StringLiteral($filesystemEvent->getResource()));
                 }
             }
         );
@@ -162,5 +126,65 @@ class Watcher implements WatcherInterface
         $path = (string) $resource;
         return 0 === strpos($path, $this->resourceFolder . '/' . Watcher::ERROR_FOLDER) ||
             0 === strpos($path, $this->resourceFolder . '/' . Watcher::SUCCESS_FOLDER);
+    }
+
+    /**
+     * @return void
+     */
+    protected function checkFolder()
+    {
+        $files = scandir($this->resourceFolder);
+        foreach ($files as $file) {
+            $fileLiteral = new StringLiteral($this->resourceFolder.'/'.$file);
+            if (is_file($fileLiteral->toNative())) {
+                $xmlString = new StringLiteral(file_get_contents($fileLiteral->toNative()));
+                $this->consumeFile($xmlString, $fileLiteral);
+            }
+        }
+    }
+
+    /**
+     * @param StringLiteral $xmlString
+     * @param StringLiteral $fileName
+     * @return void
+     */
+    protected function consumeFile(StringLiteral $xmlString, StringLiteral $fileName)
+    {
+        if ($this->parser->validate($xmlString->toNative())) {
+            $eventList = $this->parser->split($xmlString->toNative());
+
+            foreach ($eventList as $externalId => $singleEvent) {
+                $externalIdLiteral = new StringLiteral($externalId);
+                $cdbid = $this->store->getEventCdbid($externalIdLiteral);
+                $isUpdate = true;
+                if (!$cdbid) {
+                    $isUpdate = false;
+                    $cdbidString = Identity\UUID::generateAsString();
+                    $cdbid = UUID::fromNative($cdbidString);
+                }
+                $singleXml = simplexml_load_string($singleEvent);
+                $singleXml->event[0]['cdbid'] = $cdbid->toNative();
+                $singleEvent = new StringLiteral($singleXml->asXML());
+
+                if ($isUpdate) {
+                    $this->store->updateEventXml($cdbid, $singleEvent);
+                    $this->store->saveUpdated($cdbid, new \DateTime());
+                } else {
+                    $this->store->saveRelation($cdbid, $externalIdLiteral);
+                    $this->store->saveEventXml($cdbid, $singleEvent);
+                    $this->store->saveCreated($cdbid, new \DateTime());
+                }
+
+                $now = new \DateTime();
+                $baseUrl = new StringLiteral('http://test.import.com');
+                $author = new StringLiteral('importsUDB3');
+                $urlFactory = new UrlFactory($baseUrl);
+                $this->publisher->publish($cdbid, $now, $author, $urlFactory->generateUrl($cdbid), $isUpdate);
+                $this->store->savePublished($cdbid, $now);
+                $this->moveFile($fileName->toNative(), Watcher::SUCCESS_FOLDER);
+            }
+        } else {
+            $this->moveFile($fileName->toNative(), Watcher::ERROR_FOLDER);
+        }
     }
 }
