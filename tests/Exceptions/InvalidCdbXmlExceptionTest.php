@@ -23,6 +23,6 @@ class InvalidCdbXmlExceptionTest extends \PHPUnit_Framework_TestCase
     {
         $faultyXml = file_get_contents(__DIR__ . '/../NotACdbxml.xml');
         $this->expectException(InvalidCdbXmlException::class);
-        $this->parser->validate($faultyXml);
+        $this->parser->loadDOM($faultyXml);
     }
 }
