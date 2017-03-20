@@ -6,12 +6,12 @@ use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisherInterface;
 use CultuurNet\UDB3\IISImporter\Event\ParserInterface;
 use CultuurNet\UDB3\IISImporter\Url\UrlFactory;
 use CultuurNet\UDB3\IISStore\Stores\RepositoryInterface;
-use Lurker\Resource\ResourceInterface;
 use ValueObjects\StringLiteral\StringLiteral;
 use ValueObjects\Identity\UUID;
 
 class FileProcessor implements FileProcessorInterface
 {
+    const PROCESS_FOLDER = 'process';
     const SUCCESS_FOLDER = 'success';
     const ERROR_FOLDER = 'error';
     const INVALID_FOLDER = 'invalid';
@@ -19,7 +19,7 @@ class FileProcessor implements FileProcessorInterface
     /**
      * @var \SplFileInfo
      */
-    protected $resourceFolder;
+    protected $rootFolder;
 
     /**
      * @var ParserInterface
@@ -48,7 +48,7 @@ class FileProcessor implements FileProcessorInterface
 
     /**
      * FileProcessor constructor.
-     * @param \SplFileInfo $resource
+     * @param \SplFileInfo $rootFolder
      * @param ParserInterface $parser
      * @param RepositoryInterface $store
      * @param AMQPPublisherInterface $publisher
@@ -56,14 +56,14 @@ class FileProcessor implements FileProcessorInterface
      * @param StringLiteral $author
      */
     public function __construct(
-        \SplFileInfo $resource,
+        \SplFileInfo $rootFolder,
         ParserInterface $parser,
         RepositoryInterface $store,
         AMQPPublisherInterface $publisher,
         UrlFactory $urlFactory,
         StringLiteral $author
     ) {
-        $this->resourceFolder = $resource;
+        $this->rootFolder = $rootFolder;
         $this->parser = $parser;
         $this->store = $store;
         $this->publisher = $publisher;
@@ -77,7 +77,9 @@ class FileProcessor implements FileProcessorInterface
      */
     public function consumeFile(StringLiteral $fileName)
     {
-        $xmlString = new StringLiteral(file_get_contents($fileName->toNative()));
+        $fullPath = $this->getProcessFolder() . '/' . $fileName->toNative();
+        $xmlString = new StringLiteral(file_get_contents($fullPath));
+
         if ($this->parser->validate($xmlString->toNative())) {
             try {
                 $eventList = $this->parser->split($xmlString->toNative());
@@ -107,48 +109,39 @@ class FileProcessor implements FileProcessorInterface
                     $now = new \DateTime();
                     $this->publisher->publish($cdbid, $now, $this->author, $this->urlFactory->generateUrl($cdbid), $isUpdate);
                     $this->store->savePublished($cdbid, $now);
-                    $this->moveFile($fileName->toNative(), FileProcessor::SUCCESS_FOLDER);
+                    $this->moveFile($fileName, FileProcessor::SUCCESS_FOLDER);
                 }
             } catch (\Exception $e) {
-                $this->moveFile($fileName->toNative(), FileProcessor::ERROR_FOLDER);
+                $this->moveFile($fileName, FileProcessor::ERROR_FOLDER);
             }
         } else {
-            $this->moveFile($fileName->toNative(), FileProcessor::INVALID_FOLDER);
+            $this->moveFile($fileName, FileProcessor::INVALID_FOLDER);
         }
     }
 
     /**
      * @inheritdoc
      */
-    public function getPath()
+    public function getProcessFolder()
     {
-        return $this->resourceFolder->getPathname();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function isSubFolder(ResourceInterface $resource)
-    {
-        $path = (string) $resource;
-        return 0 === strpos($path, $this->getPath() . '/' . FileProcessor::ERROR_FOLDER) ||
-            0 === strpos($path, $this->getPath() . '/' . FileProcessor::SUCCESS_FOLDER) ||
-            0 === strpos($path, $this->getPath() . '/' . FileProcessor::INVALID_FOLDER);
+        return $this->rootFolder->getPathname() . '/' . self::PROCESS_FOLDER;
     }
 
     /**
      * Move file to a folder
      *
-     * @param string $file to file to move
+     * @param StringLiteral $fileName
      * @param string $folder the destination folder
      */
-    private function moveFile($file, $folder)
+    private function moveFile(StringLiteral $fileName, $folder)
     {
-        $path = $this->getPath() . '/' . $folder;
-        if (!file_exists($path) && !is_dir($path)) {
-            mkdir($path);
+        $destinationPath = $this->rootFolder->getPathname() . '/' . $folder;
+        if (!file_exists($destinationPath) && !is_dir($destinationPath)) {
+            mkdir($destinationPath);
         }
-        $destination = str_replace($this->getPath(), $path, $file);
-        rename($file, $destination);
+        $destination = $destinationPath . '/' . $fileName;
+        $source = $this->getProcessFolder() . '/' . $fileName;
+
+        rename($source, $destination);
     }
 }

@@ -53,7 +53,7 @@ class Watcher implements WatcherInterface
     {
         $this->resourceWatcher->track(
             $this->trackingId->toNative(),
-            $this->fileProcessor->getPath()
+            $this->fileProcessor->getProcessFolder()
         );
     }
 
@@ -67,11 +67,11 @@ class Watcher implements WatcherInterface
             function (FilesystemEvent $filesystemEvent) {
                 if ($filesystemEvent->isFileChange() &&
                     ($filesystemEvent->getTypeString() == 'create' ||
-                        $filesystemEvent->getTypeString() == 'modify') &&
-                    !$this->fileProcessor->isSubFolder($filesystemEvent->getResource())
+                        $filesystemEvent->getTypeString() == 'modify')
                 ) {
+                    $splInfo = new \SplFileInfo((string) $filesystemEvent->getResource());
                     $this->fileProcessor->consumeFile(
-                        new StringLiteral((string) $filesystemEvent->getResource())
+                        new StringLiteral($splInfo->getFilename())
                     );
                 }
             }
@@ -84,10 +84,10 @@ class Watcher implements WatcherInterface
     private function checkFolder()
     {
         $finder = new Finder();
-        $finder->files()->in($this->fileProcessor->getPath());
+        $finder->files()->in($this->fileProcessor->getProcessFolder());
 
         foreach ($finder as $file) {
-            $fileLiteral = new StringLiteral($file->getPathname());
+            $fileLiteral = new StringLiteral($file->getFilename());
             if (is_file($fileLiteral->toNative())) {
                 $this->fileProcessor->consumeFile($fileLiteral);
             }

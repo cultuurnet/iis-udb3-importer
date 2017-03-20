@@ -32,7 +32,7 @@ class FileProcessorCommand extends Command
             ->setName('fileProcessor')
             ->setDescription('Process a file.')
             ->addArgument(
-                'fullPath',
+                'fileName',
                 InputArgument::REQUIRED,
                 'Full path of the file to process'
             );
@@ -43,7 +43,7 @@ class FileProcessorCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $fullPath = new StringLiteral($input->getArgument('fullPath'));
-        $this->fileProcessor->consumeFile($fullPath);
+        $fileName = new StringLiteral($input->getArgument('fileName'));
+        $this->fileProcessor->consumeFile($fileName);
     }
 }

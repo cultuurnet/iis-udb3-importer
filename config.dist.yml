@@ -9,7 +9,7 @@ database:
 
 bootstrap: []
 
-input_folder: /vagrant/import
+import_folder: /vagrant/import
 
 amqp:
   host: udb3.dev
