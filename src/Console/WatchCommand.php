@@ -4,7 +4,7 @@ namespace CultuurNet\UDB3\IISImporter\Console;
 
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisherInterface;
 use CultuurNet\UDB3\IISImporter\Parser\ParserInterface;
-use CultuurNet\UDB3\IISImporter\Event\WatcherInterface;
+use CultuurNet\UDB3\IISImporter\Watcher\WatcherInterface;
 use Knp\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

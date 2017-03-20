@@ -1,6 +1,6 @@
 <?php
 
-namespace CultuurNet\UDB3\IISImporter\Event;
+namespace CultuurNet\UDB3\IISImporter\Watcher;
 
 use CultuurNet\UDB3\IISImporter\File\FileProcessorInterface;
 use Symfony\Component\Finder\Finder;
