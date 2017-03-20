@@ -2,7 +2,7 @@
 
 namespace CultuurNet\UDB3\IISImporter\Exceptions;
 
-use CultuurNet\UDB3\IISImporter\Event\ParserV3;
+use CultuurNet\UDB3\IISImporter\Parser\ParserV3;
 
 class InvalidCdbXmlExceptionTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,7 +22,7 @@ class InvalidCdbXmlExceptionTest extends \PHPUnit_Framework_TestCase
     public function itThrowsTheExpectedException()
     {
         $faultyXml = file_get_contents(__DIR__ . '/../NotACdbxml.xml');
-        $this->setExpectedException(InvalidCdbXmlException::class);
-        $this->parser->loadDOM($faultyXml);
+        $this->expectException(InvalidCdbXmlException::class);
+        $this->parser->validate($faultyXml);
     }
 }

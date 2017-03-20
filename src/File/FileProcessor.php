@@ -3,7 +3,7 @@
 namespace CultuurNet\UDB3\IISImporter\File;
 
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisherInterface;
-use CultuurNet\UDB3\IISImporter\Event\ParserInterface;
+use CultuurNet\UDB3\IISImporter\Parser\ParserInterface;
 use CultuurNet\UDB3\IISImporter\Url\UrlFactory;
 use CultuurNet\UDB3\IISStore\Stores\RepositoryInterface;
 use ValueObjects\StringLiteral\StringLiteral;

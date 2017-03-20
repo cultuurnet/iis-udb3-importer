@@ -4,7 +4,7 @@ use CultuurNet\UDB3\IISImporter\AMQP\AMQPBodyFactory;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPMessageFactory;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPropertiesFactory;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisher;
-use CultuurNet\UDB3\IISImporter\Event\ParserV3;
+use CultuurNet\UDB3\IISImporter\Parser\ParserV3;
 use CultuurNet\UDB3\IISImporter\Event\Watcher;
 use CultuurNet\UDB3\IISImporter\File\FileProcessor;
 use CultuurNet\UDB3\IISImporter\Url\UrlFactory;
@@ -18,7 +18,6 @@ use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Channel\AMQPChannel;
 use Silex\Application;
 use ValueObjects\StringLiteral\StringLiteral;
-use Lurker\Resource\DirectoryResource;
 
 $app = new Application();
 

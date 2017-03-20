@@ -1,8 +1,10 @@
 <?php
 
-namespace CultuurNet\UDB3\IISImporter\Event;
+namespace CultuurNet\UDB3\IISImporter\Parser;
 
-use \CultuurNet\UDB3\IISImporter\Exceptions;
+use CultuurNet\UDB3\IISImporter\Exceptions\SchemaValidationException;
+use CultuurNet\UDB3\IISImporter\Exceptions\UnexpectedNamespaceException;
+use CultuurNet\UDB3\IISImporter\Exceptions\UnexpectedRootElementException;
 use ValueObjects\StringLiteral\StringLiteral;
 
 class ParserV3 implements ParserInterface
@@ -58,7 +60,7 @@ class ParserV3 implements ParserInterface
         $namespaceURI = $dom->documentElement->namespaceURI;
 
         if (!array_key_exists($namespaceURI, $this->getValidNameSpaces())) {
-            throw new Exceptions\UnexpectedNamespaceException(
+            throw new UnexpectedNamespaceException(
                 $namespaceURI,
                 $this->getValidNameSpaces()
             );
@@ -69,14 +71,19 @@ class ParserV3 implements ParserInterface
         $expectedLocalName = 'cdbxml';
 
         if ($localName !== $expectedLocalName) {
-            throw new Exceptions\UnexpectedRootElementException(
+            throw new UnexpectedRootElementException(
                 $localName,
                 $expectedLocalName
             );
         }
 
-        if (!$dom->schemaValidate($schema)) {
-            throw new Exceptions\SchemaValidationException($namespaceURI);
+        try {
+            $throwValidationException = !$dom->schemaValidate($schema);
+        } catch (\Exception $exception) {
+            $throwValidationException = true;
+        }
+        if ($throwValidationException) {
+            throw new SchemaValidationException($namespaceURI);
         }
 
         return $dom;

@@ -3,10 +3,9 @@
 namespace CultuurNet\UDB3\IISImporter\Console;
 
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisherInterface;
-use CultuurNet\UDB3\IISImporter\Event\ParserInterface;
+use CultuurNet\UDB3\IISImporter\Parser\ParserInterface;
 use CultuurNet\UDB3\IISImporter\Event\WatcherInterface;
 use Knp\Command\Command;
-use CultuurNet\UDB3\IISImporter\Event;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use CultuurNet\UDB3\IISStore\Stores\RepositoryInterface;
@@ -14,7 +13,7 @@ use CultuurNet\UDB3\IISStore\Stores\RepositoryInterface;
 class WatchCommand extends Command
 {
     /**
-     * @var Event\ParserInterface
+     * @var ParserInterface
      */
     protected $parser;
 
