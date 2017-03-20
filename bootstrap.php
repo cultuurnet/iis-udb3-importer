@@ -6,6 +6,7 @@ use CultuurNet\UDB3\IISImporter\AMQP\AMQPPropertiesFactory;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisher;
 use CultuurNet\UDB3\IISImporter\Event\ParserV3;
 use CultuurNet\UDB3\IISImporter\Event\Watcher;
+use CultuurNet\UDB3\IISImporter\File\FileProcessor;
 use CultuurNet\UDB3\IISImporter\Url\UrlFactory;
 use CultuurNet\UDB3\IISStore\Stores\Doctrine\StoreLoggingDBALRepository;
 use CultuurNet\UDB3\IISStore\Stores\Doctrine\StoreRelationDBALRepository;
@@ -17,6 +18,7 @@ use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Channel\AMQPChannel;
 use Silex\Application;
 use ValueObjects\StringLiteral\StringLiteral;
+use Lurker\Resource\DirectoryResource;
 
 $app = new Application();
 
@@ -115,6 +117,14 @@ $app['iis.url_factory'] = $app->share(
     }
 );
 
+$app['iis.author'] = $app->share(
+    function (Application $app) {
+        return new StringLiteral(
+            $app['config']['amqp']['message']['author']
+        );
+    }
+);
+
 $app['iis.amqp_publisher'] = $app->share(
     function (Application $app) {
         $channel = new AMQPChannel($app['iis.amqp_connection']);
@@ -128,14 +138,24 @@ $app['iis.amqp_publisher'] = $app->share(
     }
 );
 
+$app['iis.file_processor'] = $app->share(
+    function (Application $app) {
+        return new FileProcessor(
+            new \SplFileInfo($app['config']['import_folder']),
+            $app['iis.parser'],
+            $app['iis.dbal_store'],
+            $app['iis.amqp_publisher'],
+            $app['iis.url_factory'],
+            $app['iis.author']);
+    }
+);
+
 $app['iis.watcher'] = $app->share(
     function (Application $app) {
         $trackingId = new StringLiteral('import_files');
         return new Watcher(
             $trackingId,
-            $app['iis.parser'],
-            $app['iis.dbal_store'],
-            $app['iis.amqp_publisher']);
+            $app['iis.file_processor']);
     }
 );
 

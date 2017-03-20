@@ -37,4 +37,16 @@ class ParserV3Test extends \PHPUnit_Framework_TestCase
         $valid = file_get_contents(__DIR__ . '/../CorrectVersion3.xml');
         $this->assertTrue($this->parser->validate($valid));
     }
+
+    public function testEmptyFile()
+    {
+        $valid = file_get_contents(__DIR__ . '/../Empty.xml');
+        $this->assertFalse($this->parser->validate($valid));
+    }
+
+    public function testBinaryFile()
+    {
+        $valid = file_get_contents(__DIR__ . '/../Binary.xml');
+        $this->assertFalse($this->parser->validate($valid));
+    }
 }
