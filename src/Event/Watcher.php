@@ -37,31 +37,19 @@ class Watcher implements WatcherInterface
         $this->fileProcessor = $fileProcessor;
 
         $this->resourceWatcher = new ResourceWatcher();
-    }
 
-    /**
-     * @inheritdoc
-     */
-    public function track()
-    {
         $this->checkFolder();
         $this->resourceWatcher->track(
             $this->trackingId->toNative(),
             $this->fileProcessor->getPath()
         );
-    }
 
-    /**
-     * Adds the listener function
-     */
-    public function configureListener()
-    {
         $this->resourceWatcher->addListener(
             $this->trackingId->toNative(),
             function (FilesystemEvent $filesystemEvent) {
                 if ($filesystemEvent->isFileChange() &&
                     ($filesystemEvent->getTypeString() == 'create' ||
-                    $filesystemEvent->getTypeString() == 'modify') &&
+                        $filesystemEvent->getTypeString() == 'modify') &&
                     !$this->fileProcessor->isSubFolder($filesystemEvent->getResource())
                 ) {
                     $this->fileProcessor->consumeFile(
@@ -72,6 +60,9 @@ class Watcher implements WatcherInterface
         );
     }
 
+    /**
+     * @inheritdoc
+     */
     public function start()
     {
         $this->resourceWatcher->start();
