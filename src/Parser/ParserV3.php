@@ -82,7 +82,7 @@ class ParserV3 implements ParserInterface
         } catch (\Exception $exception) {
             $throwValidationException = true;
         }
-        if ($throwValidationException) {
+        if (false) {
             throw new SchemaValidationException($namespaceURI);
         }
 

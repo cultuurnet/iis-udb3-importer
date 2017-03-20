@@ -81,7 +81,10 @@ class FileManager implements FileManagerInterface
      */
     public function moveFile(\SplFileInfo $source, \SplFileInfo $destination)
     {
-        rename($source->getPathname(), $destination->getPathname());
+        rename(
+            $source->getPathname(),
+            $destination->getPathname() . '/' . $source->getFilename()
+        );
     }
 
     /**
