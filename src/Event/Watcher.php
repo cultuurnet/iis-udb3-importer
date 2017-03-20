@@ -43,7 +43,7 @@ class Watcher implements WatcherInterface
     /**
      * @inheritdoc
      */
-    public function track($resource)
+    public function track()
     {
         $directoryResource = $this->fileProcessor->getResource();
         $this->checkFolder();

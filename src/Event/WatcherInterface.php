@@ -5,11 +5,9 @@ namespace CultuurNet\UDB3\IISImporter\Event;
 interface WatcherInterface
 {
     /**
-     * Sets the folder to track
-     *
-     * @param string $resource resource to track
+     * Starts to track the folder
      **/
-    public function track($resource);
+    public function track();
 
     /**
      * Adds the listener function

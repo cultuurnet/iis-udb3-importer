@@ -67,7 +67,7 @@ class WatchCommand extends Command
     {
         $app = $this->getSilexApplication();
 
-        $this->watcher->track($app['config']['input_folder']);
+        $this->watcher->track();
         $this->watcher->configureListener();
         $this->watcher->start();
     }

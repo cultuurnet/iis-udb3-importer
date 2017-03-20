@@ -17,6 +17,7 @@ use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Channel\AMQPChannel;
 use Silex\Application;
 use ValueObjects\StringLiteral\StringLiteral;
+use Lurker\Resource\DirectoryResource;
 
 $app = new Application();
 
@@ -136,16 +137,24 @@ $app['iis.amqp_publisher'] = $app->share(
     }
 );
 
-$app['iis.watcher'] = $app->share(
+$app['iis.file_processor'] = $app->share(
     function (Application $app) {
-        $trackingId = new StringLiteral('import_files');
-        return new Watcher(
-            $trackingId,
+        return new \CultuurNet\UDB3\IISImporter\File\FileProcessor(
+            new DirectoryResource($app['config']['input_folder']),
             $app['iis.parser'],
             $app['iis.dbal_store'],
             $app['iis.amqp_publisher'],
             $app['iis.url_factory'],
             $app['iis.author']);
+    }
+);
+
+$app['iis.watcher'] = $app->share(
+    function (Application $app) {
+        $trackingId = new StringLiteral('import_files');
+        return new Watcher(
+            $trackingId,
+            $app['iis.file_processor']);
     }
 );
 
