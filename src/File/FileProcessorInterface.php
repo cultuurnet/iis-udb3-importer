@@ -2,6 +2,7 @@
 
 namespace CultuurNet\UDB3\IISImporter\File;
 
+use Lurker\Resource\ResourceInterface;
 use ValueObjects\StringLiteral\StringLiteral;
 
 interface FileProcessorInterface
@@ -20,4 +21,9 @@ interface FileProcessorInterface
      * @return void
      */
     public function consumeFile(StringLiteral $xmlString, StringLiteral $fileName);
+
+    /**
+     * @return ResourceInterface
+     */
+    public function getResource();
 }

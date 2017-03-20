@@ -119,4 +119,12 @@ class FileProcessor implements FileProcessorInterface
         $this->urlFactory = $urlFactory;
         $this->author = $author;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getResource()
+    {
+        return $this->resourceFolder;
+    }
 }

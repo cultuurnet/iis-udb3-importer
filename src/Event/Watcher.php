@@ -2,27 +2,24 @@
 
 namespace CultuurNet\UDB3\IISImporter\Event;
 
-use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisherInterface;
-use CultuurNet\UDB3\IISImporter\Url\UrlFactory;
-use CultuurNet\UDB3\IISStore\Stores\RepositoryInterface;
-use Lurker\Resource\DirectoryResource;
+use CultuurNet\UDB3\IISImporter\File\FileProcessor;
+use CultuurNet\UDB3\IISImporter\File\FileProcessorInterface;
 use Lurker\Resource\ResourceInterface;
 use ValueObjects\StringLiteral\StringLiteral;
 use Lurker\Event\FilesystemEvent;
 use Lurker\ResourceWatcher;
-use ValueObjects\Identity;
-use ValueObjects\Identity\UUID;
 
 class Watcher implements WatcherInterface
 {
-    const SUCCESS_FOLDER = 'success';
-    const ERROR_FOLDER = 'error';
-    const INVALID_FOLDER = 'invalid';
-
     /**
      * @var StringLiteral
      */
     protected $trackingId;
+
+    /**
+     * @var FileProcessorInterface
+     */
+    protected $fileProcessor;
 
     /**
      * @var ResourceWatcher
@@ -30,57 +27,15 @@ class Watcher implements WatcherInterface
     protected $resourceWatcher;
 
     /**
-     * @var ParserInterface
-     */
-    protected $parser;
-
-    /**
-     * @var RepositoryInterface
-     */
-    protected $store;
-
-    /**
-     * @var AMQPPublisherInterface
-     */
-    protected $publisher;
-
-    /**
-     * @var UrlFactory
-     */
-    protected $urlFactory;
-
-    /**
-     * @var StringLiteral
-     */
-    protected $author;
-
-    /**
-     * @var ResourceInterface
-     */
-    protected $resourceFolder;
-
-    /**
      * @param StringLiteral $trackingId
-     * @param ParserInterface $parser
-     * @param RepositoryInterface $store
-     * @param AMQPPublisherInterface $publisher
-     * @param UrlFactory $urlFactory
-     * @param StringLiteral $author
+     * @param FileProcessorInterface $fileProcessor
      */
     public function __construct(
         StringLiteral $trackingId,
-        ParserInterface $parser,
-        RepositoryInterface $store,
-        AMQPPublisherInterface $publisher,
-        UrlFactory $urlFactory,
-        StringLiteral $author
+        FileProcessorInterface $fileProcessor
     ) {
         $this->trackingId = $trackingId;
-        $this->parser = $parser;
-        $this->store = $store;
-        $this->publisher = $publisher;
-        $this->urlFactory = $urlFactory;
-        $this->author = $author;
+        $this->fileProcessor = $fileProcessor;
 
         $this->resourceWatcher = new ResourceWatcher();
     }
@@ -90,8 +45,7 @@ class Watcher implements WatcherInterface
      */
     public function track($resource)
     {
-        $directoryResource = new DirectoryResource($resource);
-        $this->resourceFolder = $resource;
+        $directoryResource = $this->fileProcessor->getResource();
         $this->checkFolder();
         $this->resourceWatcher->track($this->trackingId->toNative(), $directoryResource);
     }
@@ -110,23 +64,13 @@ class Watcher implements WatcherInterface
                     !$this->isSubFolder($filesystemEvent->getResource())
                 ) {
                     $xmlString = new StringLiteral(file_get_contents($filesystemEvent->getResource()));
-                    $this->consumeFile($xmlString, new StringLiteral($filesystemEvent->getResource()));
+                    $this->fileProcessor->consumeFile(
+                        $xmlString,
+                        new StringLiteral($filesystemEvent->getResource())
+                    );
                 }
             }
         );
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function moveFile($file, $folder)
-    {
-        $path = $this->resourceFolder . '/' . $folder;
-        if (!file_exists($path) && !is_dir($path)) {
-            mkdir($path);
-        }
-        $destination = str_replace($this->resourceFolder, $path, $file);
-        rename($file, $destination);
     }
 
     public function start()
@@ -141,9 +85,9 @@ class Watcher implements WatcherInterface
     protected function isSubFolder(ResourceInterface $resource)
     {
         $path = (string) $resource;
-        return 0 === strpos($path, $this->resourceFolder . '/' . Watcher::ERROR_FOLDER) ||
-            0 === strpos($path, $this->resourceFolder . '/' . Watcher::SUCCESS_FOLDER) ||
-            0 === strpos($path, $this->resourceFolder . '/' . Watcher::INVALID_FOLDER);
+        return 0 === strpos($path, $this->fileProcessor->getResource() . '/' . FileProcessor::ERROR_FOLDER) ||
+            0 === strpos($path, $this->fileProcessor->getResource() . '/' . FileProcessor::SUCCESS_FOLDER) ||
+            0 === strpos($path, $this->fileProcessor->getResource() . '/' . FileProcessor::INVALID_FOLDER);
     }
 
     /**
@@ -151,59 +95,13 @@ class Watcher implements WatcherInterface
      */
     protected function checkFolder()
     {
-        $files = scandir($this->resourceFolder);
+        $files = scandir($this->fileProcessor->getResource());
         foreach ($files as $file) {
-            $fileLiteral = new StringLiteral($this->resourceFolder.'/'.$file);
+            $fileLiteral = new StringLiteral($this->fileProcessor->getResource() . '/' . $file);
             if (is_file($fileLiteral->toNative())) {
                 $xmlString = new StringLiteral(file_get_contents($fileLiteral->toNative()));
-                $this->consumeFile($xmlString, $fileLiteral);
+                $this->fileProcessor->consumeFile($xmlString, $fileLiteral);
             }
-        }
-    }
-
-    /**
-     * @param StringLiteral $xmlString
-     * @param StringLiteral $fileName
-     * @return void
-     */
-    protected function consumeFile(StringLiteral $xmlString, StringLiteral $fileName)
-    {
-        if ($this->parser->validate($xmlString->toNative())) {
-            try {
-                $eventList = $this->parser->split($xmlString->toNative());
-
-                foreach ($eventList as $externalId => $singleEvent) {
-                    $externalIdLiteral = new StringLiteral($externalId);
-                    $cdbid = $this->store->getEventCdbid($externalIdLiteral);
-                    $isUpdate = true;
-                    if (!$cdbid) {
-                        $isUpdate = false;
-                        $cdbidString = Identity\UUID::generateAsString();
-                        $cdbid = UUID::fromNative($cdbidString);
-                    }
-                    $singleXml = simplexml_load_string($singleEvent);
-                    $singleXml->event[0]['cdbid'] = $cdbid->toNative();
-                    $singleEvent = new StringLiteral($singleXml->asXML());
-
-                    if ($isUpdate) {
-                        $this->store->updateEventXml($cdbid, $singleEvent);
-                        $this->store->saveUpdated($cdbid, new \DateTime());
-                    } else {
-                        $this->store->saveRelation($cdbid, $externalIdLiteral);
-                        $this->store->saveEventXml($cdbid, $singleEvent);
-                        $this->store->saveCreated($cdbid, new \DateTime());
-                    }
-
-                    $now = new \DateTime();
-                    $this->publisher->publish($cdbid, $now, $this->author, $this->urlFactory->generateUrl($cdbid), $isUpdate);
-                    $this->store->savePublished($cdbid, $now);
-                    $this->moveFile($fileName->toNative(), Watcher::SUCCESS_FOLDER);
-                }
-            } catch (\Exception $e) {
-                $this->moveFile($fileName->toNative(), Watcher::ERROR_FOLDER);
-            }
-        } else {
-            $this->moveFile($fileName->toNative(), Watcher::INVALID_FOLDER);
         }
     }
 }
