@@ -37,14 +37,20 @@ class Watcher implements WatcherInterface
         $this->fileProcessor = $fileProcessor;
 
         $this->resourceWatcher = new ResourceWatcher();
+
+        $this->track();
+
+        $this->configureListener();
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function track()
+    public function start()
     {
         $this->checkFolder();
+        $this->resourceWatcher->start();
+    }
+
+    private function track()
+    {
         $this->resourceWatcher->track(
             $this->trackingId->toNative(),
             $this->fileProcessor->getPath()
@@ -54,7 +60,7 @@ class Watcher implements WatcherInterface
     /**
      * Adds the listener function
      */
-    public function configureListener()
+    private function configureListener()
     {
         $this->resourceWatcher->addListener(
             $this->trackingId->toNative(),
@@ -72,15 +78,10 @@ class Watcher implements WatcherInterface
         );
     }
 
-    public function start()
-    {
-        $this->resourceWatcher->start();
-    }
-
     /**
      * @return void
      */
-    protected function checkFolder()
+    private function checkFolder()
     {
         $finder = new Finder();
         $finder->files()->in($this->fileProcessor->getPath());

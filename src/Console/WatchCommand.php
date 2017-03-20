@@ -65,10 +65,6 @@ class WatchCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $app = $this->getSilexApplication();
-
-        $this->watcher->track();
-        $this->watcher->configureListener();
         $this->watcher->start();
     }
 }
