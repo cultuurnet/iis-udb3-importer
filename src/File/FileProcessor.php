@@ -122,7 +122,7 @@ class FileProcessor implements FileProcessorInterface
      */
     public function getPath()
     {
-        return $this->resourceFolder->getPath();
+        return $this->resourceFolder->getPathname();
     }
 
     /**

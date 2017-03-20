@@ -3,6 +3,7 @@
 namespace CultuurNet\UDB3\IISImporter\Event;
 
 use CultuurNet\UDB3\IISImporter\File\FileProcessorInterface;
+use Symfony\Component\Finder\Finder;
 use ValueObjects\StringLiteral\StringLiteral;
 use Lurker\Event\FilesystemEvent;
 use Lurker\ResourceWatcher;
@@ -51,7 +52,7 @@ class Watcher implements WatcherInterface
     }
 
     /**
-     * @inheritdoc
+     * Adds the listener function
      */
     public function configureListener()
     {
@@ -64,7 +65,7 @@ class Watcher implements WatcherInterface
                     !$this->fileProcessor->isSubFolder($filesystemEvent->getResource())
                 ) {
                     $this->fileProcessor->consumeFile(
-                        new StringLiteral($filesystemEvent->getResource())
+                        new StringLiteral((string) $filesystemEvent->getResource())
                     );
                 }
             }
@@ -81,9 +82,11 @@ class Watcher implements WatcherInterface
      */
     protected function checkFolder()
     {
-        $files = scandir($this->fileProcessor->getPath());
-        foreach ($files as $file) {
-            $fileLiteral = new StringLiteral($this->fileProcessor->getPath() . '/' . $file);
+        $finder = new Finder();
+        $finder->files()->in($this->fileProcessor->getPath());
+
+        foreach ($finder as $file) {
+            $fileLiteral = new StringLiteral($file->getPathname());
             if (is_file($fileLiteral->toNative())) {
                 $this->fileProcessor->consumeFile($fileLiteral);
             }

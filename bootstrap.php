@@ -141,7 +141,7 @@ $app['iis.amqp_publisher'] = $app->share(
 $app['iis.file_processor'] = $app->share(
     function (Application $app) {
         return new FileProcessor(
-            new DirectoryResource($app['config']['input_folder']),
+            new \SplFileInfo($app['config']['input_folder']),
             $app['iis.parser'],
             $app['iis.dbal_store'],
             $app['iis.amqp_publisher'],
