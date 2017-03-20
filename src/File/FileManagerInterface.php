@@ -33,5 +33,5 @@ interface FileManagerInterface
      * @param \SplFileInfo $source
      * @param \SplFileInfo $destination
      */
-    public function moveFile(\SplFileInfo $source, \SplFileInfo $destination);
+    public function moveFileToFolder(\SplFileInfo $source, \SplFileInfo $destination);
 }

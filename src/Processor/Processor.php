@@ -91,12 +91,12 @@ class Processor implements ProcessorInterface
                     );
                 }
 
-                $this->fileManager->moveFile($file, $this->fileManager->getSuccessFolder());
+                $this->fileManager->moveFileToFolder($file, $this->fileManager->getSuccessFolder());
             } catch (\Exception $e) {
-                $this->fileManager->moveFile($file, $this->fileManager->getErrorFolder());
+                $this->fileManager->moveFileToFolder($file, $this->fileManager->getErrorFolder());
             }
         } else {
-            $this->fileManager->moveFile($file, $this->fileManager->getInvalidFolder());
+            $this->fileManager->moveFileToFolder($file, $this->fileManager->getInvalidFolder());
         }
     }
 

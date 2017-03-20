@@ -78,4 +78,24 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expectedFiles, $files);
     }
+
+    /**
+     * @test
+     */
+    public function it_can_move_a_file()
+    {
+        $sourceFolder = new \SplFileInfo(__DIR__ . '/move/source');
+        $sourceFile = new \SplFileInfo(__DIR__ . '/move/source/file.xml');
+
+        $destinationFolder = new \SplFileInfo(__DIR__ . '/move/destination');
+        $destinationFile = new \SplFileInfo(__DIR__ . '/move/destination/file.xml');
+
+        $this->fileManager->moveFileToFolder($sourceFile, $destinationFolder);
+        $this->assertTrue(file_exists($destinationFile->getPathname()));
+        $this->assertFalse(file_exists($sourceFile->getPathname()));
+
+        $this->fileManager->moveFileToFolder($destinationFile, $sourceFolder);
+        $this->assertTrue(file_exists($sourceFile->getPathname()));
+        $this->assertFalse(file_exists($destinationFile->getPathname()));
+    }
 }
