@@ -45,6 +45,16 @@ class Watcher implements WatcherInterface
     protected $publisher;
 
     /**
+     * @var UrlFactory
+     */
+    protected $urlFactory;
+
+    /**
+     * @var StringLiteral
+     */
+    protected $author;
+
+    /**
      * @var ResourceInterface
      */
     protected $resourceFolder;
@@ -54,17 +64,23 @@ class Watcher implements WatcherInterface
      * @param ParserInterface $parser
      * @param RepositoryInterface $store
      * @param AMQPPublisherInterface $publisher
+     * @param UrlFactory $urlFactory
+     * @param StringLiteral $author
      */
     public function __construct(
         StringLiteral $trackingId,
         ParserInterface $parser,
         RepositoryInterface $store,
-        AMQPPublisherInterface $publisher
+        AMQPPublisherInterface $publisher,
+        UrlFactory $urlFactory,
+        StringLiteral $author
     ) {
         $this->trackingId = $trackingId;
         $this->parser = $parser;
         $this->store = $store;
         $this->publisher = $publisher;
+        $this->urlFactory = $urlFactory;
+        $this->author = $author;
 
         $this->resourceWatcher = new ResourceWatcher();
     }
@@ -179,10 +195,7 @@ class Watcher implements WatcherInterface
                     }
 
                     $now = new \DateTime();
-                    $baseUrl = new StringLiteral('http://test.import.com');
-                    $author = new StringLiteral('importsUDB3');
-                    $urlFactory = new UrlFactory($baseUrl);
-                    $this->publisher->publish($cdbid, $now, $author, $urlFactory->generateUrl($cdbid), $isUpdate);
+                    $this->publisher->publish($cdbid, $now, $this->author, $this->urlFactory->generateUrl($cdbid), $isUpdate);
                     $this->store->savePublished($cdbid, $now);
                     $this->moveFile($fileName->toNative(), Watcher::SUCCESS_FOLDER);
                 }

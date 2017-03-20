@@ -115,6 +115,14 @@ $app['iis.url_factory'] = $app->share(
     }
 );
 
+$app['iis.author'] = $app->share(
+    function (Application $app) {
+        return new StringLiteral(
+            $app['config']['amqp']['message']['author']
+        );
+    }
+);
+
 $app['iis.amqp_publisher'] = $app->share(
     function (Application $app) {
         $channel = new AMQPChannel($app['iis.amqp_connection']);
@@ -135,7 +143,9 @@ $app['iis.watcher'] = $app->share(
             $trackingId,
             $app['iis.parser'],
             $app['iis.dbal_store'],
-            $app['iis.amqp_publisher']);
+            $app['iis.amqp_publisher'],
+            $app['iis.url_factory'],
+            $app['iis.author']);
     }
 );
 
