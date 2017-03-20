@@ -17,6 +17,7 @@ class Watcher implements WatcherInterface
 {
     const SUCCESS_FOLDER = 'success';
     const ERROR_FOLDER = 'error';
+    const INVALID_FOLDER = 'invalid';
 
     /**
      * @var StringLiteral
@@ -125,7 +126,8 @@ class Watcher implements WatcherInterface
     {
         $path = (string) $resource;
         return 0 === strpos($path, $this->resourceFolder . '/' . Watcher::ERROR_FOLDER) ||
-            0 === strpos($path, $this->resourceFolder . '/' . Watcher::SUCCESS_FOLDER);
+            0 === strpos($path, $this->resourceFolder . '/' . Watcher::SUCCESS_FOLDER) ||
+            0 === strpos($path, $this->resourceFolder . '/' . Watcher::INVALID_FOLDER);
     }
 
     /**
@@ -151,40 +153,44 @@ class Watcher implements WatcherInterface
     protected function consumeFile(StringLiteral $xmlString, StringLiteral $fileName)
     {
         if ($this->parser->validate($xmlString->toNative())) {
-            $eventList = $this->parser->split($xmlString->toNative());
+            try {
+                $eventList = $this->parser->split($xmlString->toNative());
 
-            foreach ($eventList as $externalId => $singleEvent) {
-                $externalIdLiteral = new StringLiteral($externalId);
-                $cdbid = $this->store->getEventCdbid($externalIdLiteral);
-                $isUpdate = true;
-                if (!$cdbid) {
-                    $isUpdate = false;
-                    $cdbidString = Identity\UUID::generateAsString();
-                    $cdbid = UUID::fromNative($cdbidString);
+                foreach ($eventList as $externalId => $singleEvent) {
+                    $externalIdLiteral = new StringLiteral($externalId);
+                    $cdbid = $this->store->getEventCdbid($externalIdLiteral);
+                    $isUpdate = true;
+                    if (!$cdbid) {
+                        $isUpdate = false;
+                        $cdbidString = Identity\UUID::generateAsString();
+                        $cdbid = UUID::fromNative($cdbidString);
+                    }
+                    $singleXml = simplexml_load_string($singleEvent);
+                    $singleXml->event[0]['cdbid'] = $cdbid->toNative();
+                    $singleEvent = new StringLiteral($singleXml->asXML());
+
+                    if ($isUpdate) {
+                        $this->store->updateEventXml($cdbid, $singleEvent);
+                        $this->store->saveUpdated($cdbid, new \DateTime());
+                    } else {
+                        $this->store->saveRelation($cdbid, $externalIdLiteral);
+                        $this->store->saveEventXml($cdbid, $singleEvent);
+                        $this->store->saveCreated($cdbid, new \DateTime());
+                    }
+
+                    $now = new \DateTime();
+                    $baseUrl = new StringLiteral('http://test.import.com');
+                    $author = new StringLiteral('importsUDB3');
+                    $urlFactory = new UrlFactory($baseUrl);
+                    $this->publisher->publish($cdbid, $now, $author, $urlFactory->generateUrl($cdbid), $isUpdate);
+                    $this->store->savePublished($cdbid, $now);
+                    $this->moveFile($fileName->toNative(), Watcher::SUCCESS_FOLDER);
                 }
-                $singleXml = simplexml_load_string($singleEvent);
-                $singleXml->event[0]['cdbid'] = $cdbid->toNative();
-                $singleEvent = new StringLiteral($singleXml->asXML());
-
-                if ($isUpdate) {
-                    $this->store->updateEventXml($cdbid, $singleEvent);
-                    $this->store->saveUpdated($cdbid, new \DateTime());
-                } else {
-                    $this->store->saveRelation($cdbid, $externalIdLiteral);
-                    $this->store->saveEventXml($cdbid, $singleEvent);
-                    $this->store->saveCreated($cdbid, new \DateTime());
-                }
-
-                $now = new \DateTime();
-                $baseUrl = new StringLiteral('http://test.import.com');
-                $author = new StringLiteral('importsUDB3');
-                $urlFactory = new UrlFactory($baseUrl);
-                $this->publisher->publish($cdbid, $now, $author, $urlFactory->generateUrl($cdbid), $isUpdate);
-                $this->store->savePublished($cdbid, $now);
-                $this->moveFile($fileName->toNative(), Watcher::SUCCESS_FOLDER);
+            } catch (\Exception $e) {
+                $this->moveFile($fileName->toNative(), Watcher::ERROR_FOLDER);
             }
         } else {
-            $this->moveFile($fileName->toNative(), Watcher::ERROR_FOLDER);
+            $this->moveFile($fileName->toNative(), Watcher::INVALID_FOLDER);
         }
     }
 }
