@@ -1,0 +1,57 @@
+<event availablefrom="2017-03-23T00:00:00" externalid="EGD201711555" wfstatus="readyforvalidation">
+    <calendar>
+        <timestamps>
+            <timestamp>
+                <date>2017-04-23</date>
+            </timestamp>
+        </timestamps>
+    </calendar>
+    <categories>
+        <category type="eventtype" catid="11555">Lezing of congres</category>
+        <category type="theme" catid="1.40.0.0.0">Erfgoed</category>
+        <category type="publicscope" catid="6.1.0.0.0">Lokaal</category>
+    </categories>
+    <contactinfo>
+        <mail>annelies.t@kruibeke.be</mail>
+        <phone type="phone">015 29 76 51</phone>
+        <url>https://www.facebook.com/zusterRaphaelle/</url>
+    </contactinfo>
+    <eventdetails>
+        <eventdetail lang="nl">
+            <longdescription>Info organisatie: ism Femma, Markant, KVLJ, Davidsfondsom 10 uur: rondleiding in het Algemeen Nederlands (duur: 2 uur), om 11.30 uur: Rondleiding in het Mechels dialect (duur: 2 uur), om 13.30 uur rondleiding in het Algemeen Nederlands (duur: 2 uur), om 14 uur: Rondleiding in het Mechels dialect (duur: 2 uur), om 16 uur: Rondleiding in het Algemeen Nederlands (duur: 2 uur).  Deze activiteit loopt tot en met 23/04/2017. Toegankelijk voor rolstoelgebruikers.  Het Toerismehuis is op zondag slechts open vanaf 12.30 uur. Daarvoor kan je contact opnemen met stadsgids Paul Delbaere op het nummer 0498 26 93 31. Er is parking in de nabije omgeving.       Deze activiteit focust op cultureel-erfgoedzorg.  Deze activiteit focust op het erfgoed van de zorg. De activiteit heeft een sterke link met de geschiedenis van de zorg.</longdescription>
+            <media>
+                <file>
+                    <copyright>Erfgoeddag 2017</copyright>
+                    <filename>erfgoeddag2017.png</filename>
+                    <filetype>png</filetype>
+                    <hlink>http://www.faronet.be/logo/erfgoeddag2017.png</hlink>
+                    <mediatype>photo</mediatype>
+                </file>
+            </media>
+            <price>
+                <pricevalue>0</pricevalue>
+            </price>
+            <shortdescription>Stadsgidsen brengen je naar gebouwen waar 'zorg' zich afspeelde vanaf circa 1500, de periode van de Bourgondisch-Habsburgse dynastie. Ook hedendaagse zorginstellingen krijgen aandacht. Telkens worden spitante anekdotes verteld voor jong en oud.</shortdescription>
+            <title>De babyborrel van zuster Raphaëlle</title>
+        </eventdetail>
+    </eventdetails>
+    <keywords>
+        <keyword>erfgoeddag</keyword>
+        <keyword>Erfgoeddag2017</keyword>
+        <keyword>Deze activiteit focust op cultureel-erfgoedzorg.</keyword>
+    </keywords>
+    <location>
+        <address>
+            <physical>
+                <city>Mechelen</city>
+                <country>BE</country>
+                <street>Hallestraat 2</street>
+                <zipcode>2800</zipcode>
+            </physical>
+        </address>
+        <label>Toerismehuis De Gulden Arent</label>
+    </location>
+    <organiser>
+        <label>Gemeente Kruibeke</label>
+    </organiser>
+</event>

@@ -5,18 +5,13 @@ namespace CultuurNet\UDB3\IISImporter\Processor;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisherInterface;
 use CultuurNet\UDB3\IISImporter\File\FileManagerInterface;
 use CultuurNet\UDB3\IISImporter\Parser\ParserInterface;
-use CultuurNet\UDB3\IISImporter\Url\UrlFactory;
+use CultuurNet\UDB3\IISImporter\Url\UrlFactoryInterface;
 use CultuurNet\UDB3\IISStore\Stores\RepositoryInterface;
 use ValueObjects\StringLiteral\StringLiteral;
 use ValueObjects\Identity\UUID;
 
 class Processor implements ProcessorInterface
 {
-    const PROCESS_FOLDER = 'process';
-    const SUCCESS_FOLDER = 'success';
-    const ERROR_FOLDER = 'error';
-    const INVALID_FOLDER = 'invalid';
-
     /**
      * @var FileManagerInterface
      */
@@ -38,7 +33,7 @@ class Processor implements ProcessorInterface
     protected $publisher;
 
     /**
-     * @var UrlFactory
+     * @var UrlFactoryInterface
      */
     protected $urlFactory;
 
@@ -53,7 +48,7 @@ class Processor implements ProcessorInterface
      * @param ParserInterface $parser
      * @param RepositoryInterface $store
      * @param AMQPPublisherInterface $publisher
-     * @param UrlFactory $urlFactory
+     * @param UrlFactoryInterface $urlFactory
      * @param StringLiteral $author
      */
     public function __construct(
@@ -61,7 +56,7 @@ class Processor implements ProcessorInterface
         ParserInterface $parser,
         RepositoryInterface $store,
         AMQPPublisherInterface $publisher,
-        UrlFactory $urlFactory,
+        UrlFactoryInterface $urlFactory,
         StringLiteral $author
     ) {
         $this->fileManager = $fileManager;
@@ -78,11 +73,11 @@ class Processor implements ProcessorInterface
      */
     public function consumeFile(\SplFileInfo $file)
     {
-        $xmlString = new StringLiteral(file_get_contents($file->getPathname()));
+        $xmlString = file_get_contents($file->getPathname());
 
-        if ($this->parser->validate($xmlString->toNative())) {
+        if ($this->parser->validate($xmlString)) {
             try {
-                $eventList = $this->parser->split($xmlString->toNative());
+                $eventList = $this->parser->split($xmlString);
 
                 foreach ($eventList as $externalId => $event) {
                     $this->processEvent(
