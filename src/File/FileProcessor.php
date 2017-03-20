@@ -63,8 +63,9 @@ class FileProcessor implements FileProcessorInterface
     /**
      * @inheritdoc
      */
-    public function consumeFile(StringLiteral $xmlString, StringLiteral $fileName)
+    public function consumeFile(StringLiteral $fileName)
     {
+        $xmlString = new StringLiteral(file_get_contents($fileName->toNative()));
         if ($this->parser->validate($xmlString->toNative())) {
             try {
                 $eventList = $this->parser->split($xmlString->toNative());

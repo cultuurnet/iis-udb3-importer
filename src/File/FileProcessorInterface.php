@@ -16,11 +16,10 @@ interface FileProcessorInterface
     public function moveFile($file, $folder);
 
     /**
-     * @param StringLiteral $xmlString
      * @param StringLiteral $fileName
      * @return void
      */
-    public function consumeFile(StringLiteral $xmlString, StringLiteral $fileName);
+    public function consumeFile(StringLiteral $fileName);
 
     /**
      * @return ResourceInterface

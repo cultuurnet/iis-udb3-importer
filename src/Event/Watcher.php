@@ -63,9 +63,7 @@ class Watcher implements WatcherInterface
                     $filesystemEvent->getTypeString() == 'modify') &&
                     !$this->isSubFolder($filesystemEvent->getResource())
                 ) {
-                    $xmlString = new StringLiteral(file_get_contents($filesystemEvent->getResource()));
                     $this->fileProcessor->consumeFile(
-                        $xmlString,
                         new StringLiteral($filesystemEvent->getResource())
                     );
                 }
@@ -99,8 +97,7 @@ class Watcher implements WatcherInterface
         foreach ($files as $file) {
             $fileLiteral = new StringLiteral($this->fileProcessor->getResource() . '/' . $file);
             if (is_file($fileLiteral->toNative())) {
-                $xmlString = new StringLiteral(file_get_contents($fileLiteral->toNative()));
-                $this->fileProcessor->consumeFile($xmlString, $fileLiteral);
+                $this->fileProcessor->consumeFile($fileLiteral);
             }
         }
     }
