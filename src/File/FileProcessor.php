@@ -6,7 +6,6 @@ use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisherInterface;
 use CultuurNet\UDB3\IISImporter\Event\ParserInterface;
 use CultuurNet\UDB3\IISImporter\Url\UrlFactory;
 use CultuurNet\UDB3\IISStore\Stores\RepositoryInterface;
-use Lurker\Resource\DirectoryResource;
 use Lurker\Resource\ResourceInterface;
 use ValueObjects\StringLiteral\StringLiteral;
 use ValueObjects\Identity\UUID;
@@ -18,7 +17,7 @@ class FileProcessor implements FileProcessorInterface
     const INVALID_FOLDER = 'invalid';
 
     /**
-     * @var ResourceInterface
+     * @var \SplFileInfo
      */
     protected $resourceFolder;
 
@@ -47,8 +46,17 @@ class FileProcessor implements FileProcessorInterface
      */
     protected $author;
 
+    /**
+     * FileProcessor constructor.
+     * @param \SplFileInfo $resource
+     * @param ParserInterface $parser
+     * @param RepositoryInterface $store
+     * @param AMQPPublisherInterface $publisher
+     * @param UrlFactory $urlFactory
+     * @param StringLiteral $author
+     */
     public function __construct(
-        DirectoryResource $resource,
+        \SplFileInfo $resource,
         ParserInterface $parser,
         RepositoryInterface $store,
         AMQPPublisherInterface $publisher,
@@ -112,9 +120,9 @@ class FileProcessor implements FileProcessorInterface
     /**
      * @inheritdoc
      */
-    public function getResource()
+    public function getPath()
     {
-        return $this->resourceFolder;
+        return $this->resourceFolder->getPath();
     }
 
     /**
@@ -123,21 +131,24 @@ class FileProcessor implements FileProcessorInterface
     public function isSubFolder(ResourceInterface $resource)
     {
         $path = (string) $resource;
-        return 0 === strpos($path, $this->getResource() . '/' . FileProcessor::ERROR_FOLDER) ||
-            0 === strpos($path, $this->getResource() . '/' . FileProcessor::SUCCESS_FOLDER) ||
-            0 === strpos($path, $this->getResource() . '/' . FileProcessor::INVALID_FOLDER);
+        return 0 === strpos($path, $this->getPath() . '/' . FileProcessor::ERROR_FOLDER) ||
+            0 === strpos($path, $this->getPath() . '/' . FileProcessor::SUCCESS_FOLDER) ||
+            0 === strpos($path, $this->getPath() . '/' . FileProcessor::INVALID_FOLDER);
     }
 
     /**
-     * @inheritdoc
+     * Move file to a folder
+     *
+     * @param string $file to file to move
+     * @param string $folder the destination folder
      */
-    public function moveFile($file, $folder)
+    private function moveFile($file, $folder)
     {
-        $path = $this->resourceFolder . '/' . $folder;
+        $path = $this->getPath() . '/' . $folder;
         if (!file_exists($path) && !is_dir($path)) {
             mkdir($path);
         }
-        $destination = str_replace($this->resourceFolder, $path, $file);
+        $destination = str_replace($this->getPath(), $path, $file);
         rename($file, $destination);
     }
 }

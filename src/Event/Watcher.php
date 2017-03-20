@@ -43,9 +43,11 @@ class Watcher implements WatcherInterface
      */
     public function track()
     {
-        $directoryResource = $this->fileProcessor->getResource();
         $this->checkFolder();
-        $this->resourceWatcher->track($this->trackingId->toNative(), $directoryResource);
+        $this->resourceWatcher->track(
+            $this->trackingId->toNative(),
+            $this->fileProcessor->getPath()
+        );
     }
 
     /**
@@ -79,9 +81,9 @@ class Watcher implements WatcherInterface
      */
     protected function checkFolder()
     {
-        $files = scandir($this->fileProcessor->getResource());
+        $files = scandir($this->fileProcessor->getPath());
         foreach ($files as $file) {
-            $fileLiteral = new StringLiteral($this->fileProcessor->getResource() . '/' . $file);
+            $fileLiteral = new StringLiteral($this->fileProcessor->getPath() . '/' . $file);
             if (is_file($fileLiteral->toNative())) {
                 $this->fileProcessor->consumeFile($fileLiteral);
             }

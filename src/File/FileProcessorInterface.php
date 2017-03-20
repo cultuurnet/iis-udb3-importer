@@ -14,21 +14,13 @@ interface FileProcessorInterface
     public function consumeFile(StringLiteral $fileName);
 
     /**
-     * @return ResourceInterface
+     * @return string
      */
-    public function getResource();
+    public function getPath();
 
     /**
      * @param ResourceInterface $resource
      * @return bool
      */
     public function isSubFolder(ResourceInterface $resource);
-
-    /**
-     * Move file to a folder
-     *
-     * @param string $file to file to move
-     * @param string $folder the destination folder
-     */
-    public function moveFile($file, $folder);
 }
