@@ -61,7 +61,7 @@ class Watcher implements WatcherInterface
                 if ($filesystemEvent->isFileChange() &&
                     ($filesystemEvent->getTypeString() == 'create' ||
                     $filesystemEvent->getTypeString() == 'modify') &&
-                    !$this->isSubFolder($filesystemEvent->getResource())
+                    !$this->fileProcessor->isSubFolder($filesystemEvent->getResource())
                 ) {
                     $this->fileProcessor->consumeFile(
                         new StringLiteral($filesystemEvent->getResource())
@@ -74,18 +74,6 @@ class Watcher implements WatcherInterface
     public function start()
     {
         $this->resourceWatcher->start();
-    }
-
-    /**
-     * @param ResourceInterface $resource
-     * @return bool
-     */
-    protected function isSubFolder(ResourceInterface $resource)
-    {
-        $path = (string) $resource;
-        return 0 === strpos($path, $this->fileProcessor->getResource() . '/' . FileProcessor::ERROR_FOLDER) ||
-            0 === strpos($path, $this->fileProcessor->getResource() . '/' . FileProcessor::SUCCESS_FOLDER) ||
-            0 === strpos($path, $this->fileProcessor->getResource() . '/' . FileProcessor::INVALID_FOLDER);
     }
 
     /**

@@ -8,14 +8,6 @@ use ValueObjects\StringLiteral\StringLiteral;
 interface FileProcessorInterface
 {
     /**
-     * Move file to a folder
-     *
-     * @param string $file to file to move
-     * @param string $folder the destination folder
-     */
-    public function moveFile($file, $folder);
-
-    /**
      * @param StringLiteral $fileName
      * @return void
      */
@@ -25,4 +17,19 @@ interface FileProcessorInterface
      * @return ResourceInterface
      */
     public function getResource();
+
+    /**
+     * @param ResourceInterface $resource
+     * @return bool
+     */
+    public function isSubFolder(ResourceInterface $resource);
+
+    /**
+     * Move file to a folder
+     *
+     * @param string $file to file to move
+     * @param string $folder the destination folder
+     */
+    public function moveFile($file, $folder);
+
 }
