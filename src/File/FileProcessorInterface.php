@@ -31,5 +31,4 @@ interface FileProcessorInterface
      * @param string $folder the destination folder
      */
     public function moveFile($file, $folder);
-
 }

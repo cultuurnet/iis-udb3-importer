@@ -2,9 +2,7 @@
 
 namespace CultuurNet\UDB3\IISImporter\Event;
 
-use CultuurNet\UDB3\IISImporter\File\FileProcessor;
 use CultuurNet\UDB3\IISImporter\File\FileProcessorInterface;
-use Lurker\Resource\ResourceInterface;
 use ValueObjects\StringLiteral\StringLiteral;
 use Lurker\Event\FilesystemEvent;
 use Lurker\ResourceWatcher;
