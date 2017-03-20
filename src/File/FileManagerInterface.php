@@ -28,4 +28,10 @@ interface FileManagerInterface
      * @return \SplFileInfo[]
      */
     public function getProcessFolderFiles();
+
+    /**
+     * @param \SplFileInfo $source
+     * @param \SplFileInfo $destination
+     */
+    public function moveFile(\SplFileInfo $source, \SplFileInfo $destination);
 }

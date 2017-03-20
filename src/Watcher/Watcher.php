@@ -2,8 +2,8 @@
 
 namespace CultuurNet\UDB3\IISImporter\Watcher;
 
-use CultuurNet\UDB3\IISImporter\File\FileProcessorInterface;
-use Symfony\Component\Finder\Finder;
+use CultuurNet\UDB3\IISImporter\File\FileManagerInterface;
+use CultuurNet\UDB3\IISImporter\Processor\ProcessorInterface;
 use ValueObjects\StringLiteral\StringLiteral;
 use Lurker\Event\FilesystemEvent;
 use Lurker\ResourceWatcher;
@@ -13,39 +13,47 @@ class Watcher implements WatcherInterface
     /**
      * @var StringLiteral
      */
-    protected $trackingId;
+    private $trackingId;
 
     /**
-     * @var FileProcessorInterface
+     * @var FileManagerInterface
      */
-    protected $fileProcessor;
+    private $fileManager;
+
+    /**
+     * @var ProcessorInterface
+     */
+    private $processor;
 
     /**
      * @var ResourceWatcher
      */
-    protected $resourceWatcher;
+    private $resourceWatcher;
 
     /**
      * @param StringLiteral $trackingId
-     * @param FileProcessorInterface $fileProcessor
+     * @param FileManagerInterface $fileManager
+     * @param ProcessorInterface $processor
      */
     public function __construct(
         StringLiteral $trackingId,
-        FileProcessorInterface $fileProcessor
+        FileManagerInterface $fileManager,
+        ProcessorInterface $processor
     ) {
         $this->trackingId = $trackingId;
-        $this->fileProcessor = $fileProcessor;
+        $this->fileManager = $fileManager;
+        $this->processor = $processor;
 
         $this->resourceWatcher = new ResourceWatcher();
 
         $this->track();
 
-        $this->configureListener();
+        $this->addListener();
     }
 
     public function start()
     {
-        $this->checkFolder();
+        $this->processFolder();
         $this->resourceWatcher->start();
     }
 
@@ -53,44 +61,39 @@ class Watcher implements WatcherInterface
     {
         $this->resourceWatcher->track(
             $this->trackingId->toNative(),
-            $this->fileProcessor->getProcessFolder()
+            $this->fileManager->getProcessFolder()
         );
     }
 
-    /**
-     * Adds the listener function
-     */
-    private function configureListener()
+    private function addListener()
     {
         $this->resourceWatcher->addListener(
             $this->trackingId->toNative(),
             function (FilesystemEvent $filesystemEvent) {
-                if ($filesystemEvent->isFileChange() &&
-                    ($filesystemEvent->getTypeString() == 'create' ||
-                        $filesystemEvent->getTypeString() == 'modify')
-                ) {
-                    $splInfo = new \SplFileInfo((string) $filesystemEvent->getResource());
-                    $this->fileProcessor->consumeFile(
-                        new StringLiteral($splInfo->getFilename())
-                    );
-                }
+                $this->processFileSystemEvent($filesystemEvent);
             }
         );
     }
 
     /**
-     * @return void
+     * @param FilesystemEvent $filesystemEvent
      */
-    private function checkFolder()
+    private function processFileSystemEvent(FilesystemEvent $filesystemEvent)
     {
-        $finder = new Finder();
-        $finder->files()->in($this->fileProcessor->getProcessFolder());
+        if ($filesystemEvent->isFileChange() &&
+            ($filesystemEvent->getTypeString() == 'create' ||
+                $filesystemEvent->getTypeString() == 'modify')
+        ) {
+            $splInfo = new \SplFileInfo((string) $filesystemEvent->getResource());
+            $this->processor->consumeFile($splInfo);
+        }
+    }
 
-        foreach ($finder as $file) {
-            $fileLiteral = new StringLiteral($file->getFilename());
-            if (is_file($fileLiteral->toNative())) {
-                $this->fileProcessor->consumeFile($fileLiteral);
-            }
+    private function processFolder()
+    {
+        $files = $this->fileManager->getProcessFolderFiles();
+        foreach ($files as $file) {
+            $this->processor->consumeFile($file);
         }
     }
 }

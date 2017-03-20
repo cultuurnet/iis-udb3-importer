@@ -4,8 +4,9 @@ use CultuurNet\UDB3\IISImporter\AMQP\AMQPBodyFactory;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPMessageFactory;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPropertiesFactory;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisher;
+use CultuurNet\UDB3\IISImporter\File\FileManager;
 use CultuurNet\UDB3\IISImporter\Parser\ParserV3;
-use CultuurNet\UDB3\IISImporter\File\FileProcessor;
+use CultuurNet\UDB3\IISImporter\Processor\Processor;
 use CultuurNet\UDB3\IISImporter\Url\UrlFactory;
 use CultuurNet\UDB3\IISImporter\Watcher\Watcher;
 use CultuurNet\UDB3\IISStore\Stores\Doctrine\StoreLoggingDBALRepository;
@@ -30,15 +31,6 @@ $app->register(new YamlConfigServiceProvider($appConfigLocation . '/config.yml')
  * Turn debug on or off.
  */
 $app['debug'] = $app['config']['debug'] === true;
-
-/**
- * Load additional bootstrap files.
- */
-foreach ($app['config']['bootstrap'] as $identifier => $enabled) {
-    if (true === $enabled) {
-        require __DIR__ . "/bootstrap/{$identifier}.php";
-    }
-}
 
 $app['dbal_connection'] = $app->share(
     function (Application $app) {
@@ -137,10 +129,18 @@ $app['iis.amqp_publisher'] = $app->share(
     }
 );
 
+$app['iis.file_manager'] = $app->share(
+    function (Application $app) {
+        return new FileManager(
+            new \SplFileInfo($app['config']['import_folder'])
+        );
+    }
+);
+
 $app['iis.file_processor'] = $app->share(
     function (Application $app) {
-        return new FileProcessor(
-            new \SplFileInfo($app['config']['import_folder']),
+        return new Processor(
+            $app['iis.file_manager'],
             $app['iis.parser'],
             $app['iis.dbal_store'],
             $app['iis.amqp_publisher'],
@@ -154,6 +154,7 @@ $app['iis.watcher'] = $app->share(
         $trackingId = new StringLiteral('import_files');
         return new Watcher(
             $trackingId,
+            $app['iis.file_manager'],
             $app['iis.file_processor']);
     }
 );

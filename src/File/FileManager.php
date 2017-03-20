@@ -77,6 +77,14 @@ class FileManager implements FileManagerInterface
     }
 
     /**
+     * @inheritdoc
+     */
+    public function moveFile(\SplFileInfo $source, \SplFileInfo $destination)
+    {
+        rename($source->getPathname(), $destination->getPathname());
+    }
+
+    /**
      * @param string $folderName
      * @return \SplFileInfo
      */

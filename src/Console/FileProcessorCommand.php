@@ -2,27 +2,26 @@
 
 namespace CultuurNet\UDB3\IISImporter\Console;
 
-use CultuurNet\UDB3\IISImporter\File\FileProcessorInterface;
+use CultuurNet\UDB3\IISImporter\Processor\ProcessorInterface;
 use Knp\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use ValueObjects\StringLiteral\StringLiteral;
 
 class FileProcessorCommand extends Command
 {
     /**
-     * @var FileProcessorInterface
+     * @var ProcessorInterface
      */
-    private $fileProcessor;
+    private $processor;
 
     /**
      * FileProcessorCommand constructor.
-     * @param FileProcessorInterface $fileProcessor
+     * @param ProcessorInterface $processor
      */
-    public function __construct(FileProcessorInterface $fileProcessor)
+    public function __construct(ProcessorInterface $processor)
     {
-        $this->fileProcessor = $fileProcessor;
+        $this->processor = $processor;
         parent::__construct();
     }
 
@@ -43,7 +42,7 @@ class FileProcessorCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $fileName = new StringLiteral($input->getArgument('fileName'));
-        $this->fileProcessor->consumeFile($fileName);
+        $file = new \SplFileInfo($input->getArgument('fileName'));
+        $this->processor->consumeFile($file);
     }
 }
