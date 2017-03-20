@@ -2,6 +2,7 @@
 <?php
 
 use CultuurNet\UDB3\IISImporter\Console\AMQPPublishCommand;
+use CultuurNet\UDB3\IISImporter\Console\FileProcessorCommand;
 use Knp\Provider\ConsoleServiceProvider;
 use CultuurNet\UDB3\IISImporter\Console\WatchCommand;
 
@@ -35,6 +36,12 @@ $consoleApp->add(
     new AMQPPublishCommand(
         $app['iis.url_factory'],
         $app['iis.amqp_publisher']
+    )
+);
+
+$consoleApp->add(
+    new FileProcessorCommand(
+        $app['iis.file_processor']
     )
 );
 

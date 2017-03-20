@@ -6,6 +6,7 @@ use CultuurNet\UDB3\IISImporter\AMQP\AMQPPropertiesFactory;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisher;
 use CultuurNet\UDB3\IISImporter\Event\ParserV3;
 use CultuurNet\UDB3\IISImporter\Event\Watcher;
+use CultuurNet\UDB3\IISImporter\File\FileProcessor;
 use CultuurNet\UDB3\IISImporter\Url\UrlFactory;
 use CultuurNet\UDB3\IISStore\Stores\Doctrine\StoreLoggingDBALRepository;
 use CultuurNet\UDB3\IISStore\Stores\Doctrine\StoreRelationDBALRepository;
@@ -139,7 +140,7 @@ $app['iis.amqp_publisher'] = $app->share(
 
 $app['iis.file_processor'] = $app->share(
     function (Application $app) {
-        return new \CultuurNet\UDB3\IISImporter\File\FileProcessor(
+        return new FileProcessor(
             new DirectoryResource($app['config']['input_folder']),
             $app['iis.parser'],
             $app['iis.dbal_store'],
