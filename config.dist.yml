@@ -7,8 +7,6 @@ database:
   password: ***
   host: 127.0.0.1
 
-bootstrap: []
-
 import_folder: /vagrant/import
 
 amqp:

@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cdbxml xmlns="http://www.cultuurdatabank.com/XMLSchema/CdbXSD/3.3/FINAL">
+    <event availablefrom="2017-03-23T00:00:00" externalid="EGD201711542" wfstatus="readyforvalidation">
+        <calendar>
+            <timestamps>
+                <timestamp>
+                    <date>2017-04-23</date>
+                </timestamp>
+            </timestamps>
+        </calendar>
+        <categories>
+            <category type="eventtype" catid="11542">Begeleide uitstap of rondleiding</category>
+            <category type="theme" catid="1.40.0.0.0">Erfgoed</category>
+            <category type="publicscope" catid="6.1.0.0.0">Lokaal</category>
+        </categories>
+        <contactinfo>
+            <mail>info@erfgoeddag.be</mail>
+            <phone type="phone">0475 73 23 85</phone>
+            <url>http://www.toneelhuis.be</url>
+        </contactinfo>
+        <eventdetails>
+            <eventdetail lang="nl">
+                <longdescription>Info organisatie: Toneelhuis is het stadstheater van Antwerpen. Haar kerntaak is de productie van artistieke projecten voor de grote zaal, in eerste instantie op de Bourlascène voor een lokaal publiek en vervolgens - via tournees - voor een regionaal en internationaal publiek. Naast Guy Cassiers creëren een zestal artiesten er hun werk: Olympique Dramatique, Bart Meuleman, Abke Haring, Benjamin Verdonck, FC Bergman en Mokhallad Rasem. Dat levert puur teksttheater op naast beeldend theater, intens gebruik van klank- en beeldtechnologie naast artisanaal handwerk, beeldende interventies in de stad naast theaterwerk in de zaal … Vanaf 2017 wordt dit nog verruimd via P.U.L.S., een project voor jonge makers (Project for upcoming artists for the large stage).ism Atlas17:00  Deze activiteit loopt tot en met 30/04/2017. Gedeeltelijk toegankelijk voor rolstoelgebruikers. De vaste collectie is GRATIS te bezoeken en dit los van de Erfgoeddagactiviteit.  Er is parking in de nabije omgeving.       Deze activiteit focust op cultureel-erfgoedzorg.    De vaste collectie is GRATIS te bezoeken en dit los van de Erfgoeddagactiviteit.</longdescription>
+                <media>
+                    <file>
+                        <copyright>Erfgoeddag 2017</copyright>
+                        <filename>erfgoeddag2017.png</filename>
+                        <filetype>png</filetype>
+                        <hlink>http://www.faronet.be/logo/erfgoeddag2017.png</hlink>
+                        <mediatype>photo</mediatype>
+                    </file>
+                </media>
+                <price>
+                    <pricevalue>0</pricevalue>
+                </price>
+                <shortdescription>De rijkswacht speelde een belangrijke rol in het zorgen voor en het vergroten van het veiligheidsgevoel van de inwoners. Weet jij nog hoe de uniformeren van rijkswachters, gemeentepolitie en veldwachters eruitzagen? Herinner je je welke gebruiksvoorwerpen bij hun functie hoorden en hoe ze zich snel konden verplaatsen?</shortdescription>
+                <title>Ontdek de Bourlaschouwburg</title>
+            </eventdetail>
+        </eventdetails>
+        <keywords>
+            <keyword>erfgoeddag</keyword>
+            <keyword>Erfgoeddag2017</keyword>
+            <keyword>Deze activiteit focust op cultureel-erfgoedzorg.</keyword>
+        </keywords>
+        <location>
+            <address>
+                <physical>
+                    <city>Tessenderlo</city>
+                    <country>BE</country>
+                    <street>H. Hartlaan 16</street>
+                    <zipcode>3980</zipcode>
+                </physical>
+            </address>
+            <label>Technisch H.Hartinstituut</label>
+        </location>
+        <organiser>
+            <label>Toneelhuis</label>
+        </organiser>
+    </event>
+    <event availablefrom="2017-03-23T00:00:00" externalid="EGD201711555" wfstatus="readyforvalidation">
+        <calendar>
+            <timestamps>
+                <timestamp>
+                    <date>2017-04-23</date>
+                </timestamp>
+            </timestamps>
+        </calendar>
+        <categories>
+            <category type="eventtype" catid="11555">Lezing of congres</category>
+            <category type="theme" catid="1.40.0.0.0">Erfgoed</category>
+            <category type="publicscope" catid="6.1.0.0.0">Lokaal</category>
+        </categories>
+        <contactinfo>
+            <mail>annelies.t@kruibeke.be</mail>
+            <phone type="phone">015 29 76 51</phone>
+            <url>https://www.facebook.com/zusterRaphaelle/</url>
+        </contactinfo>
+        <eventdetails>
+            <eventdetail lang="nl">
+                <longdescription>Info organisatie: ism Femma, Markant, KVLJ, Davidsfondsom 10 uur: rondleiding in het Algemeen Nederlands (duur: 2 uur), om 11.30 uur: Rondleiding in het Mechels dialect (duur: 2 uur), om 13.30 uur rondleiding in het Algemeen Nederlands (duur: 2 uur), om 14 uur: Rondleiding in het Mechels dialect (duur: 2 uur), om 16 uur: Rondleiding in het Algemeen Nederlands (duur: 2 uur).  Deze activiteit loopt tot en met 23/04/2017. Toegankelijk voor rolstoelgebruikers.  Het Toerismehuis is op zondag slechts open vanaf 12.30 uur. Daarvoor kan je contact opnemen met stadsgids Paul Delbaere op het nummer 0498 26 93 31. Er is parking in de nabije omgeving.       Deze activiteit focust op cultureel-erfgoedzorg.  Deze activiteit focust op het erfgoed van de zorg. De activiteit heeft een sterke link met de geschiedenis van de zorg.</longdescription>
+                <media>
+                    <file>
+                        <copyright>Erfgoeddag 2017</copyright>
+                        <filename>erfgoeddag2017.png</filename>
+                        <filetype>png</filetype>
+                        <hlink>http://www.faronet.be/logo/erfgoeddag2017.png</hlink>
+                        <mediatype>photo</mediatype>
+                    </file>
+                </media>
+                <price>
+                    <pricevalue>0</pricevalue>
+                </price>
+                <shortdescription>Stadsgidsen brengen je naar gebouwen waar 'zorg' zich afspeelde vanaf circa 1500, de periode van de Bourgondisch-Habsburgse dynastie. Ook hedendaagse zorginstellingen krijgen aandacht. Telkens worden spitante anekdotes verteld voor jong en oud.</shortdescription>
+                <title>De babyborrel van zuster Raphaëlle</title>
+            </eventdetail>
+        </eventdetails>
+        <keywords>
+            <keyword>erfgoeddag</keyword>
+            <keyword>Erfgoeddag2017</keyword>
+            <keyword>Deze activiteit focust op cultureel-erfgoedzorg.</keyword>
+        </keywords>
+        <location>
+            <address>
+                <physical>
+                    <city>Mechelen</city>
+                    <country>BE</country>
+                    <street>Hallestraat 2</street>
+                    <zipcode>2800</zipcode>
+                </physical>
+            </address>
+            <label>Toerismehuis De Gulden Arent</label>
+        </location>
+        <organiser>
+            <label>Gemeente Kruibeke</label>
+        </organiser>
+    </event>
+    <event availablefrom="2017-03-23T00:00:00" externalid="EGD201711557" wfstatus="readyforvalidation">
+        <calendar>
+            <timestamps>
+                <timestamp>
+                    <date>2017-04-23</date>
+                </timestamp>
+            </timestamps>
+        </calendar>
+        <categories>
+            <category type="eventtype" catid="11557">Begeleide uitstap of rondleiding</category>
+            <category type="theme" catid="1.40.0.0.0">Erfgoed</category>
+            <category type="publicscope" catid="6.1.0.0.0">Lokaal</category>
+        </categories>
+        <contactinfo>
+            <mail>edu@mjb-jmb.org</mail>
+            <phone type="phone" />
+            <url>http://www.new.mjb-jmb.org/</url>
+        </contactinfo>
+        <eventdetails>
+            <eventdetail lang="nl">
+                <longdescription>Info organisatie: Het Joods Museum van België, in het hart van Brussel, beheert een verzameling over de kunst, de geschiedenis en de cultuur van de Joden in België. De permanente tentoonstelling is momenteel gesloten maar het museum blijft actief en organiseert verschillende activiteiten zoals tijdelijke tentoonstellingen op locatie, conferenties tijdens de middagpauze, educatieve activiteiten in de scholen en rondleidingen door de stad over de Joodse geschiedenis en het erfgoed. Een kunstenaar vertolkt de veranderingen in het museum ondertussen op een artistieke manier, daarbij geholpen door een aantal performers.Rondleidingen om 11.30, 13, 14.30 en 16 uur  Deze activiteit loopt tot en met 23/04/2017. Niet toegankelijk voor rolstoelgebruikers. De vaste collectie is GRATIS te bezoeken en dit los van de Erfgoeddagactiviteit.  Er is parking in de nabije omgeving. Er is een eet- en/of drinkgelegenheid aanwezig.       Deze activiteit is een samenwerking met een zorg- of welzijnsorganisatie, wordt georganiseerd door een organisatie uit de zorgsector of richt zich naar zorgbehoevende personen en hun mantelzorgers.   De vaste collectie is GRATIS te bezoeken en dit los van de Erfgoeddagactiviteit.</longdescription>
+                <media>
+                    <file>
+                        <copyright>Erfgoeddag 2017</copyright>
+                        <filename>erfgoeddag2017.png</filename>
+                        <filetype>png</filetype>
+                        <hlink>http://www.faronet.be/logo/erfgoeddag2017.png</hlink>
+                        <mediatype>photo</mediatype>
+                    </file>
+                </media>
+                <price>
+                    <pricevalue>0</pricevalue>
+                </price>
+                <shortdescription>Ontdek in het Kasteel van Horst hoe gravin Maria-Anna Van den Tympel meer dan 300 jaar geleden zorgde voor het wel en wee van haar gasten. Dankzij de apothekersrekeningen die rentmeester Piret bijhield weten we wat de gravin allemaal bestelde. En wat kregen zieke mensen te eten in zo'n kasteel? En ging het er anders aan toe bij de ridders, nog 200 jaar eerder? Een rondleiding voor het hele gezin!</shortdescription>
+                <title>Joodse families in de Marollen. Over Stolpersteine en hun betekenis</title>
+            </eventdetail>
+        </eventdetails>
+        <keywords>
+            <keyword>erfgoeddag</keyword>
+            <keyword>Erfgoeddag2017</keyword>
+            <keyword>Verstandelijke beperking</keyword>
+        </keywords>
+        <location>
+            <address>
+                <physical>
+                    <city>Sint-Pieters-Rode</city>
+                    <country>BE</country>
+                    <street>Horststraat 28</street>
+                    <zipcode>3220</zipcode>
+                </physical>
+            </address>
+            <label>Kasteel van Horst</label>
+        </location>
+        <organiser>
+            <label>Joods Museum</label>
+        </organiser>
+    </event>
+    <event availablefrom="2017-03-23T00:00:00" externalid="EGD201711574" wfstatus="readyforvalidation">
+        <calendar>
+            <timestamps>
+                <timestamp>
+                    <date>2017-04-23</date>
+                </timestamp>
+            </timestamps>
+        </calendar>
+        <categories>
+            <category type="eventtype" catid="11574">Fiets- of wandelroute</category>
+            <category type="theme" catid="1.40.0.0.0">Erfgoed</category>
+            <category type="publicscope" catid="6.1.0.0.0">Lokaal</category>
+        </categories>
+        <contactinfo>
+            <mail>marieke.vangheluwe@stad.gent</mail>
+            <phone type="phone">0488 29 06 29</phone>
+            <url>http://www.stamgent.be</url>
+        </contactinfo>
+        <eventdetails>
+            <eventdetail lang="nl">
+                <longdescription>
+                    Info organisatie: Het STAM is het Gentse stadsmuseum dat het verhaal van Gent brengt en je (nog) warm(er) maakt voor de stad.ism Turkse Unie van Belgiëtussen 13 en 17 uur, om 14 uur geleid moskeebezoek rond het thema zorg in de Fatih moskee tegenover het woonzorgcentrum, Klimopstraat 1, Beringen.
+                    Getuigenis/live interview in het woonzorgcentrum om 16 uur.  Deze activiteit loopt tot en met 27/04/2017. Toegankelijk voor rolstoelgebruikers.  Adres woonzorgcampus Sporenpark: Terrilpark 1
+                    Er is parking in de nabije omgeving. Er is een eet- en/of drinkgelegenheid aanwezig.       Deze activiteit is een samenwerking met een zorg- of welzijnsorganisatie, wordt georganiseerd door een organisatie uit de zorgsector of richt zich naar zorgbehoevende personen en hun mantelzorgers. Deze activiteit focust op het erfgoed van de zorg. De activiteit heeft een sterke link met de geschiedenis van de zorg.
+                </longdescription>
+                <media>
+                    <file>
+                        <copyright>Erfgoeddag 2017</copyright>
+                        <filename>erfgoeddag2017.png</filename>
+                        <filetype>png</filetype>
+                        <hlink>http://www.faronet.be/logo/erfgoeddag2017.png</hlink>
+                        <mediatype>photo</mediatype>
+                    </file>
+                </media>
+                <price>
+                    <pricevalue>0</pricevalue>
+                </price>
+                <shortdescription>Maak, aan de hand van foto's, kennis met de zorg voor de medemens binnen de Turkse gemeenschap. Hoe was mantelzorg vroeger georganiseerd en hoe gebeurt dat nu? Wat was en is de relatie en interactie met de professionele zorg? We belichten de veranderingen onder invloed van migratiestromen, kennismaking met een nieuwe cultuur en met nieuwe vormen van dienstverlening.</shortdescription>
+                <title>Reünie van de Bijloke: voor iedereen met herinneringen aan het ziekenhuis</title>
+            </eventdetail>
+        </eventdetails>
+        <keywords>
+            <keyword>erfgoeddag</keyword>
+            <keyword>Erfgoeddag2017</keyword>
+            <keyword>Fysieke beperking</keyword>
+            <keyword>Psychische beperking</keyword>
+            <keyword>Verstandelijke beperking</keyword>
+        </keywords>
+        <location>
+            <address>
+                <physical>
+                    <city>Beringen</city>
+                    <country>BE</country>
+                    <street>Terrilpark 1</street>
+                    <zipcode>3582</zipcode>
+                </physical>
+            </address>
+            <label>Woon en Zorgcentrum Sporenpark</label>
+        </location>
+        <organiser>
+            <label>STAM</label>
+        </organiser>
+    </event>
+    <event availablefrom="2017-03-23T00:00:00" externalid="EGD201711576" wfstatus="readyforvalidation">
+        <calendar>
+            <timestamps>
+                <timestamp>
+                    <date>2017-04-23</date>
+                </timestamp>
+            </timestamps>
+        </calendar>
+        <categories>
+            <category type="eventtype" catid="11576">Tentoonstelling</category>
+            <category type="theme" catid="1.40.0.0.0">Erfgoed</category>
+            <category type="publicscope" catid="6.1.0.0.0">Lokaal</category>
+        </categories>
+        <contactinfo>
+            <mail>tony.strypsteen@telenet.be</mail>
+            <phone type="phone">0471 34 09 11</phone>
+            <url>http://www.familiekundebrugge.brugseverenigingen.be/</url>
+        </contactinfo>
+        <eventdetails>
+            <eventdetail lang="nl">
+                <longdescription>Info organisatie: Familiekunde Vlaanderen Regio Brugge is een vzw die deel uitmaakt van de koepelorganisatie Familiekunde Vlaanderen. Familiekunde Vlaanderen vzw is een door de Vlaamse Overheid erkende cultureel-erfgoedorganisatie die actief is op het vlak van familiegeschiedenis en familiaal erfgoed. Vele vrijwilligers zetten zich in om het onderzoek naar familiegeschiedenis te faciliteren. Dit gebeurt aan de hand van familiekundige dienstverlening en advies, via onze website www.familiegeschiedenis.be en door het aanbieden van een over geheel Vlaanderen en Brussel verspreid aanbod van cursussen en voordrachten omtrent familiegeschiedenis.17:00  Deze activiteit loopt tot en met 23/04/2017. Toegankelijk voor rolstoelgebruikers.  Gelegen op de Bijlokesite waar onder andere ook het STAM zich bevindt.  Er is een eet- en/of drinkgelegenheid aanwezig.       Deze activiteit is een samenwerking met een zorg- of welzijnsorganisatie, wordt georganiseerd door een organisatie uit de zorgsector of richt zich naar zorgbehoevende personen en hun mantelzorgers.    De activiteit richt zich specifiek op gezinnen met kinderen jonger dan 12 jaar.</longdescription>
+                <media>
+                    <file>
+                        <copyright>Erfgoeddag 2017</copyright>
+                        <filename>erfgoeddag2017.png</filename>
+                        <filetype>png</filetype>
+                        <hlink>http://www.faronet.be/logo/erfgoeddag2017.png</hlink>
+                        <mediatype>photo</mediatype>
+                    </file>
+                </media>
+                <price>
+                    <pricevalue>0</pricevalue>
+                </price>
+                <shortdescription>Ook in Heist-op-den-Berg waren heel wat klovers, zagers, snijders en slijpers van diamant. Ontdek hun verhalen en hun ambacht in deze expo. Samen met wzc Ten Kerselaere maakte het cultureel centrum portretten van de bewoners die hun verhaal vertellen over het leven in de diamantsector. De portretten en anekdotes brengen de herinneringen sprekend in beeld. Workshops rond diamantbewerken voor kids.</shortdescription>
+                <title>Zorg dragen voor je familieverleden</title>
+            </eventdetail>
+        </eventdetails>
+        <keywords>
+            <keyword>erfgoeddag</keyword>
+            <keyword>Erfgoeddag2017</keyword>
+            <keyword>De activiteit richt zich specifiek op gezinnen met kinderen jonger dan 12 jaar.</keyword>
+        </keywords>
+        <location>
+            <address>
+                <physical>
+                    <city>Gent</city>
+                    <country>BE</country>
+                    <street>Jozef Kluyskensstraat 2</street>
+                    <zipcode>9000</zipcode>
+                </physical>
+            </address>
+            <label>Muziekcentrum De Bijloke</label>
+        </location>
+        <organiser>
+            <label>Familiekunde Vlaanderen Regio Brugge</label>
+        </organiser>
+    </event>
+</cdbxml>

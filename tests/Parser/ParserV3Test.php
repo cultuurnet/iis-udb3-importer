@@ -1,6 +1,6 @@
 <?php
 
-namespace CultuurNet\UDB3\IISImporter\Event;
+namespace CultuurNet\UDB3\IISImporter\Parser;
 
 class ParserV3Test extends \PHPUnit_Framework_TestCase
 {
@@ -48,5 +48,21 @@ class ParserV3Test extends \PHPUnit_Framework_TestCase
     {
         $valid = file_get_contents(__DIR__ . '/../Binary.xml');
         $this->assertFalse($this->parser->validate($valid));
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_split_a_file()
+    {
+        $largeFile = file_get_contents(__DIR__ . '/../FileToSplit.xml');
+        $events = $this->parser->split($largeFile);
+
+        $this->assertCount(5, $events);
+        $this->assertArrayHasKey('EGD201711542', $events);
+        $this->assertArrayHasKey('EGD201711555', $events);
+        $this->assertArrayHasKey('EGD201711557', $events);
+        $this->assertArrayHasKey('EGD201711574', $events);
+        $this->assertArrayHasKey('EGD201711576', $events);
     }
 }

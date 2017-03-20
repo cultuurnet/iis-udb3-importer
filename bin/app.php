@@ -25,10 +25,7 @@ $consoleApp = $app['console'];
 
 $consoleApp->add(
     new WatchCommand(
-        $app['iis.parser'],
-        $app['iis.dbal_store'],
-        $app['iis.watcher'],
-        $app['iis.amqp_publisher']
+        $app['iis.watcher']
     )
 );
 

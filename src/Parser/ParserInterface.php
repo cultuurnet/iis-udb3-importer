@@ -1,6 +1,6 @@
 <?php
 
-namespace CultuurNet\UDB3\IISImporter\Event;
+namespace CultuurNet\UDB3\IISImporter\Parser;
 
 interface ParserInterface
 {

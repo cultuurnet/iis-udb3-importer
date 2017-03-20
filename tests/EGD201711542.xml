@@ -1,0 +1,57 @@
+<event availablefrom="2017-03-23T00:00:00" externalid="EGD201711542" wfstatus="readyforvalidation">
+    <calendar>
+        <timestamps>
+            <timestamp>
+                <date>2017-04-23</date>
+            </timestamp>
+        </timestamps>
+    </calendar>
+    <categories>
+        <category type="eventtype" catid="11542">Begeleide uitstap of rondleiding</category>
+        <category type="theme" catid="1.40.0.0.0">Erfgoed</category>
+        <category type="publicscope" catid="6.1.0.0.0">Lokaal</category>
+    </categories>
+    <contactinfo>
+        <mail>info@erfgoeddag.be</mail>
+        <phone type="phone">0475 73 23 85</phone>
+        <url>http://www.toneelhuis.be</url>
+    </contactinfo>
+    <eventdetails>
+        <eventdetail lang="nl">
+            <longdescription>Info organisatie: Toneelhuis is het stadstheater van Antwerpen. Haar kerntaak is de productie van artistieke projecten voor de grote zaal, in eerste instantie op de Bourlascène voor een lokaal publiek en vervolgens - via tournees - voor een regionaal en internationaal publiek. Naast Guy Cassiers creëren een zestal artiesten er hun werk: Olympique Dramatique, Bart Meuleman, Abke Haring, Benjamin Verdonck, FC Bergman en Mokhallad Rasem. Dat levert puur teksttheater op naast beeldend theater, intens gebruik van klank- en beeldtechnologie naast artisanaal handwerk, beeldende interventies in de stad naast theaterwerk in de zaal … Vanaf 2017 wordt dit nog verruimd via P.U.L.S., een project voor jonge makers (Project for upcoming artists for the large stage).ism Atlas17:00  Deze activiteit loopt tot en met 30/04/2017. Gedeeltelijk toegankelijk voor rolstoelgebruikers. De vaste collectie is GRATIS te bezoeken en dit los van de Erfgoeddagactiviteit.  Er is parking in de nabije omgeving.       Deze activiteit focust op cultureel-erfgoedzorg.    De vaste collectie is GRATIS te bezoeken en dit los van de Erfgoeddagactiviteit.</longdescription>
+            <media>
+                <file>
+                    <copyright>Erfgoeddag 2017</copyright>
+                    <filename>erfgoeddag2017.png</filename>
+                    <filetype>png</filetype>
+                    <hlink>http://www.faronet.be/logo/erfgoeddag2017.png</hlink>
+                    <mediatype>photo</mediatype>
+                </file>
+            </media>
+            <price>
+                <pricevalue>0</pricevalue>
+            </price>
+            <shortdescription>De rijkswacht speelde een belangrijke rol in het zorgen voor en het vergroten van het veiligheidsgevoel van de inwoners. Weet jij nog hoe de uniformeren van rijkswachters, gemeentepolitie en veldwachters eruitzagen? Herinner je je welke gebruiksvoorwerpen bij hun functie hoorden en hoe ze zich snel konden verplaatsen?</shortdescription>
+            <title>Ontdek de Bourlaschouwburg</title>
+        </eventdetail>
+    </eventdetails>
+    <keywords>
+        <keyword>erfgoeddag</keyword>
+        <keyword>Erfgoeddag2017</keyword>
+        <keyword>Deze activiteit focust op cultureel-erfgoedzorg.</keyword>
+    </keywords>
+    <location>
+        <address>
+            <physical>
+                <city>Tessenderlo</city>
+                <country>BE</country>
+                <street>H. Hartlaan 16</street>
+                <zipcode>3980</zipcode>
+            </physical>
+        </address>
+        <label>Technisch H.Hartinstituut</label>
+    </location>
+    <organiser>
+        <label>Toneelhuis</label>
+    </organiser>
+</event>
