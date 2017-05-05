@@ -126,15 +126,15 @@ class Processor implements ProcessorInterface
             $singleXml->event[0]['lastupdated'] = $this->changeDateToLocalTime($lastUpdated);
         }
 
-        if($singleXml->event[0]->calendar[0]->timestamps[0]) {
+        if ($singleXml->event[0]->calendar[0]->timestamps[0]) {
             foreach ($singleXml->event[0]->calendar[0]->timestamps[0]->timestamp as $xmlTimeStamp) {
-                if($xmlTimeStamp->timestart) {
+                if ($xmlTimeStamp->timestart) {
                     $timeStart = (string) $xmlTimeStamp->timestart;
                     $tempStart = $this->changeTimeStampToLocalTime($timeStart);
                     $xmlTimeStamp->timestart = $tempStart;
                 }
 
-                if($xmlTimeStamp->timeend) {
+                if ($xmlTimeStamp->timeend) {
                     $timeEnd = (string) $xmlTimeStamp->timeend;
                     $tempEnd = $this->changeTimeStampToLocalTime($timeEnd);
                     $xmlTimeStamp->timeend = $tempEnd;

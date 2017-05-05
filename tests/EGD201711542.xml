@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cdbxml xmlns="http://www.cultuurdatabank.com/XMLSchema/CdbXSD/3.3/FINAL">
 <event availablefrom="2017-03-23T00:00:00" externalid="EGD201711542" wfstatus="readyforvalidation">
     <calendar>
         <timestamps>
@@ -55,3 +57,4 @@
         <label>Toneelhuis</label>
     </organiser>
 </event>
+</cdbxml>
