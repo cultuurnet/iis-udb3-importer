@@ -115,6 +115,33 @@ class Processor implements ProcessorInterface
         // Add cdbid to the event.
         $singleXml = simplexml_load_string($event);
         $singleXml->event[0]['cdbid'] = $cdbid->toNative();
+
+        // Change the dates to local time so they don't error on import
+        if ($singleXml->event[0]['creationdate']) {
+            $creationDate = (string) $singleXml->event[0]['creationdate'];
+            $singleXml->event[0]['creationdate'] = $this->changeDateToLocalTime($creationDate);
+        }
+        if ($singleXml->event[0]['lastupdated']) {
+            $lastUpdated = (string) $singleXml->event[0]['lastupdated'];
+            $singleXml->event[0]['lastupdated'] = $this->changeDateToLocalTime($lastUpdated);
+        }
+
+        if($singleXml->event[0]->calendar[0]->timestamps[0]) {
+            foreach ($singleXml->event[0]->calendar[0]->timestamps[0]->timestamp as $xmlTimeStamp) {
+                if($xmlTimeStamp->timestart) {
+                    $timeStart = (string) $xmlTimeStamp->timestart;
+                    $tempStart = $this->changeTimeStampToLocalTime($timeStart);
+                    $xmlTimeStamp->timestart = $tempStart;
+                }
+
+                if($xmlTimeStamp->timeend) {
+                    $timeEnd = (string) $xmlTimeStamp->timeend;
+                    $tempEnd = $this->changeTimeStampToLocalTime($timeEnd);
+                    $xmlTimeStamp->timeend = $tempEnd;
+                }
+            }
+        }
+
         $event = new StringLiteral($singleXml->asXML());
 
         // Update or create event.
@@ -136,5 +163,25 @@ class Processor implements ProcessorInterface
             $isUpdate
         );
         $this->store->savePublished($cdbid, $now);
+    }
+
+    /**
+     * @param string $date
+     * @return string
+     */
+    private function changeDateToLocalTime($date)
+    {
+        $time = strtotime($date);
+        return date("Y-m-d H:i:s", $time);
+    }
+
+    /**
+     * @param string $timeStamp
+     * @return string
+     */
+    private function changeTimeStampToLocalTime($date)
+    {
+        $time = strtotime($date);
+        return date("H:i:s", $time);
     }
 }
