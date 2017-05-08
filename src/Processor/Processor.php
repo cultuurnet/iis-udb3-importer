@@ -172,11 +172,11 @@ class Processor implements ProcessorInterface
     private function changeDateToLocalTime($date)
     {
         $time = strtotime($date);
-        return date("Y-m-d H:i:s", $time);
+        return date("Y-m-d\TH:i:s", $time);
     }
 
     /**
-     * @param string $timeStamp
+     * @param string $date
      * @return string
      */
     private function changeTimeStampToLocalTime($date)
