@@ -31,8 +31,11 @@ class MediaManager implements MediaManagerInterface
         //TODO: temporary development return
         $filesystem = new Filesystem($this->adaptor);
 
+        $ftpConnection = ftp_connect($url->getDomain());
+        ftp_login($ftpConnection, $url->getUser(), $url->getPassword());
+
         $putStream = tmpfile();
-        ftp_get($url->getDomain(), $putStream, $url->getPath(), FTP_BINARY);
+        ftp_get($ftpConnection, $putStream, $url->getPath(), FTP_BINARY);
         fwrite($putStream, $url);
         rewind($putStream);
 
