@@ -29,11 +29,17 @@ class MediaManager implements MediaManagerInterface
     public function generateMediaLink(Url $url)
     {
         //TODO: temporary development return
-
-
         $filesystem = new Filesystem($this->adaptor);
 
-        $filesystem->put('path/to/file.txt', 'contents');
+        $putStream = tmpfile();
+        ftp_get($url->getDomain(), $putStream, $url->getPath(), FTP_BINARY);
+        fwrite($putStream, $url);
+        rewind($putStream);
+
+        $filesystem->putStream('somewhere/todo.txt', $putStream);
+        if (is_resource($putStream)) {
+            fclose($putStream);
+        }
 
         return $url;
     }
