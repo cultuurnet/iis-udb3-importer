@@ -5,6 +5,7 @@ use CultuurNet\UDB3\IISImporter\AMQP\AMQPMessageFactory;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPropertiesFactory;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisher;
 use CultuurNet\UDB3\IISImporter\File\FileManager;
+use CultuurNet\UDB3\IISImporter\Media\MediaManager;
 use CultuurNet\UDB3\IISImporter\Parser\ParserV3;
 use CultuurNet\UDB3\IISImporter\Processor\Processor;
 use CultuurNet\UDB3\IISImporter\Url\UrlFactory;
@@ -137,6 +138,12 @@ $app['iis.file_manager'] = $app->share(
     }
 );
 
+$app['iis.media_manager'] = $app->share(
+    function () {
+        return new MediaManager();
+    }
+);
+
 $app['iis.file_processor'] = $app->share(
     function (Application $app) {
         return new Processor(
@@ -145,7 +152,8 @@ $app['iis.file_processor'] = $app->share(
             $app['iis.dbal_store'],
             $app['iis.amqp_publisher'],
             $app['iis.url_factory'],
-            $app['iis.author']);
+            $app['iis.author'],
+            $app['iis.media_manager']);
     }
 );
 

@@ -4,6 +4,7 @@ namespace CultuurNet\UDB3\IISImporter\Processor;
 
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisherInterface;
 use CultuurNet\UDB3\IISImporter\File\FileManagerInterface;
+use CultuurNet\UDB3\IISImporter\Media\MediaManagerInterface;
 use CultuurNet\UDB3\IISImporter\Parser\ParserInterface;
 use CultuurNet\UDB3\IISImporter\Url\UrlFactoryInterface;
 use CultuurNet\UDB3\IISStore\Stores\RepositoryInterface;
@@ -44,6 +45,11 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     private $author;
 
     /**
+     * @var MediaManagerInterface
+     */
+    private $mediaManager;
+
+    /**
      * @var Processor
      */
     private $processor;
@@ -62,13 +68,16 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
 
         $this->author = new StringLiteral('importsUDB3');
 
+        $this->mediaManager = $this->createMock(MediaManagerInterface::class);
+
         $this->processor = new Processor(
             $this->fileManager,
             $this->parser,
             $this->store,
             $this->publisher,
             $this->urlFactory,
-            $this->author
+            $this->author,
+            $this->mediaManager
         );
     }
 

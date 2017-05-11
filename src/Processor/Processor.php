@@ -4,11 +4,13 @@ namespace CultuurNet\UDB3\IISImporter\Processor;
 
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisherInterface;
 use CultuurNet\UDB3\IISImporter\File\FileManagerInterface;
+use CultuurNet\UDB3\IISImporter\Media\MediaManagerInterface;
 use CultuurNet\UDB3\IISImporter\Parser\ParserInterface;
 use CultuurNet\UDB3\IISImporter\Url\UrlFactoryInterface;
 use CultuurNet\UDB3\IISStore\Stores\RepositoryInterface;
 use ValueObjects\StringLiteral\StringLiteral;
 use ValueObjects\Identity\UUID;
+use ValueObjects\Web\Url;
 
 class Processor implements ProcessorInterface
 {
@@ -43,6 +45,11 @@ class Processor implements ProcessorInterface
     protected $author;
 
     /**
+     * @var MediaManagerInterface
+     */
+    protected $mediaManager;
+
+    /**
      * FileProcessor constructor.
      * @param FileManagerInterface $fileManager
      * @param ParserInterface $parser
@@ -50,6 +57,7 @@ class Processor implements ProcessorInterface
      * @param AMQPPublisherInterface $publisher
      * @param UrlFactoryInterface $urlFactory
      * @param StringLiteral $author
+     * @param MediaManagerInterface $mediaManager
      */
     public function __construct(
         FileManagerInterface $fileManager,
@@ -57,7 +65,8 @@ class Processor implements ProcessorInterface
         RepositoryInterface $store,
         AMQPPublisherInterface $publisher,
         UrlFactoryInterface $urlFactory,
-        StringLiteral $author
+        StringLiteral $author,
+        MediaManagerInterface $mediaManager
     ) {
         $this->fileManager = $fileManager;
         $this->parser = $parser;
@@ -65,6 +74,7 @@ class Processor implements ProcessorInterface
         $this->publisher = $publisher;
         $this->urlFactory = $urlFactory;
         $this->author = $author;
+        $this->mediaManager = $mediaManager;
     }
 
 
@@ -138,6 +148,20 @@ class Processor implements ProcessorInterface
                     $timeEnd = (string) $xmlTimeStamp->timeend;
                     $tempEnd = $this->changeTimeStampToLocalTime($timeEnd);
                     $xmlTimeStamp->timeend = $tempEnd;
+                }
+            }
+        }
+
+        if ($singleXml->event[0]->eventdetails[0]) {
+            foreach ($singleXml->event[0]->eventdetails[0]->eventdetail as $eventDetail) {
+                if ($eventDetail->media) {
+                    foreach ($eventDetail->media[0]->file as $file) {
+                        if ($file->hlink) {
+                            $hlink = Url::fromNative($file->hlink);
+                            $mediaLink = $this->mediaManager->generateMediaLink($hlink);
+                            $file->hlink = (string) $mediaLink;
+                        }
+                    }
                 }
             }
         }
