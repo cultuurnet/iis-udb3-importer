@@ -1,5 +1,6 @@
 <?php
 
+use Aws\S3\S3Client;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPBodyFactory;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPMessageFactory;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPropertiesFactory;
@@ -16,6 +17,7 @@ use CultuurNet\UDB3\IISStore\Stores\Doctrine\StoreXmlDBALRepository;
 use CultuurNet\UDB3\IISStore\Stores\StoreRepository;
 use DerAlex\Silex\YamlConfigServiceProvider;
 use Doctrine\DBAL\DriverManager;
+use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Channel\AMQPChannel;
 use Silex\Application;
@@ -138,9 +140,31 @@ $app['iis.file_manager'] = $app->share(
     }
 );
 
+$app['iis.cloud_client'] = $app->share(
+    function (Application $app) {
+        return new S3Client([
+            'credentials' => [
+                'key'    => $app['config']['aws']['credentials']['key'],
+                'secret' => $app['config']['aws']['credentials']['secret']
+            ],
+            'region' => $app['config']['aws']['region'],
+            'version' => $app['config']['aws']['version'],
+        ]);
+    }
+);
+
+$app['iis.adapter'] = $app->share(
+    function (Application $app) {
+        return  new AwsS3Adapter(
+            $app['iis.cloud_client'],
+            $app['config']['aws']['bucket']
+        );
+    }
+);
+
 $app['iis.media_manager'] = $app->share(
-    function () {
-        return new MediaManager();
+    function (Application $app) {
+        return new MediaManager($app['iis.adapter']);
     }
 );
 

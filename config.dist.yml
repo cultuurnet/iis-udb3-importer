@@ -21,3 +21,11 @@ amqp:
   message:
     base_url: http://iis-udb.dev/events
     author: importsUDB3
+
+aws:
+  credentials:
+    key: ***
+    secret: ***
+  region: ***
+  version: ***
+  bucket: ***
