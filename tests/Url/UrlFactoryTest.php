@@ -28,13 +28,28 @@ class UrlFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_generates_an_url()
+    public function it_generates_an_event_url()
     {
         $cdbid = new UUID();
         $url = $this->urlFactory->generateEventUrl($cdbid);
 
         $expectedUrl = Url::fromNative(
             $this->baseUrl . '/' . $cdbid->toNative()
+        );
+
+        $this->assertEquals($expectedUrl, $url);
+    }
+
+    /**
+     * @test
+     */
+    public function it_generates_a_media_url()
+    {
+        $mediaLink = new StringLiteral('test.jpg');
+        $url = $this->urlFactory->generateMediaUrl($mediaLink);
+
+        $expectedUrl = Url::fromNative(
+            $this->baseUrl . '/' . $mediaLink->toNative()
         );
 
         $this->assertEquals($expectedUrl, $url);
