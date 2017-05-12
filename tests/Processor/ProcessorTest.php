@@ -130,7 +130,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('savePublished');
 
         $this->urlFactory->expects($this->exactly(2))
-            ->method('generateUrl')
+            ->method('generateEventUrl')
             ->willReturn(Url::fromNative('http://www.test.be'));
 
         $this->fileManager->expects($this->once())

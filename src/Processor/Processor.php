@@ -183,7 +183,7 @@ class Processor implements ProcessorInterface
             $cdbid,
             $now,
             $this->author,
-            $this->urlFactory->generateUrl($cdbid),
+            $this->urlFactory->generateEventUrl($cdbid),
             $isUpdate
         );
         $this->store->savePublished($cdbid, $now);

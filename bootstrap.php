@@ -5,6 +5,7 @@ use CultuurNet\UDB3\IISImporter\AMQP\AMQPBodyFactory;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPMessageFactory;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPropertiesFactory;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisher;
+use CultuurNet\UDB3\IISImporter\Download\Downloader;
 use CultuurNet\UDB3\IISImporter\File\FileManager;
 use CultuurNet\UDB3\IISImporter\Media\MediaManager;
 use CultuurNet\UDB3\IISImporter\Parser\ParserV3;
@@ -101,7 +102,7 @@ $app['iis.amqp_connection'] = $app->share(
     }
 );
 
-$app['iis.url_factory'] = $app->share(
+$app['iis.amqp_url_factory'] = $app->share(
     function (Application $app) {
         return new UrlFactory(
             new StringLiteral(
@@ -153,9 +154,25 @@ $app['iis.cloud_client'] = $app->share(
     }
 );
 
+$app['iis.media_url_factory'] = $app->share(
+    function (Application $app) {
+        return new UrlFactory(
+            new StringLiteral(
+                $app['config']['aws']['media_url']
+            )
+        );
+    }
+);
+
+$app['iis.downloader'] = $app->share(
+    function () {
+        return new Downloader();
+    }
+);
+
 $app['iis.adapter'] = $app->share(
     function (Application $app) {
-        return  new AwsS3Adapter(
+        return new AwsS3Adapter(
             $app['iis.cloud_client'],
             $app['config']['aws']['bucket']
         );
@@ -164,7 +181,11 @@ $app['iis.adapter'] = $app->share(
 
 $app['iis.media_manager'] = $app->share(
     function (Application $app) {
-        return new MediaManager($app['iis.adapter']);
+        return new MediaManager(
+            $app['iis.media_url_factory'],
+            $app['iis.downloader'],
+            $app['iis.adapter']
+        );
     }
 );
 
@@ -175,7 +196,7 @@ $app['iis.file_processor'] = $app->share(
             $app['iis.parser'],
             $app['iis.dbal_store'],
             $app['iis.amqp_publisher'],
-            $app['iis.url_factory'],
+            $app['iis.amqp_url_factory'],
             $app['iis.author'],
             $app['iis.media_manager']);
     }

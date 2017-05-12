@@ -31,7 +31,7 @@ $consoleApp->add(
 
 $consoleApp->add(
     new AMQPPublishCommand(
-        $app['iis.url_factory'],
+        $app['iis.amqp_url_factory'],
         $app['iis.amqp_publisher']
     )
 );

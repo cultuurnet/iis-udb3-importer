@@ -25,8 +25,16 @@ class UrlFactory implements UrlFactoryInterface
     /**
      * @inheritdoc
      */
-    public function generateUrl(UUID $cdbid)
+    public function generateEventUrl(UUID $cdbid)
     {
          return Url::fromNative($this->baseUrl->toNative() . '/' . $cdbid->toNative());
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function generateMediaUrl(StringLiteral $path)
+    {
+        return Url::fromNative($this->baseUrl->toNative() . '/' . $path->toNative());
     }
 }

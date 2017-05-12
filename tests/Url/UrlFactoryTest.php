@@ -31,7 +31,7 @@ class UrlFactoryTest extends \PHPUnit_Framework_TestCase
     public function it_generates_an_url()
     {
         $cdbid = new UUID();
-        $url = $this->urlFactory->generateUrl($cdbid);
+        $url = $this->urlFactory->generateEventUrl($cdbid);
 
         $expectedUrl = Url::fromNative(
             $this->baseUrl . '/' . $cdbid->toNative()

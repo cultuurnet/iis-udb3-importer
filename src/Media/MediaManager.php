@@ -2,12 +2,24 @@
 
 namespace CultuurNet\UDB3\IISImporter\Media;
 
+use CultuurNet\UDB3\IISImporter\Download\DownloaderInterface;
+use CultuurNet\UDB3\IISImporter\Url\UrlFactoryInterface;
 use League\Flysystem\Adapter\AbstractAdapter;
 use League\Flysystem\Filesystem;
+use ValueObjects\StringLiteral\StringLiteral;
 use ValueObjects\Web\Url;
 
 class MediaManager implements MediaManagerInterface
 {
+    /**
+     * @var UrlFactoryInterface
+     */
+    protected $urlFactory;
+
+    /**
+     * @var DownloaderInterface
+     */
+    protected $downloader;
 
     /**
      * @var AbstractAdapter
@@ -16,11 +28,18 @@ class MediaManager implements MediaManagerInterface
 
     /**
      * MediaManager constructor.
-     * @param AbstractAdapter $adapter
+     * @param UrlFactoryInterface $urlFactory
+     * @param DownloaderInterface $downloader
+     * @param AbstractAdapter $adaptor
      */
-    public function __construct(AbstractAdapter $adapter)
-    {
-        $this->adaptor = $adapter;
+    public function __construct(
+        UrlFactoryInterface $urlFactory,
+        DownloaderInterface $downloader,
+        AbstractAdapter $adaptor
+    ) {
+        $this->urlFactory = $urlFactory;
+        $this->downloader = $downloader;
+        $this->adaptor = $adaptor;
     }
 
     /**
@@ -28,22 +47,16 @@ class MediaManager implements MediaManagerInterface
      */
     public function generateMediaLink(Url $url)
     {
-        //TODO: temporary development return
-        $filesystem = new Filesystem($this->adaptor);
-
-        $ftpConnection = ftp_connect($url->getDomain());
-        ftp_login($ftpConnection, $url->getUser(), $url->getPassword());
-
-        $putStream = tmpfile();
-        ftp_get($ftpConnection, $putStream, $url->getPath(), FTP_BINARY);
-        fwrite($putStream, $url);
-        rewind($putStream);
-
-        $filesystem->putStream('somewhere/todo.txt', $putStream);
-        if (is_resource($putStream)) {
-            fclose($putStream);
+        if ($url->getScheme() == 'ftp') {
+            $putStream = $this->downloader->fetchStreamFromFTP($url);
+            $filesystem = new Filesystem($this->adaptor);
+            $destination = new StringLiteral(substr($url->getPath()->toNative(), 1));
+            $filesystem->putStream($destination->toNative(), $putStream);
+            if (is_resource($putStream)) {
+                fclose($putStream);
+            }
+            $url = $this->urlFactory->generateMediaUrl($destination);
         }
-
         return $url;
     }
 }
