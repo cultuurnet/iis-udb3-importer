@@ -65,7 +65,7 @@ class AMQPPublishCommand extends Command
         $uuid = new UUID($input->getArgument('cdbid'));
         $author = new StringLiteral($app['config']['amqp']['message']['author']);
         $isUpdate = (bool) $input->getArgument('isUpdate');
-        $url = $this->urlFactory->generateUrl($uuid);
+        $url = $this->urlFactory->generateEventUrl($uuid);
 
         $this->amqpPublisher->publish(
             $uuid,

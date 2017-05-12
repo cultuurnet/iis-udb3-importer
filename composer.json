@@ -14,6 +14,8 @@
         "cultuurnet/cdb": "~2.2.0",
         "sabre/xml": "^1.4.2",
         "henrikbjorn/lurker" : "~1.1",
+        "league/flysystem": "~1.0",
+        "league/flysystem-aws-s3-v3": "~1.0",
         "symfony/finder" : "~3.2"
     },
     "require-dev": {

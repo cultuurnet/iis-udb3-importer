@@ -1,10 +1,13 @@
 <?php
 
+use Aws\S3\S3Client;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPBodyFactory;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPMessageFactory;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPropertiesFactory;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisher;
+use CultuurNet\UDB3\IISImporter\Download\Downloader;
 use CultuurNet\UDB3\IISImporter\File\FileManager;
+use CultuurNet\UDB3\IISImporter\Media\MediaManager;
 use CultuurNet\UDB3\IISImporter\Parser\ParserV3;
 use CultuurNet\UDB3\IISImporter\Processor\Processor;
 use CultuurNet\UDB3\IISImporter\Url\UrlFactory;
@@ -15,6 +18,7 @@ use CultuurNet\UDB3\IISStore\Stores\Doctrine\StoreXmlDBALRepository;
 use CultuurNet\UDB3\IISStore\Stores\StoreRepository;
 use DerAlex\Silex\YamlConfigServiceProvider;
 use Doctrine\DBAL\DriverManager;
+use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Channel\AMQPChannel;
 use Silex\Application;
@@ -98,7 +102,7 @@ $app['iis.amqp_connection'] = $app->share(
     }
 );
 
-$app['iis.url_factory'] = $app->share(
+$app['iis.amqp_url_factory'] = $app->share(
     function (Application $app) {
         return new UrlFactory(
             new StringLiteral(
@@ -137,6 +141,54 @@ $app['iis.file_manager'] = $app->share(
     }
 );
 
+$app['iis.cloud_client'] = $app->share(
+    function (Application $app) {
+        return new S3Client([
+            'credentials' => [
+                'key'    => $app['config']['aws']['credentials']['key'],
+                'secret' => $app['config']['aws']['credentials']['secret']
+            ],
+            'region' => $app['config']['aws']['region'],
+            'version' => $app['config']['aws']['version'],
+        ]);
+    }
+);
+
+$app['iis.media_url_factory'] = $app->share(
+    function (Application $app) {
+        return new UrlFactory(
+            new StringLiteral(
+                $app['config']['aws']['media_url']
+            )
+        );
+    }
+);
+
+$app['iis.downloader'] = $app->share(
+    function () {
+        return new Downloader();
+    }
+);
+
+$app['iis.adapter'] = $app->share(
+    function (Application $app) {
+        return new AwsS3Adapter(
+            $app['iis.cloud_client'],
+            $app['config']['aws']['bucket']
+        );
+    }
+);
+
+$app['iis.media_manager'] = $app->share(
+    function (Application $app) {
+        return new MediaManager(
+            $app['iis.media_url_factory'],
+            $app['iis.downloader'],
+            $app['iis.adapter']
+        );
+    }
+);
+
 $app['iis.file_processor'] = $app->share(
     function (Application $app) {
         return new Processor(
@@ -144,8 +196,9 @@ $app['iis.file_processor'] = $app->share(
             $app['iis.parser'],
             $app['iis.dbal_store'],
             $app['iis.amqp_publisher'],
-            $app['iis.url_factory'],
-            $app['iis.author']);
+            $app['iis.amqp_url_factory'],
+            $app['iis.author'],
+            $app['iis.media_manager']);
     }
 );
 
