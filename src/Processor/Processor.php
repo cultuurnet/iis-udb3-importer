@@ -135,6 +135,14 @@ class Processor implements ProcessorInterface
             $lastUpdated = (string) $singleXml->event[0]['lastupdated'];
             $singleXml->event[0]['lastupdated'] = $this->changeDateToLocalTime($lastUpdated);
         }
+        if ($singleXml->event[0]['availablefrom']) {
+            $availableFrom = (string) $singleXml->event[0]['availablefrom'];
+            $singleXml->event[0]['availablefrom'] = $this->changeDateToLocalTime($availableFrom);
+        }
+        if ($singleXml->event[0]['availableto']) {
+            $availableTo = (string) $singleXml->event[0]['availableto'];
+            $singleXml->event[0]['availableto'] = $this->changeDateToLocalTime($availableTo);
+        }
 
         if ($singleXml->event[0]->calendar[0]->timestamps[0]) {
             foreach ($singleXml->event[0]->calendar[0]->timestamps[0]->timestamp as $xmlTimeStamp) {
