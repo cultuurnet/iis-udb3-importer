@@ -6,6 +6,7 @@ use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisherInterface;
 use CultuurNet\UDB3\IISImporter\File\FileManagerInterface;
 use CultuurNet\UDB3\IISImporter\Media\MediaManagerInterface;
 use CultuurNet\UDB3\IISImporter\Parser\ParserInterface;
+use CultuurNet\UDB3\IISImporter\Time\TimeFactoryInterface;
 use CultuurNet\UDB3\IISImporter\Url\UrlFactoryInterface;
 use CultuurNet\UDB3\IISStore\Stores\RepositoryInterface;
 use ValueObjects\StringLiteral\StringLiteral;
@@ -50,6 +51,11 @@ class Processor implements ProcessorInterface
     protected $mediaManager;
 
     /**
+     * @var TimeFactoryInterface
+     */
+    protected $timeFactory;
+
+    /**
      * FileProcessor constructor.
      * @param FileManagerInterface $fileManager
      * @param ParserInterface $parser
@@ -58,6 +64,7 @@ class Processor implements ProcessorInterface
      * @param UrlFactoryInterface $urlFactory
      * @param StringLiteral $author
      * @param MediaManagerInterface $mediaManager
+     * @param TimeFactoryInterface $timeFactory
      */
     public function __construct(
         FileManagerInterface $fileManager,
@@ -66,7 +73,8 @@ class Processor implements ProcessorInterface
         AMQPPublisherInterface $publisher,
         UrlFactoryInterface $urlFactory,
         StringLiteral $author,
-        MediaManagerInterface $mediaManager
+        MediaManagerInterface $mediaManager,
+        TimeFactoryInterface $timeFactory
     ) {
         $this->fileManager = $fileManager;
         $this->parser = $parser;
@@ -75,6 +83,7 @@ class Processor implements ProcessorInterface
         $this->urlFactory = $urlFactory;
         $this->author = $author;
         $this->mediaManager = $mediaManager;
+        $this->timeFactory = $timeFactory;
     }
 
 
@@ -129,33 +138,47 @@ class Processor implements ProcessorInterface
         // Change the dates to local time so they don't error on import
         if ($singleXml->event[0]['creationdate']) {
             $creationDate = (string) $singleXml->event[0]['creationdate'];
-            $singleXml->event[0]['creationdate'] = $this->changeDateToLocalTime($creationDate);
+            if (!$this->timeFactory->isAlreadyLocalTime($creationDate)) {
+                $singleXml->event[0]['creationdate'] = $this->timeFactory->changeDateToLocalTime($creationDate);
+            }
         }
         if ($singleXml->event[0]['lastupdated']) {
             $lastUpdated = (string) $singleXml->event[0]['lastupdated'];
-            $singleXml->event[0]['lastupdated'] = $this->changeDateToLocalTime($lastUpdated);
+            if (!$this->timeFactory->isAlreadyLocalTime($lastUpdated)) {
+                $singleXml->event[0]['lastupdated'] = $this->timeFactory->changeDateToLocalTime($lastUpdated);
+            }
         }
         if ($singleXml->event[0]['availablefrom']) {
             $availableFrom = (string) $singleXml->event[0]['availablefrom'];
-            $singleXml->event[0]['availablefrom'] = $this->changeDateToLocalTime($availableFrom);
+            if (!$this->timeFactory->isAlreadyLocalTime($availableFrom)) {
+                $singleXml->event[0]['availablefrom'] = $this->timeFactory->changeDateToLocalTime($availableFrom);
+            }
         }
         if ($singleXml->event[0]['availableto']) {
             $availableTo = (string) $singleXml->event[0]['availableto'];
-            $singleXml->event[0]['availableto'] = $this->changeDateToLocalTime($availableTo);
+            if (!$this->timeFactory->isAlreadyLocalTime($availableTo)) {
+                $singleXml->event[0]['availableto'] = $this->timeFactory->changeDateToLocalTime($availableTo);
+            }
         }
 
         if ($singleXml->event[0]->calendar[0]->timestamps[0]) {
             foreach ($singleXml->event[0]->calendar[0]->timestamps[0]->timestamp as $xmlTimeStamp) {
                 if ($xmlTimeStamp->timestart) {
                     $timeStart = (string) $xmlTimeStamp->timestart;
-                    $tempStart = $this->changeTimeStampToLocalTime($timeStart);
-                    $xmlTimeStamp->timestart = $tempStart;
+
+                    if (!$this->timeFactory->isAlreadyLocalTime($timeStart)) {
+                        $tempStart = $this->timeFactory->changeTimeStampToLocalTime($timeStart);
+                        $xmlTimeStamp->timestart = $tempStart;
+                    }
                 }
 
                 if ($xmlTimeStamp->timeend) {
                     $timeEnd = (string) $xmlTimeStamp->timeend;
-                    $tempEnd = $this->changeTimeStampToLocalTime($timeEnd);
-                    $xmlTimeStamp->timeend = $tempEnd;
+
+                    if (!$this->timeFactory->isAlreadyLocalTime($timeEnd)) {
+                        $tempEnd = $this->timeFactory->changeTimeStampToLocalTime($timeEnd);
+                        $xmlTimeStamp->timeend = $tempEnd;
+                    }
                 }
             }
         }
@@ -195,25 +218,5 @@ class Processor implements ProcessorInterface
             $isUpdate
         );
         $this->store->savePublished($cdbid, $now);
-    }
-
-    /**
-     * @param string $date
-     * @return string
-     */
-    private function changeDateToLocalTime($date)
-    {
-        $time = strtotime($date);
-        return date("Y-m-d\TH:i:s", $time);
-    }
-
-    /**
-     * @param string $date
-     * @return string
-     */
-    private function changeTimeStampToLocalTime($date)
-    {
-        $time = strtotime($date);
-        return date("H:i:s", $time);
     }
 }

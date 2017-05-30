@@ -10,6 +10,7 @@ use CultuurNet\UDB3\IISImporter\File\FileManager;
 use CultuurNet\UDB3\IISImporter\Media\MediaManager;
 use CultuurNet\UDB3\IISImporter\Parser\ParserV3;
 use CultuurNet\UDB3\IISImporter\Processor\Processor;
+use CultuurNet\UDB3\IISImporter\Time\TimeFactory;
 use CultuurNet\UDB3\IISImporter\Url\UrlFactory;
 use CultuurNet\UDB3\IISImporter\Watcher\Watcher;
 use CultuurNet\UDB3\IISStore\Stores\Doctrine\StoreLoggingDBALRepository;
@@ -189,6 +190,12 @@ $app['iis.media_manager'] = $app->share(
     }
 );
 
+$app['iis.time_factory'] = $app->share(
+    function () {
+        return new TimeFactory();
+    }
+);
+
 $app['iis.file_processor'] = $app->share(
     function (Application $app) {
         return new Processor(
@@ -198,7 +205,8 @@ $app['iis.file_processor'] = $app->share(
             $app['iis.amqp_publisher'],
             $app['iis.amqp_url_factory'],
             $app['iis.author'],
-            $app['iis.media_manager']);
+            $app['iis.media_manager'],
+            $app['iis.time_factory']);
     }
 );
 
