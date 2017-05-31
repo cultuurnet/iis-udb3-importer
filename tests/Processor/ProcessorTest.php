@@ -6,6 +6,7 @@ use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisherInterface;
 use CultuurNet\UDB3\IISImporter\File\FileManagerInterface;
 use CultuurNet\UDB3\IISImporter\Media\MediaManagerInterface;
 use CultuurNet\UDB3\IISImporter\Parser\ParserInterface;
+use CultuurNet\UDB3\IISImporter\Time\TimeFactoryInterface;
 use CultuurNet\UDB3\IISImporter\Url\UrlFactoryInterface;
 use CultuurNet\UDB3\IISStore\Stores\RepositoryInterface;
 use ValueObjects\Identity\UUID;
@@ -54,6 +55,11 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
      */
     private $processor;
 
+    /**
+     * @var TimeFactoryInterface
+     */
+    private $timeFactory;
+
     protected function setUp()
     {
         $this->fileManager = $this->createMock(FileManagerInterface::class);
@@ -70,6 +76,8 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
 
         $this->mediaManager = $this->createMock(MediaManagerInterface::class);
 
+        $this->timeFactory = $this->createMock(TimeFactoryInterface::class);
+
         $this->processor = new Processor(
             $this->fileManager,
             $this->parser,
@@ -77,7 +85,8 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
             $this->publisher,
             $this->urlFactory,
             $this->author,
-            $this->mediaManager
+            $this->mediaManager,
+            $this->timeFactory
         );
     }
 
