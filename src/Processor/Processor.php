@@ -211,7 +211,20 @@ class Processor implements ProcessorInterface
 
 
         if ($singleXml->event[0]->location[0]->address[0]) {
+            $physical = $singleXml->event[0]->location[0]->address[0]->physical[0];
 
+            $zipCode = (string) $physical->zipcode[0];
+            $city = (string) $physical->city[0];
+            $zipCity = new StringLiteral($zipCode . ' ' . $city);
+            $category = $this->flandersRegionFactory->getCategoryFromValue($zipCity);
+
+            if ($category) {
+                $flandersRegionNode = $singleXml
+                    ->event[0]->categories[0]->addChild('category', (string) $category->label);
+
+                $flandersRegionNode->addAttribute('type', (string) $category->type);
+                $flandersRegionNode->addAttribute('catid', (string) $category->catId);
+            }
         }
 
         $event = new StringLiteral($singleXml->asXML());
