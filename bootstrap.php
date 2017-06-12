@@ -5,6 +5,7 @@ use CultuurNet\UDB3\IISImporter\AMQP\AMQPBodyFactory;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPMessageFactory;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPropertiesFactory;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisher;
+use CultuurNet\UDB3\IISImporter\CategorizationRules\FlandersRegion;
 use CultuurNet\UDB3\IISImporter\Download\Downloader;
 use CultuurNet\UDB3\IISImporter\File\FileManager;
 use CultuurNet\UDB3\IISImporter\Media\MediaManager;
@@ -196,6 +197,12 @@ $app['iis.time_factory'] = $app->share(
     }
 );
 
+$app['iis.flanders_region_factory'] = $app->share(
+    function () {
+        return new FlandersRegion();
+    }
+);
+
 $app['iis.file_processor'] = $app->share(
     function (Application $app) {
         return new Processor(
@@ -206,7 +213,8 @@ $app['iis.file_processor'] = $app->share(
             $app['iis.amqp_url_factory'],
             $app['iis.author'],
             $app['iis.media_manager'],
-            $app['iis.time_factory']);
+            $app['iis.time_factory'],
+            $app['iis.flanders_region_factory']);
     }
 );
 

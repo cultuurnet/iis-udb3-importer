@@ -3,6 +3,7 @@
 namespace CultuurNet\UDB3\IISImporter\Processor;
 
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisherInterface;
+use CultuurNet\UDB3\IISImporter\CategorizationRules\CategorizationRulesInterface;
 use CultuurNet\UDB3\IISImporter\File\FileManagerInterface;
 use CultuurNet\UDB3\IISImporter\Media\MediaManagerInterface;
 use CultuurNet\UDB3\IISImporter\Parser\ParserInterface;
@@ -56,6 +57,11 @@ class Processor implements ProcessorInterface
     protected $timeFactory;
 
     /**
+     * @var CategorizationRulesInterface
+     */
+    protected $flandersRegionFactory;
+
+    /**
      * FileProcessor constructor.
      * @param FileManagerInterface $fileManager
      * @param ParserInterface $parser
@@ -65,6 +71,7 @@ class Processor implements ProcessorInterface
      * @param StringLiteral $author
      * @param MediaManagerInterface $mediaManager
      * @param TimeFactoryInterface $timeFactory
+     * @param CategorizationRulesInterface $flandersRegionFactory
      */
     public function __construct(
         FileManagerInterface $fileManager,
@@ -74,7 +81,8 @@ class Processor implements ProcessorInterface
         UrlFactoryInterface $urlFactory,
         StringLiteral $author,
         MediaManagerInterface $mediaManager,
-        TimeFactoryInterface $timeFactory
+        TimeFactoryInterface $timeFactory,
+        CategorizationRulesInterface $flandersRegionFactory
     ) {
         $this->fileManager = $fileManager;
         $this->parser = $parser;
@@ -84,6 +92,7 @@ class Processor implements ProcessorInterface
         $this->author = $author;
         $this->mediaManager = $mediaManager;
         $this->timeFactory = $timeFactory;
+        $this->flandersRegionFactory = $flandersRegionFactory;
     }
 
 
@@ -134,6 +143,9 @@ class Processor implements ProcessorInterface
         // Add cdbid to the event.
         $singleXml = simplexml_load_string($event);
         $singleXml->event[0]['cdbid'] = $cdbid->toNative();
+
+        // Add wfstatus to autovalidate the event.
+        $singleXml->event[0]['wfstatus'] = 'approved';
 
         // Change the dates to local time so they don't error on import
         if ($singleXml->event[0]['creationdate']) {
