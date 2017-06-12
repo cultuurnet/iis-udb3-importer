@@ -43,7 +43,7 @@ class FlandersRegion implements CategorizationRulesInterface
      */
     public function __construct(Url $taxonomy, Url $namespace)
     {
-        $this->taxonomy = simplexml_load_file($taxonomy);
+        $this->taxonomy = simplexml_load_file((string) $taxonomy);
         $this->taxonomy->registerXPathNamespace(self::PREFIX, (string) $namespace);
     }
 

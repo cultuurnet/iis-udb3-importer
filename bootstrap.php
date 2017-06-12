@@ -25,6 +25,7 @@ use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Channel\AMQPChannel;
 use Silex\Application;
 use ValueObjects\StringLiteral\StringLiteral;
+use ValueObjects\Web\Url;
 
 $app = new Application();
 
@@ -197,9 +198,28 @@ $app['iis.time_factory'] = $app->share(
     }
 );
 
+$app['iis.flanders_region_url'] = $app->share(
+    function (Application $app) {
+        return Url::fromNative(
+            $app['config']['category']['flanders_region']
+        );
+    }
+);
+
+$app['iis.taxonomy_namespace'] = $app->share(
+    function (Application $app) {
+        return Url::fromNative(
+            $app['config']['category']['taxonomy_namespace']
+        );
+    }
+);
+
 $app['iis.flanders_region_factory'] = $app->share(
-    function () {
-        return new FlandersRegion();
+    function (Application $app) {
+        return new FlandersRegion(
+            $app['iis.flanders_region_url'],
+            $app['iis.taxonomy_namespace']
+        );
     }
 );
 

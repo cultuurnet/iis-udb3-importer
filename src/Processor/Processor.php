@@ -209,6 +209,11 @@ class Processor implements ProcessorInterface
             }
         }
 
+
+        if ($singleXml->event[0]->location[0]->address[0]) {
+
+        }
+
         $event = new StringLiteral($singleXml->asXML());
 
         // Update or create event.
