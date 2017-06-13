@@ -41,4 +41,35 @@ class FlandersRegionTest extends \PHPUnit_Framework_TestCase
         $value = new StringLiteral('4000 Luik');
         $this->assertNull($this->flandersRegion->getCategoryFromValue($value));
     }
+
+    /**
+     * @test
+     */
+    public function test_flemish_address()
+    {
+        $value = new StringLiteral('9700 Oudenaarde');
+        $expected = new Category(
+            new StringLiteral('reg.1464'),
+            new StringLiteral('flandersregion'),
+            new StringLiteral('9700 Oudenaarde')
+        );
+
+        $this->assertEquals($expected, $this->flandersRegion->getCategoryFromValue($value));
+    }
+
+    /**
+     * @test
+     */
+    public function test_borough()
+    {
+        $value = new StringLiteral('2018 Antwerpen');
+        $expected = new Category(
+            new StringLiteral('reg.476'),
+            new StringLiteral('flandersregion'),
+            new StringLiteral('2018 Antwerpen 18 (Antwerpen)')
+        );
+
+        $this->assertEquals($expected, $this->flandersRegion->getCategoryFromValue($value));
+
+    }
 }
