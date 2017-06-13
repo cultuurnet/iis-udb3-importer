@@ -29,3 +29,7 @@ aws:
   region: ***
   version: ***
   bucket: ***
+
+category:
+  taxonomy_namespace: http://www.cultuurdatabank.com/XMLSchema/CdbXSD/3.2/FINAL
+  flanders_region: http://taxonomy.uitdatabank.be/api/domain/flandersregion/classification

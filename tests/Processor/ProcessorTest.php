@@ -3,6 +3,7 @@
 namespace CultuurNet\UDB3\IISImporter\Processor;
 
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisherInterface;
+use CultuurNet\UDB3\IISImporter\CategorizationRules\CategorizationRulesInterface;
 use CultuurNet\UDB3\IISImporter\File\FileManagerInterface;
 use CultuurNet\UDB3\IISImporter\Media\MediaManagerInterface;
 use CultuurNet\UDB3\IISImporter\Parser\ParserInterface;
@@ -60,6 +61,11 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
      */
     private $timeFactory;
 
+    /**
+     * @var CategorizationRulesInterface
+     */
+    private $flandersRegionFactory;
+
     protected function setUp()
     {
         $this->fileManager = $this->createMock(FileManagerInterface::class);
@@ -78,6 +84,8 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
 
         $this->timeFactory = $this->createMock(TimeFactoryInterface::class);
 
+        $this->flandersRegionFactory = $this->createMock(CategorizationRulesInterface::class);
+
         $this->processor = new Processor(
             $this->fileManager,
             $this->parser,
@@ -86,7 +94,8 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
             $this->urlFactory,
             $this->author,
             $this->mediaManager,
-            $this->timeFactory
+            $this->timeFactory,
+            $this->flandersRegionFactory
         );
     }
 
