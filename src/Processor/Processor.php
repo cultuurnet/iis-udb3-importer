@@ -147,6 +147,15 @@ class Processor implements ProcessorInterface
         // Add wfstatus to autovalidate the event.
         $singleXml->event[0]['wfstatus'] = 'approved';
 
+        // Add private status if event is for schools
+        if (isset($singleXml->event[0]->categories[0])) {
+            foreach ($singleXml->event[0]->categories[0]->category as $xmlCategory) {
+                if ('Scholen' == (string) $xmlCategory) {
+                    $singleXml->event[0]['private'] = 'true';
+                }
+            }
+        }
+
         // Change the dates to local time so they don't error on import
         if ($singleXml->event[0]['creationdate']) {
             $creationDate = (string) $singleXml->event[0]['creationdate'];
@@ -190,6 +199,30 @@ class Processor implements ProcessorInterface
                     if (!$this->timeFactory->isAlreadyLocalTime($timeEnd)) {
                         $tempEnd = $this->timeFactory->changeTimeStampToLocalTime($timeEnd);
                         $xmlTimeStamp->timeend = $tempEnd;
+                    }
+                }
+            }
+        }
+
+        if ($singleXml->event[0]->calendar[0]->periods[0]) {
+            foreach ($singleXml->event[0]->calendar[0]->periods[0]->period[0] as $period) {
+                if ($period->children()) {
+                    foreach ($period->children() as $day) {
+                        if ($day->openingtime) {
+                            if ($day->openingtime['from']) {
+                                $from = (string) $day->openingtime['from'];
+                                if (!$this->timeFactory->isAlreadyLocalTime($from)) {
+                                    $day->openingtime['from'] = $this->timeFactory->changeTimeStampToLocalTime($from);
+                                }
+                            }
+
+                            if ($day->openingtime['to']) {
+                                $to = (string) $day->openingtime['to'];
+                                if (!$this->timeFactory->isAlreadyLocalTime($to)) {
+                                    $day->openingtime['to'] = $this->timeFactory->changeTimeStampToLocalTime($to);
+                                }
+                            }
+                        }
                     }
                 }
             }
