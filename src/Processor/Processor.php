@@ -237,6 +237,11 @@ class Processor implements ProcessorInterface
                             $mediaLink = $this->mediaManager->generateMediaLink($hlink);
                             $file->hlink = (string) $mediaLink;
                         }
+                        if (isset($file->mediatype) && $file->mediatype == 'culturefeed-page') {
+                            if (!isset($file->reltype)) {
+                                $file->addChild('reltype', 'organiser');
+                            }
+                        }
                     }
                 }
             }
