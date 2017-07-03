@@ -56,7 +56,7 @@ class TimeFactoryTest extends \PHPUnit_Framework_TestCase
     public function it_generates_a_local_datetime_from_utc()
     {
         $utcDate = '2017-03-30T09:56:03+01:00';
-        $localDate = '2017-03-30T10:56:03';
+        $localDate = '2017-03-30T09:56:03';
 
         $this->assertEquals($localDate, $this->timeFactory->changeDateToLocalTime($utcDate));
     }
@@ -78,7 +78,7 @@ class TimeFactoryTest extends \PHPUnit_Framework_TestCase
     public function it_generates_a_local_timestamp_from_utc()
     {
         $utcTime = '00:00:00+02:00';
-        $localTime = '02:00:00';
+        $localTime = '00:00:00';
 
         $this->assertEquals($localTime, $this->timeFactory->changeTimeStampToLocalTime($utcTime));
     }

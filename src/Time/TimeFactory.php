@@ -12,12 +12,15 @@ class TimeFactory implements TimeFactoryInterface
         if ($this->isAlreadyLocalTime($date)) {
             return $date;
         } else {
-            $timeInfo = explode('+', $date);
-            $datetime = new \DateTime($timeInfo[0]);
-            $intervalSpec = 'PT' . substr($timeInfo[1], 0, 2) . 'H';
-            $interval = new \DateInterval($intervalSpec);
-            $datetime->add($interval);
-            return $datetime->format("Y-m-d\TH:i:s");
+            // IIS SENDS localdatetime as UTC so this is not needed.
+            //
+            // $timeInfo = explode('+', $date);
+            // $datetime = new \DateTime($timeInfo[0]);
+            // $intervalSpec = 'PT' . substr($timeInfo[1], 0, 2) . 'H';
+            // $interval = new \DateInterval($intervalSpec);
+            // $datetime->add($interval);
+            // return $datetime->format("Y-m-d\TH:i:s");
+            return  substr($date, 0, strpos($date, '+'));
         }
     }
 
@@ -29,12 +32,15 @@ class TimeFactory implements TimeFactoryInterface
         if ($this->isAlreadyLocalTime($date)) {
             return $date;
         } else {
-            $timeInfo = explode('+', $date);
-            $datetime = new \DateTime($timeInfo[0]);
-            $intervalSpec = 'PT' . substr($timeInfo[1], 0, 2) . 'H';
-            $interval = new \DateInterval($intervalSpec);
-            $datetime->add($interval);
-            return $datetime->format("H:i:s");
+            // IIS SENDS localdatetime as UTC so this is not needed.
+            //
+            // $timeInfo = explode('+', $date);
+            // $datetime = new \DateTime($timeInfo[0]);
+            // $intervalSpec = 'PT' . substr($timeInfo[1], 0, 2) . 'H';
+            // $interval = new \DateInterval($intervalSpec);
+            // $datetime->add($interval);
+            // return $datetime->format("H:i:s");
+            return  substr($date, 0, strpos($date, '+'));
         }
     }
 
