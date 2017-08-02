@@ -10,6 +10,7 @@ use CultuurNet\UDB3\IISImporter\Parser\ParserInterface;
 use CultuurNet\UDB3\IISImporter\Time\TimeFactoryInterface;
 use CultuurNet\UDB3\IISImporter\Url\UrlFactoryInterface;
 use CultuurNet\UDB3\IISStore\Stores\RepositoryInterface;
+use Monolog\Logger;
 use ValueObjects\StringLiteral\StringLiteral;
 use ValueObjects\Identity\UUID;
 use ValueObjects\Web\Url;
@@ -62,6 +63,11 @@ class Processor implements ProcessorInterface
     protected $flandersRegionFactory;
 
     /**
+     * @var Logger
+     */
+    protected $logger;
+
+    /**
      * FileProcessor constructor.
      * @param FileManagerInterface $fileManager
      * @param ParserInterface $parser
@@ -72,6 +78,7 @@ class Processor implements ProcessorInterface
      * @param MediaManagerInterface $mediaManager
      * @param TimeFactoryInterface $timeFactory
      * @param CategorizationRulesInterface $flandersRegionFactory
+     * @param Logger $logger
      */
     public function __construct(
         FileManagerInterface $fileManager,
@@ -82,7 +89,8 @@ class Processor implements ProcessorInterface
         StringLiteral $author,
         MediaManagerInterface $mediaManager,
         TimeFactoryInterface $timeFactory,
-        CategorizationRulesInterface $flandersRegionFactory
+        CategorizationRulesInterface $flandersRegionFactory,
+        Logger $logger
     ) {
         $this->fileManager = $fileManager;
         $this->parser = $parser;
@@ -93,6 +101,7 @@ class Processor implements ProcessorInterface
         $this->mediaManager = $mediaManager;
         $this->timeFactory = $timeFactory;
         $this->flandersRegionFactory = $flandersRegionFactory;
+        $this->logger = $logger;
     }
 
 
@@ -101,6 +110,7 @@ class Processor implements ProcessorInterface
      */
     public function consumeFile(\SplFileInfo $file)
     {
+        $this->logger->debug('Will consume file: ' . $file->getFilename());
         $xmlString = file_get_contents($file->getPathname());
 
         if ($this->parser->validate($xmlString)) {
@@ -116,9 +126,11 @@ class Processor implements ProcessorInterface
 
                 $this->fileManager->moveFileToFolder($file, $this->fileManager->getSuccessFolder());
             } catch (\Exception $e) {
+                $this->logger->error($file->getFilename() . ' gives error: ' . $e->getMessage());
                 $this->fileManager->moveFileToFolder($file, $this->fileManager->getErrorFolder());
             }
         } else {
+            $this->logger->warning($file->getFilename() . ' is invalid');
             $this->fileManager->moveFileToFolder($file, $this->fileManager->getInvalidFolder());
         }
     }
@@ -139,6 +151,8 @@ class Processor implements ProcessorInterface
             $cdbidString = UUID::generateAsString();
             $cdbid = UUID::fromNative($cdbidString);
         }
+
+        $this->logger->debug('externalId: ' . $externalId->toNative() . ' is cdbid: ' . $cdbid->toNative());
 
         // Add cdbid to the event.
         $singleXml = simplexml_load_string($event);
