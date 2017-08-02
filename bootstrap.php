@@ -21,6 +21,8 @@ use CultuurNet\UDB3\IISStore\Stores\StoreRepository;
 use DerAlex\Silex\YamlConfigServiceProvider;
 use Doctrine\DBAL\DriverManager;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Channel\AMQPChannel;
 use Silex\Application;
@@ -223,6 +225,18 @@ $app['iis.flanders_region_factory'] = $app->share(
     }
 );
 
+$app['iis.handler'] = $app->share(
+    function (Application $app) {
+        return new StreamHandler('../log/importer.log', Logger::DEBUG);
+    }
+);
+
+$app['iis.logger'] = $app->share(
+    function (Application $app) {
+        return new Logger('importer', array($app['iis.handler']));
+    }
+);
+
 $app['iis.file_processor'] = $app->share(
     function (Application $app) {
         return new Processor(
@@ -234,7 +248,8 @@ $app['iis.file_processor'] = $app->share(
             $app['iis.author'],
             $app['iis.media_manager'],
             $app['iis.time_factory'],
-            $app['iis.flanders_region_factory']);
+            $app['iis.flanders_region_factory'],
+            $app['iis.logger']);
     }
 );
 

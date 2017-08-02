@@ -10,6 +10,7 @@ use CultuurNet\UDB3\IISImporter\Parser\ParserInterface;
 use CultuurNet\UDB3\IISImporter\Time\TimeFactoryInterface;
 use CultuurNet\UDB3\IISImporter\Url\UrlFactoryInterface;
 use CultuurNet\UDB3\IISStore\Stores\RepositoryInterface;
+use Monolog\Logger;
 use ValueObjects\Identity\UUID;
 use ValueObjects\StringLiteral\StringLiteral;
 use ValueObjects\Web\Url;
@@ -66,6 +67,11 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
      */
     private $flandersRegionFactory;
 
+    /**
+     * @var Logger;
+     */
+    private $logger;
+
     protected function setUp()
     {
         $this->fileManager = $this->createMock(FileManagerInterface::class);
@@ -86,6 +92,8 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
 
         $this->flandersRegionFactory = $this->createMock(CategorizationRulesInterface::class);
 
+        $this->logger = $this->createMock(Logger::class);
+
         $this->processor = new Processor(
             $this->fileManager,
             $this->parser,
@@ -95,7 +103,8 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
             $this->author,
             $this->mediaManager,
             $this->timeFactory,
-            $this->flandersRegionFactory
+            $this->flandersRegionFactory,
+            $this->logger
         );
     }
 
