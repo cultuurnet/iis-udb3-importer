@@ -9,6 +9,8 @@ database:
 
 import_folder: /vagrant/import
 
+logging_folder: /vagrant/log
+
 amqp:
   host: udb3.dev
   port: 5672

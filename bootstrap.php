@@ -227,7 +227,7 @@ $app['iis.flanders_region_factory'] = $app->share(
 
 $app['iis.handler'] = $app->share(
     function (Application $app) {
-        return new StreamHandler('../log/importer.log', Logger::DEBUG);
+        return new StreamHandler($app['config']['logging_folder'] . '/importer.log', Logger::DEBUG);
     }
 );
 
