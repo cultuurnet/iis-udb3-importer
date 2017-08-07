@@ -247,9 +247,14 @@ class Processor implements ProcessorInterface
                 if ($eventDetail->media) {
                     foreach ($eventDetail->media[0]->file as $file) {
                         if ($file->hlink) {
-                            $hlink = Url::fromNative($file->hlink);
-                            $mediaLink = $this->mediaManager->generateMediaLink($hlink);
-                            $file->hlink = (string) $mediaLink;
+                            try {
+                                $hlink = Url::fromNative($file->hlink);
+                                $mediaLink = $this->mediaManager->generateMediaLink($hlink);
+                                $file->hlink = (string) $mediaLink;
+                            } catch (\Exception $e) {
+                                $this->logger->error($file->hlink . ' cannot be found');
+                                $file->parentNode->removeChild($file);
+                            }
                         }
                         if (isset($file->mediatype) && $file->mediatype == 'culturefeed-page') {
                             if (!isset($file->reltype)) {
