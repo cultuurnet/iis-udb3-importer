@@ -33,8 +33,6 @@ class Downloader implements DownloaderInterface
      */
     public function fetchStreamFromHttp(Url $url)
     {
-
-        return fopen((string) $url, 'r');
         $httpAdapter = new HttpAdapter($url->getScheme() . "://" . $url->getDomain());
 
         $httpSystem = new Filesystem($httpAdapter);
