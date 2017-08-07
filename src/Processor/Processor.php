@@ -223,17 +223,19 @@ class Processor implements ProcessorInterface
                 if ($period->children()) {
                     foreach ($period->children() as $day) {
                         if ($day->openingtime) {
-                            if ($day->openingtime['from']) {
-                                $from = (string) $day->openingtime['from'];
-                                if (!$this->timeFactory->isAlreadyLocalTime($from)) {
-                                    $day->openingtime['from'] = $this->timeFactory->changeTimeStampToLocalTime($from);
+                            foreach ($day->children() as $openingtime) {
+                                if ($openingtime['from']) {
+                                    $from = (string) $openingtime['from'];
+                                    if (!$this->timeFactory->isAlreadyLocalTime($from)) {
+                                        $openingtime['from'] = $this->timeFactory->changeTimeStampToLocalTime($from);
+                                    }
                                 }
-                            }
 
-                            if ($day->openingtime['to']) {
-                                $to = (string) $day->openingtime['to'];
-                                if (!$this->timeFactory->isAlreadyLocalTime($to)) {
-                                    $day->openingtime['to'] = $this->timeFactory->changeTimeStampToLocalTime($to);
+                                if ($openingtime['to']) {
+                                    $to = (string) $openingtime['to'];
+                                    if (!$this->timeFactory->isAlreadyLocalTime($to)) {
+                                        $openingtime['to'] = $this->timeFactory->changeTimeStampToLocalTime($to);
+                                    }
                                 }
                             }
                         }
