@@ -16,7 +16,8 @@
         "henrikbjorn/lurker" : "~1.1",
         "league/flysystem": "~1.0",
         "league/flysystem-aws-s3-v3": "~1.0",
-        "symfony/finder" : "~3.2"
+        "symfony/finder" : "~3.2",
+        "twistor/flysystem-http" : "~0.2"
     },
     "require-dev": {
         "phpunit/phpunit": "~5.7",

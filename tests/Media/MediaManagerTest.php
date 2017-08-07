@@ -41,11 +41,4 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
             $this->adapter
         );
     }
-
-    public function testHtmlLink()
-    {
-        $htmlLink = Url::fromNative('http://www.test.com/foto.jpg');
-        $result = $this->mediaManager->generateMediaLink($htmlLink);
-        $this->assertEquals($htmlLink, $result);
-    }
 }

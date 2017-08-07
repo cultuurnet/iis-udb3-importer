@@ -11,4 +11,10 @@ interface DownloaderInterface
      * @return resource|false The path resource or false on failure
      */
     public function fetchStreamFromFTP(Url $url);
+
+    /**
+     * @param Url $url
+     * @return resource|false The path resource or false on failure
+     */
+    public function fetchStreamFromHttp(Url $url);
 }
