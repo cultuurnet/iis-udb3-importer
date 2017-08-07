@@ -21,7 +21,7 @@ use CultuurNet\UDB3\IISStore\Stores\StoreRepository;
 use DerAlex\Silex\YamlConfigServiceProvider;
 use Doctrine\DBAL\DriverManager;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
-use Monolog\Handler\StreamHandler;
+use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Channel\AMQPChannel;
@@ -227,7 +227,11 @@ $app['iis.flanders_region_factory'] = $app->share(
 
 $app['iis.handler'] = $app->share(
     function (Application $app) {
-        return new StreamHandler($app['config']['logging_folder'] . '/importer.log', Logger::DEBUG);
+        return new RotatingFileHandler(
+            $app['config']['logging_folder'] . '/importer.log',
+            90,
+            Logger::DEBUG
+        );
     }
 );
 

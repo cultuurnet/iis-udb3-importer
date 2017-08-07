@@ -126,7 +126,10 @@ class Processor implements ProcessorInterface
 
                 $this->fileManager->moveFileToFolder($file, $this->fileManager->getSuccessFolder());
             } catch (\Exception $e) {
-                $this->logger->error($file->getFilename() . ' gives error: ' . $e->getMessage());
+                $this->logger->error(
+                    $file->getFilename() . ' gives error: ' . $e->getMessage(),
+                    $e->getTrace()
+                );
                 $this->fileManager->moveFileToFolder($file, $this->fileManager->getErrorFolder());
             }
         } else {
