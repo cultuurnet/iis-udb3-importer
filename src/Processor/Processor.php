@@ -246,6 +246,11 @@ class Processor implements ProcessorInterface
             foreach ($singleXml->event[0]->eventdetails[0]->eventdetail as $eventDetail) {
                 if ($eventDetail->media) {
                     foreach ($eventDetail->media[0]->file as $file) {
+                        if (isset($file->mediatype) && $file->mediatype == 'culturefeed-page') {
+                            if (!isset($file->reltype)) {
+                                $file->addChild('reltype', 'organiser');
+                            }
+                        }
                         if ($file->hlink) {
                             try {
                                 $hlink = Url::fromNative($file->hlink);
@@ -253,12 +258,7 @@ class Processor implements ProcessorInterface
                                 $file->hlink = (string) $mediaLink;
                             } catch (\Exception $e) {
                                 $this->logger->error($file->hlink . ' cannot be found');
-                                $file->parentNode->removeChild($file);
-                            }
-                        }
-                        if (isset($file->mediatype) && $file->mediatype == 'culturefeed-page') {
-                            if (!isset($file->reltype)) {
-                                $file->addChild('reltype', 'organiser');
+                                unset($file);
                             }
                         }
                     }
