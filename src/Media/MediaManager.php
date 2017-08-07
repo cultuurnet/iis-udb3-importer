@@ -47,7 +47,16 @@ class MediaManager implements MediaManagerInterface
      */
     public function generateMediaLink(Url $url)
     {
-        if ($url->getScheme() == 'ftp') {
+        if ($url->getScheme() == 'http' || $url->getScheme() == 'https') {
+            $putStream = $this->downloader->fetchStreamFromHttp($url);
+            $filesystem = new Filesystem($this->adaptor);
+            $destination = new StringLiteral(substr($url->getPath()->toNative(), 1));
+            $filesystem->putStream($destination->toNative(), $putStream);
+            if (is_resource($putStream)) {
+                fclose($putStream);
+            }
+            $url = $this->urlFactory->generateMediaUrl($destination);
+        } elseif ($url->getScheme() == 'ftp') {
             $putStream = $this->downloader->fetchStreamFromFTP($url);
             $filesystem = new Filesystem($this->adaptor);
             $destination = new StringLiteral(substr($url->getPath()->toNative(), 1));
@@ -57,6 +66,7 @@ class MediaManager implements MediaManagerInterface
             }
             $url = $this->urlFactory->generateMediaUrl($destination);
         }
+
         return $url;
     }
 }
