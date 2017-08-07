@@ -3,6 +3,7 @@
 namespace CultuurNet\UDB3\IISImporter\Download;
 
 use League\Flysystem\Adapter\Ftp;
+use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use Twistor\Flysystem\Http\HttpAdapter;
 use ValueObjects\Web\Url;
@@ -32,6 +33,8 @@ class Downloader implements DownloaderInterface
      */
     public function fetchStreamFromHttp(Url $url)
     {
+
+        return fopen((string) $url, 'r');
         $httpAdapter = new HttpAdapter($url->getScheme() . "://" . $url->getDomain());
 
         $httpSystem = new Filesystem($httpAdapter);
