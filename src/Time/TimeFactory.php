@@ -55,4 +55,17 @@ class TimeFactory implements TimeFactoryInterface
             return true;
         }
     }
+
+    /**
+     * @param string $date
+     * @return string
+     */
+    public function createAvailabilityDate($date)
+    {
+        $datetime = new \DateTime($date);
+        $intervalSpec = 'PT24H';
+        $interval = new \DateInterval($intervalSpec);
+        $datetime->add($interval);
+        return $datetime->format("Y-m-d\TH:i:s");
+    }
 }
