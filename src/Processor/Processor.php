@@ -188,7 +188,7 @@ class Processor implements ProcessorInterface
             if (!$this->timeFactory->isAlreadyLocalTime($availableFrom)) {
                 $singleXml->event[0]['availablefrom'] = $this->timeFactory->changeDateToLocalTime($availableFrom);
             }
-        } else{
+        } else {
             $singleXml->event[0]['availablefrom'] = '2017-01-18T00:00:00';
         }
         if ($singleXml->event[0]['availableto']) {
@@ -202,8 +202,8 @@ class Processor implements ProcessorInterface
 
         if ($singleXml->event[0]->calendar[0]->timestamps[0]) {
             foreach ($singleXml->event[0]->calendar[0]->timestamps[0]->timestamp as $xmlTimeStamp) {
-                if($xmlTimeStamp->date) {
-                    $compareDate = (string)$xmlTimeStamp->date;
+                if ($xmlTimeStamp->date) {
+                    $compareDate = (string) $xmlTimeStamp->date;
                     if ($compareDate > $enddate) {
                         $enddate = $compareDate;
                     }
@@ -231,10 +231,10 @@ class Processor implements ProcessorInterface
 
         if ($singleXml->event[0]->calendar[0]->periods[0]) {
             foreach ($singleXml->event[0]->calendar[0]->periods[0]->period as $period) {
-                if($period->dateto) {
-                    $compareDate = (string)$period->dateto;
+                if ($period->dateto) {
+                    $compareDate = (string) $period->dateto;
                     if ($compareDate > $enddate) {
-                       $enddate = $compareDate;
+                        $enddate = $compareDate;
                     }
                 }
                 if ($period->weekscheme) {
@@ -244,14 +244,14 @@ class Processor implements ProcessorInterface
                             if ($day->openingtime) {
                                 foreach ($day->children() as $openingtime) {
                                     if ($openingtime['from']) {
-                                        $from = (string)$openingtime['from'];
+                                        $from = (string) $openingtime['from'];
                                         if (!$this->timeFactory->isAlreadyLocalTime($from)) {
                                             $openingtime['from'] = $this->timeFactory->changeTimeStampToLocalTime($from);
                                         }
                                     }
 
                                     if ($openingtime['to']) {
-                                        $to = (string)$openingtime['to'];
+                                        $to = (string) $openingtime['to'];
                                         if (!$this->timeFactory->isAlreadyLocalTime($to)) {
                                             $openingtime['to'] = $this->timeFactory->changeTimeStampToLocalTime($to);
                                         }
