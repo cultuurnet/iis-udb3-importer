@@ -188,6 +188,8 @@ class Processor implements ProcessorInterface
             if (!$this->timeFactory->isAlreadyLocalTime($availableFrom)) {
                 $singleXml->event[0]['availablefrom'] = $this->timeFactory->changeDateToLocalTime($availableFrom);
             }
+        } else{
+            $singleXml->event[0]['availablefrom'] = '2017-01-18T00:00:00';
         }
         if ($singleXml->event[0]['availableto']) {
             $availableTo = (string) $singleXml->event[0]['availableto'];
@@ -196,8 +198,17 @@ class Processor implements ProcessorInterface
             }
         }
 
+        $enddate = '1900-01-01';
+
         if ($singleXml->event[0]->calendar[0]->timestamps[0]) {
             foreach ($singleXml->event[0]->calendar[0]->timestamps[0]->timestamp as $xmlTimeStamp) {
+                if($xmlTimeStamp->date) {
+                    $compareDate = (string)$xmlTimeStamp->date;
+                    if ($compareDate > $enddate) {
+                        $enddate = $compareDate;
+                    }
+                }
+
                 if ($xmlTimeStamp->timestart) {
                     $timeStart = (string) $xmlTimeStamp->timestart;
 
@@ -219,22 +230,31 @@ class Processor implements ProcessorInterface
         }
 
         if ($singleXml->event[0]->calendar[0]->periods[0]) {
-            foreach ($singleXml->event[0]->calendar[0]->periods[0]->period[0] as $period) {
-                if ($period->children()) {
-                    foreach ($period->children() as $day) {
-                        if ($day->openingtime) {
-                            foreach ($day->children() as $openingtime) {
-                                if ($openingtime['from']) {
-                                    $from = (string) $openingtime['from'];
-                                    if (!$this->timeFactory->isAlreadyLocalTime($from)) {
-                                        $openingtime['from'] = $this->timeFactory->changeTimeStampToLocalTime($from);
-                                    }
-                                }
+            foreach ($singleXml->event[0]->calendar[0]->periods[0]->period as $period) {
+                if($period->dateto) {
+                    $compareDate = (string)$period->dateto;
+                    if ($compareDate > $enddate) {
+                       $enddate = $compareDate;
+                    }
+                }
+                if ($period->weekscheme) {
+                    if ($period->weekscheme->children()) {
+                        foreach ($period->weekscheme->children() as $day) {
 
-                                if ($openingtime['to']) {
-                                    $to = (string) $openingtime['to'];
-                                    if (!$this->timeFactory->isAlreadyLocalTime($to)) {
-                                        $openingtime['to'] = $this->timeFactory->changeTimeStampToLocalTime($to);
+                            if ($day->openingtime) {
+                                foreach ($day->children() as $openingtime) {
+                                    if ($openingtime['from']) {
+                                        $from = (string)$openingtime['from'];
+                                        if (!$this->timeFactory->isAlreadyLocalTime($from)) {
+                                            $openingtime['from'] = $this->timeFactory->changeTimeStampToLocalTime($from);
+                                        }
+                                    }
+
+                                    if ($openingtime['to']) {
+                                        $to = (string)$openingtime['to'];
+                                        if (!$this->timeFactory->isAlreadyLocalTime($to)) {
+                                            $openingtime['to'] = $this->timeFactory->changeTimeStampToLocalTime($to);
+                                        }
                                     }
                                 }
                             }
@@ -243,6 +263,8 @@ class Processor implements ProcessorInterface
                 }
             }
         }
+
+        $singleXml->event[0]['availableto'] = $this->timeFactory->createAvailabilityDate($enddate);
 
         if ($singleXml->event[0]->eventdetails[0]) {
             foreach ($singleXml->event[0]->eventdetails[0]->eventdetail as $eventDetail) {
