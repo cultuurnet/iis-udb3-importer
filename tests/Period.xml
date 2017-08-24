@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cdbxml xmlns="http://www.cultuurdatabank.com/XMLSchema/CdbXSD/3.3/FINAL" xmlns:cdb="http://www.cultuurdatabank.com/XMLSchema/CdbXSD/3.2/FINAL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.cultuurdatabank.com/XMLSchema/CdbXSD/3.3/FINAL C:\XML\XSD\CDB_XSD_3_3\CdbXSD.xsd">
+<event private="false" owner="Zap All People" lastupdatedby="zapapimport" lastupdated="2017-08-17T13:04:02+01:00" externalid="CC_Het_Gasthuis_Aarschot:1137" creationdate="2017-07-24T11:36:26+01:00" createdby="zapapimport">
+<calendar>
+<periods>
+<period>
+<datefrom>2017-09-08</datefrom>
+<dateto>2017-11-08</dateto>
+    <weekscheme>
+        <monday opentype="closed"></monday>
+        <tuesday opentype="closed"></tuesday>
+        <wednesday opentype="closed"></wednesday>
+        <thursday opentype="open">
+            <openingtime from="09:45:00" to="10:45:00"></openingtime>
+        </thursday>
+        <friday opentype="open">
+            <openingtime from="09:45:00" to="10:45:00"></openingtime>
+        </friday>
+        <saturday opentype="closed"></saturday>
+        <sunday opentype="closed"></sunday>
+    </weekscheme>
+
+</period>
+</periods>
+</calendar>
+<categories>
+<category type="targetaudience" catid="2.1.3.0.0">Scholen</category>
+<category type="educationlevel" catid="12.1.2.0.0">Kleuter 3 - 4 jaar</category>
+<category type="publicscope" catid="6.2.0.0.0">Regionaal</category>
+<category type="theme" catid="1.3.5.0.0">Figuren en poppentheater</category>
+<category type="theme" catid="1.3.1.0.0">Tekst en muziektheater</category>
+<category type="targetaudience" catid="2.2.1.0.0">Vanaf kleuterleeftijd (3+)</category>
+<category type="eventtype" catid="0.55.0.0.0">Theatervoorstelling</category>
+<category type="educationfield" catid="13.0.0.0.3">Kunst en cultuur</category>
+<category type="educationlevel" catid="12.1.3.0.0">Kleuter 4 - 5 jaar</category>
+</categories>
+<contactinfo>
+<url>http://www.hetgasthuis.be/nl/voorstelling/1137/manneke-tap</url>
+</contactinfo>
+<eventdetails>
+<eventdetail lang="nl">
+<performers>
+<performer>
+<label>Muziektheater De Kolonie MT</label>
+</performer>
+</performers>
+<longdescription>MannekeTAP is een eenzaam, beetje stuurs mannetje, dat elke dag dezelfde routines volgt: opstaan, kopje koffie drinken, de krant lezen, turnoefeningen doen… Enkele toevallige ontmoetingen brengen weer meer klank en kleur in zijn leven. Een vinger tikt. Een voet haalt uit. Voelt hij daar het ritme van het tappen weer?
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;Spel Thaïs Scholiers
+&lt;br /&gt;
+&lt;br /&gt;Compositie, muziektheatrale regie &amp; livemuziek Bo Spaenc
+&lt;br /&gt;
+&lt;br /&gt;poppen, poppenspel &amp; vorm Filip Peeters
+&lt;br /&gt;
+&lt;br /&gt;Regie Mieke Laureys  
+&lt;br /&gt;
+&lt;br /&gt;Concept Bo, Filip &amp; Mieke
+&lt;br /&gt;
+&lt;br /&gt;Tapdanscoaching Joëlle Ribant
+&lt;br /&gt;
+&lt;br /&gt;Kostuums Huguette d’
+&lt;br /&gt;
+&lt;br /&gt;Realisatie decor Kopspel
+&lt;br /&gt;
+&lt;br /&gt;Klank- en lichtontwerp Dries Bellinkx
+&lt;br /&gt;
+&lt;br /&gt;Stage productie Kristel Soekias
+&lt;br /&gt;
+&lt;br /&gt;</longdescription>
+<media>
+<file private="false">
+<hlink>https://www.uitid.be/uitid/rest/page/d5db4c33-6637-4c53-b43d-7164bc791c7d</hlink>
+<mediatype>culturefeed-page</mediatype>
+</file>
+<file private="false">
+<filename>CC_Het_Gasthuis_Aarschot_e95a1573trjanmarchand.jpg</filename>
+<filetype>jpeg</filetype>
+<hlink>ftp://ftp.045:Kihuesac@ftp.iis32.uitdatabank.be/mediafolder/CC_Het_Gasthuis_Aarschot_e95a1573trjanmarchand.jpg</hlink>
+<mediatype>photo</mediatype>
+</file>
+</media>
+<price>
+<pricevalue>4.0</pricevalue>
+</price>
+<shortdescription>MannekeTAP is een eenzaam, beetje stuurs mannetje, dat elke dag dezelfde routines volgt: opstaan, kopje koffie drinken, de krant lezen, turnoefeningen doen… Enkele toevallige ontmoetingen brengen weer meer klank en kleur in zijn leven. Een vinger tikt. Een voet haalt uit.</shortdescription>
+<title>Manneke Tap</title>
+</eventdetail>
+</eventdetails>
+<location>
+<address>
+<physical>
+<city>Aarschot</city>
+<country>BE</country>
+<housenr>22</housenr>
+<street>Gasthuisstraat</street>
+<zipcode>3200</zipcode>
+</physical>
+</address>
+<label>CC HET GASTHUIS</label>
+</location>
+<organiser>
+<label externalid="Zap All People:ZAP_150">Cultuurcentrum Het Gasthuis</label>
+</organiser>
+</event>
+<event private="false" owner="Zap All People" lastupdatedby="zapapimport" lastupdated="2017-08-17T13:04:02+01:00" externalid="CC_Het_Gasthuis_Aarschot:1138" creationdate="2017-07-24T11:36:26+01:00" createdby="zapapimport">
+<calendar>
+<timestamps>
+<timestamp>
+<date>2018-01-16</date>
+<timestart>10:30:00+01:00</timestart>
+</timestamp>
+<timestamp>
+<date>2018-01-16</date>
+<timestart>13:30:00+01:00</timestart>
+</timestamp>
+</timestamps>
+</calendar>
+<categories>
+<category type="educationlevel" catid="12.1.2.0.0">Kleuter 3 - 4 jaar</category>
+<category type="targetaudience" catid="2.2.1.0.0">Vanaf kleuterleeftijd (3+)</category>
+<category type="targetaudience" catid="2.1.3.0.0">Scholen</category>
+<category type="educationfield" catid="13.0.0.0.3">Kunst en cultuur</category>
+<category type="publicscope" catid="6.2.0.0.0">Regionaal</category>
+<category type="educationlevel" catid="12.1.3.0.0">Kleuter 4 - 5 jaar</category>
+<category type="theme" catid="1.3.1.0.0">Tekst en muziektheater</category>
+<category type="eventtype" catid="0.55.0.0.0">Theatervoorstelling</category>
+<category type="educationlevel" catid="12.1.1.0.0">Kleuter 2 - 3 jaar</category>
+</categories>
+<contactinfo>
+<url>http://www.hetgasthuis.be/nl/voorstelling/1138/broemmm</url>
+</contactinfo>
+<eventdetails>
+<eventdetail lang="nl">
+<performers>
+<performer>
+<label>Ellen smets</label>
+</performer>
+</performers>
+<longdescription>Broemmm! is een beeldende voorstelling vol avontuur en humor. De kinderen voelen zich onmiddellijk betrokken en beleven samen met Broemmm en haar baasje Zip de spannendste avonturen.
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;Zip wil weg met haar autootje Broemmm, ze wacht op haar vriend Deus maar die komt maar niet. Uiteindelijk besluit ze zonder hem te vertrekken maar Broemmm start niet…
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;De kinderen schateren om de capriolen van Zip en haar onwillig autootje, want niet alles verloopt zoals verwacht…
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;Productie Ellen Smets
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;Regisseur Hans Thissen 
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;Vormgeving Bartel Meyburg
+&lt;br /&gt;
+&lt;br /&gt;</longdescription>
+<media>
+<file private="false">
+<filename>CC_Het_Gasthuis_Aarschot_fotoellensmetsbroemmdef.jpg</filename>
+<filetype>jpeg</filetype>
+<hlink>ftp://ftp.045:Kihuesac@ftp.iis32.uitdatabank.be/mediafolder/CC_Het_Gasthuis_Aarschot_fotoellensmetsbroemmdef.jpg</hlink>
+<mediatype>photo</mediatype>
+</file>
+<file private="false">
+<hlink>https://www.uitid.be/uitid/rest/page/d5db4c33-6637-4c53-b43d-7164bc791c7d</hlink>
+<mediatype>culturefeed-page</mediatype>
+</file>
+</media>
+<price>
+<pricevalue>4.0</pricevalue>
+</price>
+<shortdescription>Broemmm! is een beeldende voorstelling vol avontuur en humor. De kinderen voelen zich onmiddellijk betrokken en beleven samen met Broemmm en haar baasje Zip de spannendste avonturen.
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;Zip wil weg met haar autootje Broemmm, ze wacht op haar vriend Deus maar die komt maar niet. Uiteindelijk besluit ze zonder hem te vertrekken maar Broemmm start niet…
+&lt;br /&gt;</shortdescription>
+<title>Broemmm</title>
+</eventdetail>
+</eventdetails>
+<location>
+<address>
+<physical>
+<city>Aarschot</city>
+<country>BE</country>
+<housenr>22</housenr>
+<street>Gasthuisstraat</street>
+<zipcode>3200</zipcode>
+</physical>
+</address>
+<label>CC HET GASTHUIS</label>
+</location>
+<organiser>
+<label externalid="Zap All People:ZAP_150">Cultuurcentrum Het Gasthuis</label>
+</organiser>
+</event>
+<event private="false" owner="Zap All People" lastupdatedby="zapapimport" lastupdated="2017-08-17T13:04:02+01:00" externalid="CC_Het_Gasthuis_Aarschot:1139" creationdate="2017-07-24T11:36:26+01:00" createdby="zapapimport">
+<calendar>
+<timestamps>
+<timestamp>
+<date>2018-04-23</date>
+<timestart>13:30:00+02:00</timestart>
+</timestamp>
+<timestamp>
+<date>2018-04-24</date>
+<timestart>10:30:00+02:00</timestart>
+</timestamp>
+<timestamp>
+<date>2018-04-24</date>
+<timestart>13:30:00+02:00</timestart>
+</timestamp>
+</timestamps>
+</calendar>
+<categories>
+<category type="eventtype" catid="0.55.0.0.0">Theatervoorstelling</category>
+<category type="publicscope" catid="6.2.0.0.0">Regionaal</category>
+<category type="targetaudience" catid="2.2.1.0.0">Vanaf kleuterleeftijd (3+)</category>
+<category type="targetaudience" catid="2.1.3.0.0">Scholen</category>
+<category type="theme" catid="1.3.1.0.0">Tekst en muziektheater</category>
+<category type="educationlevel" catid="12.1.2.0.0">Kleuter 3 - 4 jaar</category>
+<category type="educationfield" catid="13.0.0.0.3">Kunst en cultuur</category>
+<category type="educationlevel" catid="12.1.3.0.0">Kleuter 4 - 5 jaar</category>
+</categories>
+<contactinfo>
+<url>http://www.hetgasthuis.be/nl/voorstelling/1139/stekeblind</url>
+</contactinfo>
+<eventdetails>
+<eventdetail lang="nl">
+<performers>
+<performer>
+<label>4Hoog</label>
+</performer>
+</performers>
+<longdescription>Alles begint met een brief.
+&lt;br /&gt;Van Egel aan Mol.
+&lt;br /&gt;Dat hij bij haar wil zijn.
+&lt;br /&gt;Samen praten over de dingen.
+&lt;br /&gt;Samen thee drinken voor het raam.
+&lt;br /&gt;Samen naar buiten kijken.
+&lt;br /&gt;Samen schaapjes tellen en
+&lt;br /&gt;Samen slapen in één bed.
+&lt;br /&gt;Stekeblind is een verhaal van liefde.
+&lt;br /&gt;Stekeblind is Romeo en Julia voor kleuters.
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;Auteurs Raf Walschaerts &amp; Frans Van der Aa
+&lt;br /&gt;Spel Femke Platteau &amp; Freek De Craecker
+&lt;br /&gt;Regie Frans van der Aa
+&lt;br /&gt;Compositie Peter Spaepen
+&lt;br /&gt;Decor Geert Hautekiet
+&lt;br /&gt;Kostuums Jana Roos
+&lt;br /&gt;Animatie Fran Vangysegem</longdescription>
+<media>
+<file private="false">
+<filename>CC_Het_Gasthuis_Aarschot_7893_stkblndtkekst2.jpg</filename>
+<filetype>jpeg</filetype>
+<hlink>ftp://ftp.045:Kihuesac@ftp.iis32.uitdatabank.be/mediafolder/CC_Het_Gasthuis_Aarschot_7893_stkblndtkekst2.jpg</hlink>
+<mediatype>photo</mediatype>
+</file>
+<file private="false">
+<hlink>https://www.uitid.be/uitid/rest/page/d5db4c33-6637-4c53-b43d-7164bc791c7d</hlink>
+<mediatype>culturefeed-page</mediatype>
+</file>
+</media>
+<price>
+<pricevalue>4.0</pricevalue>
+</price>
+<shortdescription>Alles begint met een brief.
+&lt;br /&gt;Van Egel aan Mol.
+&lt;br /&gt;Dat hij bij haar wil zijn.
+&lt;br /&gt;Samen praten over de dingen.
+&lt;br /&gt;Samen thee drinken voor het raam.
+&lt;br /&gt;Samen naar buiten kijken.
+&lt;br /&gt;Samen schaapjes tellen en
+&lt;br /&gt;Samen slapen in één bed.
+&lt;br /&gt;Stekeblind is een verhaal van liefde.
+&lt;br /&gt;Stekeblind is Romeo en Julia voor kleuters.
+&lt;br /&gt;</shortdescription>
+<title>Stekeblind</title>
+</eventdetail>
+</eventdetails>
+<location>
+<address>
+<physical>
+<city>Aarschot</city>
+<country>BE</country>
+<housenr>22</housenr>
+<street>Gasthuisstraat</street>
+<zipcode>3200</zipcode>
+</physical>
+</address>
+<label>CC HET GASTHUIS</label>
+</location>
+<organiser>
+<label externalid="Zap All People:ZAP_150">Cultuurcentrum Het Gasthuis</label>
+</organiser>
+</event>
+</cdbxml>

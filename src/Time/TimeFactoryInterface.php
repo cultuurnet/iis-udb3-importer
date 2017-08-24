@@ -25,4 +25,10 @@ interface TimeFactoryInterface
      * @return bool
      */
     public function isAlreadyLocalTime($time);
+
+    /**
+     * @param string $date
+     * @return string
+     */
+    public function createAvailabilityDate($date);
 }
