@@ -171,7 +171,7 @@ class Processor implements ProcessorInterface
         }
 
         // Add agefrom for legacy importers
-        if(!isset($singleXml->event[0]->agefrom)) {
+        if (!isset($singleXml->event[0]->agefrom)) {
             if (isset($singleXml->event[0]->categories[0])) {
                 $ageFrom = null;
                 foreach ($singleXml->event[0]->categories[0]->category as $xmlCategory) {
@@ -197,7 +197,7 @@ class Processor implements ProcessorInterface
                         $ageFrom = 0;
                     }
                 }
-                if(isset($ageFrom)){
+                if (isset($ageFrom)) {
                     $singleXml->event[0]->addChild('agefrom', $ageFrom);
                 }
             }
