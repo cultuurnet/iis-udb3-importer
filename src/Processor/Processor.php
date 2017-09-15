@@ -170,6 +170,39 @@ class Processor implements ProcessorInterface
             }
         }
 
+        // Add agefrom for legacy importers
+        if(!isset($singleXml->event[0]->agefrom)) {
+            if (isset($singleXml->event[0]->categories[0])) {
+                $ageFrom = null;
+                foreach ($singleXml->event[0]->categories[0]->category as $xmlCategory) {
+                    if ($xmlCategory['catid'] == '2.2.5.0.0') {
+                        $ageFrom = 18;
+                    }
+                    if ($xmlCategory['catid'] == '2.2.4.0.0') {
+                        $ageFrom = 15;
+                    }
+                    if ($xmlCategory['catid'] == '2.2.3.0.0') {
+                        $ageFrom = 12;
+                    }
+                    if ($xmlCategory['catid'] == '2.2.7.0.0') {
+                        $ageFrom = 9;
+                    }
+                    if ($xmlCategory['catid'] == '2.2.2.0.0') {
+                        $ageFrom = 6;
+                    }
+                    if ($xmlCategory['catid'] == '2.2.1.0.0') {
+                        $ageFrom = 3;
+                    }
+                    if ($xmlCategory['catid'] == '2.2.6.0.0') {
+                        $ageFrom = 0;
+                    }
+                }
+                if(isset($ageFrom)){
+                    $singleXml->event[0]->addChild('agefrom', $ageFrom);
+                }
+            }
+        }
+
         // Change the dates to local time so they don't error on import
         if ($singleXml->event[0]['creationdate']) {
             $creationDate = (string) $singleXml->event[0]['creationdate'];
