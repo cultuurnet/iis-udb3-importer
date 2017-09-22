@@ -303,17 +303,31 @@ class Processor implements ProcessorInterface
             foreach ($singleXml->event[0]->eventdetails[0]->eventdetail as $eventDetail) {
                 if ($eventDetail->media) {
                     foreach ($eventDetail->media[0]->file as $file) {
-                        if (isset($file->mediatype) && $file->mediatype == 'culturefeed-page') {
-                            if (!isset($file->reltype)) {
-                                $file->addChild('reltype', 'organiser');
+                        if (isset($file->mediatype)) {
+                            if ($file->mediatype == 'culturefeed-page') {
+                                if (!isset($file->reltype)) {
+                                    $file->addChild('reltype', 'organiser');
+                                }
                             }
-                        }
-                        if (isset($file->mediatype) && ($file->mediatype == 'imageweb' || $file->mediatype == 'photo')) {
-                            if ($file->hlink) {
+                            if (($file->mediatype == 'imageweb' || $file->mediatype == 'photo')) {
+                                if ($file->hlink) {
+                                    try {
+                                        $hlink = Url::fromNative($file->hlink);
+                                        $mediaLink = $this->mediaManager->generateMediaLink($hlink);
+                                        $file->hlink = (string) $mediaLink;
+                                    } catch (\Exception $e) {
+                                        $this->logger->error($file->hlink . ' cannot be found');
+                                        unset($file);
+                                    }
+                                }
+                            }
+                        } else {
+                            if (isset($file->hlink) && strpos($file->hlink, 'ftp') === 0) {
                                 try {
                                     $hlink = Url::fromNative($file->hlink);
                                     $mediaLink = $this->mediaManager->generateMediaLink($hlink);
                                     $file->hlink = (string) $mediaLink;
+                                    $file->addChild('mediatype', 'photo');
                                 } catch (\Exception $e) {
                                     $this->logger->error($file->hlink . ' cannot be found');
                                     unset($file);
