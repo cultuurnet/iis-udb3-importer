@@ -322,15 +322,22 @@ class Processor implements ProcessorInterface
                                 }
                             }
                         } else {
-                            if (isset($file->hlink) && strpos($file->hlink, 'ftp') === 0) {
-                                try {
-                                    $hlink = Url::fromNative($file->hlink);
-                                    $mediaLink = $this->mediaManager->generateMediaLink($hlink);
-                                    $file->hlink = (string) $mediaLink;
-                                    $file->addChild('mediatype', 'photo');
-                                } catch (\Exception $e) {
-                                    $this->logger->error($file->hlink . ' cannot be found');
-                                    unset($file);
+                            if (isset($file->hlink) &&
+                                isset($file->filetype)
+                            ) {
+                                if ($file->filetype == 'gif' ||
+                                    $file->filetype == 'jpeg' ||
+                                    $file->filetype == 'png'
+                                ) {
+                                    try {
+                                        $hlink = Url::fromNative($file->hlink);
+                                        $mediaLink = $this->mediaManager->generateMediaLink($hlink);
+                                        $file->hlink = (string) $mediaLink;
+                                        $file->addChild('mediatype', 'photo');
+                                    } catch (\Exception $e) {
+                                        $this->logger->error($file->hlink . ' cannot be found');
+                                        unset($file);
+                                    }
                                 }
                             }
                         }
