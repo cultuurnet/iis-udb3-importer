@@ -334,6 +334,12 @@ class Processor implements ProcessorInterface
                                         $mediaLink = $this->mediaManager->generateMediaLink($hlink);
                                         $file->hlink = (string) $mediaLink;
                                         $file->addChild('mediatype', 'photo');
+                                        if (isset($file->title)) {
+                                            $titleNode = $file->title;
+                                            $titleValue = (string) $file->title;
+                                            unset($titleNode[0][0]);
+                                            $file->addChild('title', $titleValue);
+                                        }
                                     } catch (\Exception $e) {
                                         $this->logger->error($file->hlink . ' cannot be found');
                                         unset($file);
