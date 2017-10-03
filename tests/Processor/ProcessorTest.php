@@ -2,6 +2,7 @@
 
 namespace CultuurNet\UDB3\IISImporter\Processor;
 
+use CultuurNet\CalendarSummary\CalendarFormatterInterface;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisherInterface;
 use CultuurNet\UDB3\IISImporter\CategorizationRules\CategorizationRulesInterface;
 use CultuurNet\UDB3\IISImporter\File\FileManagerInterface;
@@ -68,6 +69,11 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     private $flandersRegionFactory;
 
     /**
+     * @var CalendarFormatterInterface
+     */
+    private $calendarFormatter;
+
+    /**
      * @var Logger;
      */
     private $logger;
@@ -92,6 +98,8 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
 
         $this->flandersRegionFactory = $this->createMock(CategorizationRulesInterface::class);
 
+        $this->calendarFormatter = $this->createMock(CalendarFormatterInterface::class);
+
         $this->logger = $this->createMock(Logger::class);
 
         $this->processor = new Processor(
@@ -104,6 +112,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
             $this->mediaManager,
             $this->timeFactory,
             $this->flandersRegionFactory,
+            $this->calendarFormatter,
             $this->logger
         );
     }

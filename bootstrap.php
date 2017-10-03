@@ -1,6 +1,7 @@
 <?php
 
 use Aws\S3\S3Client;
+use CultuurNet\CalendarSummary\CalendarPlainTextFormatter;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPBodyFactory;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPMessageFactory;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPropertiesFactory;
@@ -241,6 +242,12 @@ $app['iis.logger'] = $app->share(
     }
 );
 
+$app['iis.calendar_formatter'] = $app->share(
+    function () {
+        return new CalendarPlainTextFormatter();
+    }
+);
+
 $app['iis.file_processor'] = $app->share(
     function (Application $app) {
         return new Processor(
@@ -253,6 +260,7 @@ $app['iis.file_processor'] = $app->share(
             $app['iis.media_manager'],
             $app['iis.time_factory'],
             $app['iis.flanders_region_factory'],
+            $app['iis.calendar_formatter'],
             $app['iis.logger']);
     }
 );

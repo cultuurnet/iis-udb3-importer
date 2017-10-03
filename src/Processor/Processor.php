@@ -2,6 +2,7 @@
 
 namespace CultuurNet\UDB3\IISImporter\Processor;
 
+use CultuurNet\CalendarSummary\CalendarFormatterInterface;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisherInterface;
 use CultuurNet\UDB3\IISImporter\CategorizationRules\CategorizationRulesInterface;
 use CultuurNet\UDB3\IISImporter\File\FileManagerInterface;
@@ -63,6 +64,11 @@ class Processor implements ProcessorInterface
     protected $flandersRegionFactory;
 
     /**
+     * @var CalendarFormatterInterface
+     */
+    protected $calendarFormatter;
+
+    /**
      * @var Logger
      */
     protected $logger;
@@ -78,6 +84,7 @@ class Processor implements ProcessorInterface
      * @param MediaManagerInterface $mediaManager
      * @param TimeFactoryInterface $timeFactory
      * @param CategorizationRulesInterface $flandersRegionFactory
+     * @param CalendarFormatterInterface $calendarFormatter
      * @param Logger $logger
      */
     public function __construct(
@@ -90,6 +97,7 @@ class Processor implements ProcessorInterface
         MediaManagerInterface $mediaManager,
         TimeFactoryInterface $timeFactory,
         CategorizationRulesInterface $flandersRegionFactory,
+        CalendarFormatterInterface $calendarFormatter,
         Logger $logger
     ) {
         $this->fileManager = $fileManager;
@@ -101,6 +109,7 @@ class Processor implements ProcessorInterface
         $this->mediaManager = $mediaManager;
         $this->timeFactory = $timeFactory;
         $this->flandersRegionFactory = $flandersRegionFactory;
+        $this->calendarFormatter = $calendarFormatter;
         $this->logger = $logger;
     }
 
