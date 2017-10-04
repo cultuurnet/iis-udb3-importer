@@ -6,6 +6,7 @@ use CultuurNet\UDB3\IISImporter\AMQP\AMQPBodyFactory;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPMessageFactory;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPropertiesFactory;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisher;
+use CultuurNet\UDB3\IISImporter\Calendar\CalendarFactory;
 use CultuurNet\UDB3\IISImporter\CategorizationRules\FlandersRegion;
 use CultuurNet\UDB3\IISImporter\Download\Downloader;
 use CultuurNet\UDB3\IISImporter\File\FileManager;
@@ -248,6 +249,12 @@ $app['iis.calendar_formatter'] = $app->share(
     }
 );
 
+$app['iis.calendar_factory'] = $app->share(
+    function () {
+        return new CalendarFactory();
+    }
+);
+
 $app['iis.file_processor'] = $app->share(
     function (Application $app) {
         return new Processor(
@@ -260,7 +267,7 @@ $app['iis.file_processor'] = $app->share(
             $app['iis.media_manager'],
             $app['iis.time_factory'],
             $app['iis.flanders_region_factory'],
-            $app['iis.calendar_formatter'],
+            $app['iis.calendar_factory'],
             $app['iis.logger']);
     }
 );

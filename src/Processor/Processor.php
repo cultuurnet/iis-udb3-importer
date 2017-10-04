@@ -7,6 +7,7 @@ use CultureFeed_Cdb_Data_Calendar_Permanent;
 use CultureFeed_Cdb_Data_Calendar_TimestampList;
 use CultuurNet\CalendarSummary\CalendarFormatterInterface;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisherInterface;
+use CultuurNet\UDB3\IISImporter\Calendar\CalendarFactoryInterface;
 use CultuurNet\UDB3\IISImporter\CategorizationRules\CategorizationRulesInterface;
 use CultuurNet\UDB3\IISImporter\File\FileManagerInterface;
 use CultuurNet\UDB3\IISImporter\Media\MediaManagerInterface;
@@ -67,9 +68,9 @@ class Processor implements ProcessorInterface
     protected $flandersRegionFactory;
 
     /**
-     * @var CalendarFormatterInterface
+     * @var CalendarFactoryInterface
      */
-    protected $calendarFormatter;
+    protected $calendarFactory;
 
     /**
      * @var Logger
@@ -87,7 +88,7 @@ class Processor implements ProcessorInterface
      * @param MediaManagerInterface $mediaManager
      * @param TimeFactoryInterface $timeFactory
      * @param CategorizationRulesInterface $flandersRegionFactory
-     * @param CalendarFormatterInterface $calendarFormatter
+     * @param CalendarFactoryInterface $calendarFactory
      * @param Logger $logger
      */
     public function __construct(
@@ -100,7 +101,7 @@ class Processor implements ProcessorInterface
         MediaManagerInterface $mediaManager,
         TimeFactoryInterface $timeFactory,
         CategorizationRulesInterface $flandersRegionFactory,
-        CalendarFormatterInterface $calendarFormatter,
+        CalendarFactoryInterface $calendarFactory,
         Logger $logger
     ) {
         $this->fileManager = $fileManager;
@@ -112,7 +113,7 @@ class Processor implements ProcessorInterface
         $this->mediaManager = $mediaManager;
         $this->timeFactory = $timeFactory;
         $this->flandersRegionFactory = $flandersRegionFactory;
-        $this->calendarFormatter = $calendarFormatter;
+        $this->calendarFactory = $calendarFactory;
         $this->logger = $logger;
     }
 
@@ -311,11 +312,11 @@ class Processor implements ProcessorInterface
 
         $singleXml->event[0]['availableto'] = $this->timeFactory->createAvailabilityDate($enddate);
 
-        $calendar = new CultureFeed_Cdb_Data_Calendar_PeriodList();
-        $calendar = new CultureFeed_Cdb_Data_Calendar_Permanent();
-        $calendar = new CultureFeed_Cdb_Data_Calendar_TimestampList();
-
-        $this->calendarFormatter->format($calendar, 'lg');
+//        $calendar = new CultureFeed_Cdb_Data_Calendar_PeriodList();
+//        $calendar = new CultureFeed_Cdb_Data_Calendar_Permanent();
+//        $calendar = new CultureFeed_Cdb_Data_Calendar_TimestampList();
+//
+//        $this->calendarFormatter->format($calendar, 'lg');
 
         if ($singleXml->event[0]->eventdetails[0]) {
             foreach ($singleXml->event[0]->eventdetails[0]->eventdetail as $eventDetail) {
@@ -330,7 +331,7 @@ class Processor implements ProcessorInterface
                             if (($file->mediatype == 'imageweb' || $file->mediatype == 'photo')) {
                                 if ($file->hlink) {
                                     try {
-                                        $hlink = Url::fromNative($file->hlink);
+                                        $hl3d3ink = Url::fromNative($file->hlink);
                                         $mediaLink = $this->mediaManager->generateMediaLink($hlink);
                                         $file->hlink = (string) $mediaLink;
                                     } catch (\Exception $e) {
