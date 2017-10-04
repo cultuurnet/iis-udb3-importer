@@ -2,6 +2,9 @@
 
 namespace CultuurNet\UDB3\IISImporter\Processor;
 
+use CultureFeed_Cdb_Data_Calendar_PeriodList;
+use CultureFeed_Cdb_Data_Calendar_Permanent;
+use CultureFeed_Cdb_Data_Calendar_TimestampList;
 use CultuurNet\CalendarSummary\CalendarFormatterInterface;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisherInterface;
 use CultuurNet\UDB3\IISImporter\CategorizationRules\CategorizationRulesInterface;
@@ -307,6 +310,12 @@ class Processor implements ProcessorInterface
         }
 
         $singleXml->event[0]['availableto'] = $this->timeFactory->createAvailabilityDate($enddate);
+
+        $calendar = new CultureFeed_Cdb_Data_Calendar_PeriodList();
+        $calendar = new CultureFeed_Cdb_Data_Calendar_Permanent();
+        $calendar = new CultureFeed_Cdb_Data_Calendar_TimestampList();
+
+        $this->calendarFormatter->format($calendar, 'lg');
 
         if ($singleXml->event[0]->eventdetails[0]) {
             foreach ($singleXml->event[0]->eventdetails[0]->eventdetail as $eventDetail) {
