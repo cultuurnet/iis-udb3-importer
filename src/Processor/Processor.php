@@ -312,6 +312,11 @@ class Processor implements ProcessorInterface
 
         $singleXml->event[0]['availableto'] = $this->timeFactory->createAvailabilityDate($enddate);
 
+        if (isset($singleXml->event[0]->calendar[0])) {
+            $calendarNode = $singleXml->event[0]->calendar[0];
+            $calendarSummary = $this->calendarFactory->format($calendarNode);
+        }
+
 //        $calendar = new CultureFeed_Cdb_Data_Calendar_PeriodList();
 //        $calendar = new CultureFeed_Cdb_Data_Calendar_Permanent();
 //        $calendar = new CultureFeed_Cdb_Data_Calendar_TimestampList();

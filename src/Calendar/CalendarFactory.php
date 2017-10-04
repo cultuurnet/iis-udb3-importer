@@ -24,15 +24,25 @@ class CalendarFactory implements CalendarFactoryInterface
     protected $formatType;
 
     /**
-     * @param StringLiteral $calendarNode
-     * @return CultureFeed_Cdb_Data_Calendar
+     * @inheritdoc
      */
-    public function generateCalendar(StringLiteral $calendarNode)
+    public function generateCalendar($calendarNode)
     {
         // TODO: Implement generateCalendar() method.
     }
 
-    public function format()
+    /**
+     * @inheritdoc
+     */
+    public function formatCalendar($calendar)
+    {
+        // TODO: Implement formatCalendar() method.
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function format($calendarNode)
     {
         $calendarSummary = $this->calendarFormatter->format($this->calendar, $this->formatType);
         return new StringLiteral($calendarSummary);

@@ -8,14 +8,20 @@ use ValueObjects\StringLiteral\StringLiteral;
 interface CalendarFactoryInterface
 {
     /**
-     * @param StringLiteral $calendarNode
+     * @param \SimpleXMLElement $calendarNode
      * @return CultureFeed_Cdb_Data_Calendar
      */
-    public function generateCalendar(StringLiteral $calendarNode);
+    public function generateCalendar($calendarNode);
 
     /**
-     * @param StringLiteral $calendarNode
+     * @param CultureFeed_Cdb_Data_Calendar $calendar
+     * @return string
+     */
+    public function formatCalendar($calendar);
+
+    /**
+     * @param \SimpleXMLElement $calendarNode
      * @return StringLiteral
      */
-    public function format();
+    public function format($calendarNode);
 }
