@@ -367,6 +367,10 @@ class Processor implements ProcessorInterface
                         }
                     }
                 }
+
+                if (isset($calendarSummary)) {
+                    $eventDetail->addChild('calendarsummary', (string) $calendarSummary);
+                }
             }
         }
 

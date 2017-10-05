@@ -4,6 +4,8 @@ namespace CultuurNet\UDB3\IISImporter\Calendar;
 
 use CultureFeed_Cdb_Data_Calendar;
 use CultureFeed_Cdb_Data_Calendar_OpeningTime;
+use CultureFeed_Cdb_Data_Calendar_Period;
+use CultureFeed_Cdb_Data_Calendar_PeriodList;
 use CultureFeed_Cdb_Data_Calendar_Permanent;
 use CultureFeed_Cdb_Data_Calendar_SchemeDay;
 use CultureFeed_Cdb_Data_Calendar_Timestamp;
@@ -61,31 +63,29 @@ class CalendarFactory implements CalendarFactoryInterface
                 $weekNode = $calendarNode->permanentopeningtimes[0]->permanent[0]->weekscheme;
                 $weekScheme = new CultureFeed_Cdb_Data_Calendar_Weekscheme();
 
-                if (isset($weekNode->monday)) {
-                    $this->generateDay($weekNode->monday, $weekScheme, CultureFeed_Cdb_Data_Calendar_SchemeDay::MONDAY);
-                }
-                if (isset($weekNode->tuesday)) {
-                    $this->generateDay($weekNode->tuesday, $weekScheme, CultureFeed_Cdb_Data_Calendar_SchemeDay::TUESDAY);
-                }
-                if (isset($weekNode->wednesday)) {
-                    $this->generateDay($weekNode->wednesday, $weekScheme, CultureFeed_Cdb_Data_Calendar_SchemeDay::WEDNESDAY);
-                }
-                if (isset($weekNode->thursday)) {
-                    $this->generateDay($weekNode->thursday, $weekScheme, CultureFeed_Cdb_Data_Calendar_SchemeDay::THURSDAY);
-                }
-                if (isset($weekNode->friday)) {
-                    $this->generateDay($weekNode->friday, $weekScheme, CultureFeed_Cdb_Data_Calendar_SchemeDay::FRIDAY);
-                }
-                if (isset($weekNode->saturday)) {
-                    $this->generateDay($weekNode->saturday, $weekScheme, CultureFeed_Cdb_Data_Calendar_SchemeDay::SATURDAY);
-                }
-                if (isset($weekNode->sunday)) {
-                    $this->generateDay($weekNode->sunday, $weekScheme, CultureFeed_Cdb_Data_Calendar_SchemeDay::SUNDAY);
-                }
+                $this->generateWeek($weekNode[0], $weekScheme);
+
                 $this->calendar->setWeekScheme($weekScheme);
             }
-        } elseif (isset($calendarNode->period)) {
+        } elseif (isset($calendarNode->periods)) {
             $this->calendarFormatter = new LargePeriodPlainTextFormatter();
+
+            $this->calendar = new CultureFeed_Cdb_Data_Calendar_PeriodList();
+            if ($calendarNode->periods[0]->period[0]) {
+                $dateFrom = (string) $calendarNode->periods[0]->period[0]->datefrom;
+                $dateTo = (string) $calendarNode->periods[0]->period[0]->dateto;
+
+                $period = new CultureFeed_Cdb_Data_Calendar_Period($dateFrom, $dateTo);
+                if (isset($calendarNode->periods[0]->period[0]->weekscheme)) {
+                    $weekNode = $calendarNode->periods[0]->period[0]->weekscheme;
+                    $weekScheme = new CultureFeed_Cdb_Data_Calendar_Weekscheme();
+
+                    $this->generateWeek($weekNode[0], $weekScheme);
+
+                    $period->setWeekScheme($weekScheme);
+                    $this->calendar->add($period);
+                }
+            }
 
         } else {
             throw new CalendarException('This calendar node is not supported');
@@ -106,8 +106,41 @@ class CalendarFactory implements CalendarFactoryInterface
      */
     public function format($calendarNode)
     {
-        $this->generateCalendar($calendarNode);
-        return new StringLiteral($this->calendarFormatter->format($this->calendar, self::LONG_FORMAT));
+        try {
+            $this->generateCalendar($calendarNode);
+            return new StringLiteral($this->calendarFormatter->format($this->calendar, self::LONG_FORMAT));
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * @param \SimpleXMLElement $weekNode
+     * @param CultureFeed_Cdb_Data_Calendar_Weekscheme $weekScheme
+     */
+    private function generateWeek(\SimpleXMLElement $weekNode, CultureFeed_Cdb_Data_Calendar_Weekscheme $weekScheme)
+    {
+        if (isset($weekNode->monday)) {
+            $this->generateDay($weekNode->monday[0], $weekScheme, CultureFeed_Cdb_Data_Calendar_SchemeDay::MONDAY);
+        }
+        if (isset($weekNode->tuesday)) {
+            $this->generateDay($weekNode->tuesday[0], $weekScheme, CultureFeed_Cdb_Data_Calendar_SchemeDay::TUESDAY);
+        }
+        if (isset($weekNode->wednesday)) {
+            $this->generateDay($weekNode->wednesday[0], $weekScheme, CultureFeed_Cdb_Data_Calendar_SchemeDay::WEDNESDAY);
+        }
+        if (isset($weekNode->thursday)) {
+            $this->generateDay($weekNode->thursday[0], $weekScheme, CultureFeed_Cdb_Data_Calendar_SchemeDay::THURSDAY);
+        }
+        if (isset($weekNode->friday)) {
+            $this->generateDay($weekNode->friday[0], $weekScheme, CultureFeed_Cdb_Data_Calendar_SchemeDay::FRIDAY);
+        }
+        if (isset($weekNode->saturday)) {
+            $this->generateDay($weekNode->saturday[0], $weekScheme, CultureFeed_Cdb_Data_Calendar_SchemeDay::SATURDAY);
+        }
+        if (isset($weekNode->sunday)) {
+            $this->generateDay($weekNode->sunday[0], $weekScheme, CultureFeed_Cdb_Data_Calendar_SchemeDay::SUNDAY);
+        }
     }
 
     /**
