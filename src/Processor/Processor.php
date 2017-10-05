@@ -317,12 +317,6 @@ class Processor implements ProcessorInterface
             $calendarSummary = $this->calendarFactory->format($calendarNode);
         }
 
-//        $calendar = new CultureFeed_Cdb_Data_Calendar_PeriodList();
-//        $calendar = new CultureFeed_Cdb_Data_Calendar_Permanent();
-//        $calendar = new CultureFeed_Cdb_Data_Calendar_TimestampList();
-//
-//        $this->calendarFormatter->format($calendar, 'lg');
-
         if ($singleXml->event[0]->eventdetails[0]) {
             foreach ($singleXml->event[0]->eventdetails[0]->eventdetail as $eventDetail) {
                 if ($eventDetail->media) {
@@ -336,7 +330,7 @@ class Processor implements ProcessorInterface
                             if (($file->mediatype == 'imageweb' || $file->mediatype == 'photo')) {
                                 if ($file->hlink) {
                                     try {
-                                        $hl3d3ink = Url::fromNative($file->hlink);
+                                        $hlink = Url::fromNative($file->hlink);
                                         $mediaLink = $this->mediaManager->generateMediaLink($hlink);
                                         $file->hlink = (string) $mediaLink;
                                     } catch (\Exception $e) {
