@@ -2,7 +2,12 @@
 
 namespace CultuurNet\UDB3\IISImporter\Processor;
 
+use CultureFeed_Cdb_Data_Calendar_PeriodList;
+use CultureFeed_Cdb_Data_Calendar_Permanent;
+use CultureFeed_Cdb_Data_Calendar_TimestampList;
+use CultuurNet\CalendarSummary\CalendarFormatterInterface;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisherInterface;
+use CultuurNet\UDB3\IISImporter\Calendar\CalendarFactoryInterface;
 use CultuurNet\UDB3\IISImporter\CategorizationRules\CategorizationRulesInterface;
 use CultuurNet\UDB3\IISImporter\File\FileManagerInterface;
 use CultuurNet\UDB3\IISImporter\Media\MediaManagerInterface;
@@ -63,6 +68,11 @@ class Processor implements ProcessorInterface
     protected $flandersRegionFactory;
 
     /**
+     * @var CalendarFactoryInterface
+     */
+    protected $calendarFactory;
+
+    /**
      * @var Logger
      */
     protected $logger;
@@ -78,6 +88,7 @@ class Processor implements ProcessorInterface
      * @param MediaManagerInterface $mediaManager
      * @param TimeFactoryInterface $timeFactory
      * @param CategorizationRulesInterface $flandersRegionFactory
+     * @param CalendarFactoryInterface $calendarFactory
      * @param Logger $logger
      */
     public function __construct(
@@ -90,6 +101,7 @@ class Processor implements ProcessorInterface
         MediaManagerInterface $mediaManager,
         TimeFactoryInterface $timeFactory,
         CategorizationRulesInterface $flandersRegionFactory,
+        CalendarFactoryInterface $calendarFactory,
         Logger $logger
     ) {
         $this->fileManager = $fileManager;
@@ -101,6 +113,7 @@ class Processor implements ProcessorInterface
         $this->mediaManager = $mediaManager;
         $this->timeFactory = $timeFactory;
         $this->flandersRegionFactory = $flandersRegionFactory;
+        $this->calendarFactory = $calendarFactory;
         $this->logger = $logger;
     }
 
@@ -299,6 +312,11 @@ class Processor implements ProcessorInterface
 
         $singleXml->event[0]['availableto'] = $this->timeFactory->createAvailabilityDate($enddate);
 
+        if (isset($singleXml->event[0]->calendar[0])) {
+            $calendarNode = $singleXml->event[0]->calendar[0];
+            $calendarSummary = $this->calendarFactory->format($calendarNode);
+        }
+
         if ($singleXml->event[0]->eventdetails[0]) {
             foreach ($singleXml->event[0]->eventdetails[0]->eventdetail as $eventDetail) {
                 if ($eventDetail->media) {
@@ -348,6 +366,10 @@ class Processor implements ProcessorInterface
                             }
                         }
                     }
+                }
+
+                if (isset($calendarSummary)) {
+                    $eventDetail->addChild('calendarsummary', (string) $calendarSummary);
                 }
             }
         }
