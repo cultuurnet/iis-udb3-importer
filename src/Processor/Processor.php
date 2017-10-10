@@ -313,8 +313,12 @@ class Processor implements ProcessorInterface
         $singleXml->event[0]['availableto'] = $this->timeFactory->createAvailabilityDate($enddate);
 
         if (isset($singleXml->event[0]->calendar[0])) {
-            $calendarNode = $singleXml->event[0]->calendar[0];
-            $calendarSummary = $this->calendarFactory->format($calendarNode);
+            try {
+                $calendarNode = $singleXml->event[0]->calendar[0];
+                $calendarSummary = $this->calendarFactory->format($calendarNode);
+            } catch (\Exception $e) {
+                $calendarSummary = null;
+            }
         }
 
         if ($singleXml->event[0]->eventdetails[0]) {
@@ -368,7 +372,7 @@ class Processor implements ProcessorInterface
                     }
                 }
 
-                if (isset($calendarSummary)) {
+                if (isset($calendarSummary) && !$calendarSummary->isEmpty()) {
                     $eventDetail->addChild('calendarsummary', (string) $calendarSummary);
                 }
             }

@@ -83,8 +83,8 @@ class CalendarFactory implements CalendarFactoryInterface
                     $this->generateWeek($weekNode[0], $weekScheme);
 
                     $period->setWeekScheme($weekScheme);
-                    $this->calendar->add($period);
                 }
+                $this->calendar->add($period);
             }
 
         } else {
