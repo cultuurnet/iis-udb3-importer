@@ -231,7 +231,7 @@ $app['iis.handler'] = $app->share(
     function (Application $app) {
         return new RotatingFileHandler(
             $app['config']['logging_folder'] . '/importer.log',
-            90,
+            400,
             Logger::DEBUG
         );
     }
