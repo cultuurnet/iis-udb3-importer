@@ -172,7 +172,9 @@ class Processor implements ProcessorInterface
         $singleXml->event[0]['cdbid'] = $cdbid->toNative();
 
         // Add wfstatus to autovalidate the event.
-        $singleXml->event[0]['wfstatus'] = 'approved';
+        if($singleXml->event[0]['wfstatus'] != 'deleted') {
+            $singleXml->event[0]['wfstatus'] = 'approved';
+        }
 
         // Add private status if event is for schools
         if (isset($singleXml->event[0]->categories[0])) {
