@@ -32,7 +32,19 @@ class FlandersRegion implements CategorizationRulesInterface
             return new Category($cnetId, $domain, $label);
 
         } else {
-            return null;
+            $fallbackXpath = $this->createFallbackXPath($value);
+            $terms = $this->taxonomy->xpath((string) $fallbackXpath);
+
+            if (sizeof($terms) > 0) {
+                $attributes = $terms[0]->attributes();
+                $cnetId = new StringLiteral((string) $attributes['id']);
+                $domain = new StringLiteral((string) $attributes['domain']);
+                $label =  new StringLiteral((string) $attributes['labelnl']);
+                return new Category($cnetId, $domain, $label);
+
+            } else {
+                return null;
+            }
         }
     }
 
@@ -59,5 +71,17 @@ class FlandersRegion implements CategorizationRulesInterface
         $city =  explode("(", $zipCity[1], 2)[0];
 
         return new StringLiteral('//c:term[contains(@label,\'' . $zip . '\') and contains(@label, \''. $city .'\')]');
+    }
+
+    /**
+     * @param StringLiteral $value
+     * @return StringLiteral
+     */
+    private function createFallbackXPath(StringLiteral $value)
+    {
+        $zipCity = explode(' ', $value, 2);
+        $zip = $zipCity[0];
+
+        return new StringLiteral('//c:term[contains(@label,\'' . $zip . '\')]');
     }
 }
