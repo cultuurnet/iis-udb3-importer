@@ -6,7 +6,7 @@ use \SimpleXMLElement;
 use ValueObjects\StringLiteral\StringLiteral;
 use ValueObjects\Web\Url;
 
-class FlandersRegion implements CategorizationRulesInterface
+class CategoryRules implements CategorizationRulesInterface
 {
     const PREFIX = 'c';
 
@@ -16,10 +16,9 @@ class FlandersRegion implements CategorizationRulesInterface
     protected $taxonomy;
 
     /**
-     * @param StringLiteral $value
-     * @return Category
+     * @inheritdoc
      */
-    public function getCategoryFromValue(StringLiteral $value)
+    public function getFlandersRegion(StringLiteral $value)
     {
         $xpath = $this->createXPath($value);
         $terms = $this->taxonomy->xpath((string) $xpath);
@@ -46,6 +45,17 @@ class FlandersRegion implements CategorizationRulesInterface
                 return null;
             }
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getUndeterminedType()
+    {
+        $cnetId = new StringLiteral('0.51.0.0.0');
+        $domain = new StringLiteral('eventtype');
+        $label =  new StringLiteral('Type onbepaald');
+        return new Category($cnetId, $domain, $label);
     }
 
     /**

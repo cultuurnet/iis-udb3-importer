@@ -21,7 +21,7 @@ class FlandersRegionTest extends \PHPUnit_Framework_TestCase
     private $nameSpaceUrl;
 
     /**
-     * @var FlandersRegion
+     * @var CategoryRules
      */
     private $flandersRegion;
 
@@ -30,7 +30,7 @@ class FlandersRegionTest extends \PHPUnit_Framework_TestCase
         $this->taxonomyUrl = Url::fromNative('http://taxonomy.uitdatabank.be/api/domain/flandersregion/classification');
         $this->nameSpaceUrl = Url::fromNative('http://www.cultuurdatabank.com/XMLSchema/CdbXSD/3.2/FINAL');
 
-        $this->flandersRegion = new FlandersRegion($this->taxonomyUrl, $this->nameSpaceUrl);
+        $this->flandersRegion = new CategoryRules($this->taxonomyUrl, $this->nameSpaceUrl);
     }
 
     /**
@@ -39,7 +39,7 @@ class FlandersRegionTest extends \PHPUnit_Framework_TestCase
     public function test_non_flemish_address()
     {
         $value = new StringLiteral('4000 Luik');
-        $this->assertNull($this->flandersRegion->getCategoryFromValue($value));
+        $this->assertNull($this->flandersRegion->getFlandersRegion($value));
     }
 
     /**
@@ -54,7 +54,7 @@ class FlandersRegionTest extends \PHPUnit_Framework_TestCase
             new StringLiteral('9700 Oudenaarde')
         );
 
-        $this->assertEquals($expected, $this->flandersRegion->getCategoryFromValue($value));
+        $this->assertEquals($expected, $this->flandersRegion->getFlandersRegion($value));
     }
 
     /**
@@ -69,7 +69,7 @@ class FlandersRegionTest extends \PHPUnit_Framework_TestCase
             new StringLiteral('2018 Antwerpen 18 (Antwerpen)')
         );
 
-        $this->assertEquals($expected, $this->flandersRegion->getCategoryFromValue($value));
+        $this->assertEquals($expected, $this->flandersRegion->getFlandersRegion($value));
 
     }
 }

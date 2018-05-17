@@ -65,7 +65,7 @@ class Processor implements ProcessorInterface
     /**
      * @var CategorizationRulesInterface
      */
-    protected $flandersRegionFactory;
+    protected $categoryFactory;
 
     /**
      * @var CalendarFactoryInterface
@@ -87,7 +87,7 @@ class Processor implements ProcessorInterface
      * @param StringLiteral $author
      * @param MediaManagerInterface $mediaManager
      * @param TimeFactoryInterface $timeFactory
-     * @param CategorizationRulesInterface $flandersRegionFactory
+     * @param CategorizationRulesInterface $categoryFactory
      * @param CalendarFactoryInterface $calendarFactory
      * @param Logger $logger
      */
@@ -100,7 +100,7 @@ class Processor implements ProcessorInterface
         StringLiteral $author,
         MediaManagerInterface $mediaManager,
         TimeFactoryInterface $timeFactory,
-        CategorizationRulesInterface $flandersRegionFactory,
+        CategorizationRulesInterface $categoryFactory,
         CalendarFactoryInterface $calendarFactory,
         Logger $logger
     ) {
@@ -112,7 +112,7 @@ class Processor implements ProcessorInterface
         $this->author = $author;
         $this->mediaManager = $mediaManager;
         $this->timeFactory = $timeFactory;
-        $this->flandersRegionFactory = $flandersRegionFactory;
+        $this->categoryFactory = $categoryFactory;
         $this->calendarFactory = $calendarFactory;
         $this->logger = $logger;
     }
@@ -380,6 +380,23 @@ class Processor implements ProcessorInterface
             }
         }
 
+        // Add undetermined category if the event has no eventtype status if event is for schools
+        if (isset($singleXml->event[0]->categories[0])) {
+            $hasEventType = false;
+            foreach ($singleXml->event[0]->categories[0]->category as $xmlCategory) {
+                $typeName = (string) $xmlCategory['type'];
+                if ($typeName == 'eventtype') {
+                    $hasEventType = true;
+                }
+            }
+            if (!$hasEventType) {
+                $undeterminedType = $this->categoryFactory->getUndeterminedType();
+                $undeterminedNode = $singleXml
+                    ->event[0]->categories[0]->addChild('category', (string) $undeterminedType->label);
+                $undeterminedNode->addAttribute('type', (string) $undeterminedType->type);
+                $undeterminedNode->addAttribute('catid', (string) $undeterminedType->catId);
+            }
+        }
 
         if ($singleXml->event[0]->location[0]->address[0]) {
             $physical = $singleXml->event[0]->location[0]->address[0]->physical[0];
@@ -387,7 +404,7 @@ class Processor implements ProcessorInterface
             $zipCode = (string) $physical->zipcode[0];
             $city = (string) $physical->city[0];
             $zipCity = new StringLiteral($zipCode . ' ' . $city);
-            $category = $this->flandersRegionFactory->getCategoryFromValue($zipCity);
+            $category = $this->categoryFactory->getFlandersRegion($zipCity);
 
             if ($category) {
                 $flandersRegionNode = $singleXml
