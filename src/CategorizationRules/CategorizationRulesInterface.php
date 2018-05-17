@@ -10,5 +10,10 @@ interface CategorizationRulesInterface
      * @param StringLiteral $value
      * @return Category
      */
-    public function getCategoryFromValue(StringLiteral $value);
+    public function getFlandersRegion(StringLiteral $value);
+
+    /**
+     * @return Category
+     */
+    public function getUndeterminedType();
 }

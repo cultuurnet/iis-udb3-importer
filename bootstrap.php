@@ -7,7 +7,7 @@ use CultuurNet\UDB3\IISImporter\AMQP\AMQPMessageFactory;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPropertiesFactory;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisher;
 use CultuurNet\UDB3\IISImporter\Calendar\CalendarFactory;
-use CultuurNet\UDB3\IISImporter\CategorizationRules\FlandersRegion;
+use CultuurNet\UDB3\IISImporter\CategorizationRules\CategoryRules;
 use CultuurNet\UDB3\IISImporter\Download\Downloader;
 use CultuurNet\UDB3\IISImporter\File\FileManager;
 use CultuurNet\UDB3\IISImporter\Media\MediaManager;
@@ -218,9 +218,9 @@ $app['iis.taxonomy_namespace'] = $app->share(
     }
 );
 
-$app['iis.flanders_region_factory'] = $app->share(
+$app['iis.category_factory'] = $app->share(
     function (Application $app) {
-        return new FlandersRegion(
+        return new CategoryRules(
             $app['iis.flanders_region_url'],
             $app['iis.taxonomy_namespace']
         );
@@ -266,7 +266,7 @@ $app['iis.file_processor'] = $app->share(
             $app['iis.author'],
             $app['iis.media_manager'],
             $app['iis.time_factory'],
-            $app['iis.flanders_region_factory'],
+            $app['iis.category_factory'],
             $app['iis.calendar_factory'],
             $app['iis.logger']);
     }
