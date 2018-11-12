@@ -117,6 +117,7 @@ class CalendarFactory implements CalendarFactoryInterface
     /**
      * @param \SimpleXMLElement $weekNode
      * @param CultureFeed_Cdb_Data_Calendar_Weekscheme $weekScheme
+     * @throws \Exception
      */
     private function generateWeek(\SimpleXMLElement $weekNode, CultureFeed_Cdb_Data_Calendar_Weekscheme $weekScheme)
     {
@@ -147,6 +148,7 @@ class CalendarFactory implements CalendarFactoryInterface
      * @param \SimpleXMLElement $dayNode
      * @param CultureFeed_Cdb_Data_Calendar_Weekscheme $weekScheme
      * @param $weekDay
+     * @throws \Exception
      */
     private function generateDay(\SimpleXMLElement $dayNode, CultureFeed_Cdb_Data_Calendar_Weekscheme $weekScheme, $weekDay)
     {

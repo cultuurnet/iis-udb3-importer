@@ -10,6 +10,7 @@ use CultuurNet\UDB3\IISImporter\Calendar\CalendarFactory;
 use CultuurNet\UDB3\IISImporter\CategorizationRules\CategoryRules;
 use CultuurNet\UDB3\IISImporter\Download\Downloader;
 use CultuurNet\UDB3\IISImporter\File\FileManager;
+use CultuurNet\UDB3\IISImporter\Identification\IdentificationFactory;
 use CultuurNet\UDB3\IISImporter\Media\MediaManager;
 use CultuurNet\UDB3\IISImporter\Parser\ParserV3;
 use CultuurNet\UDB3\IISImporter\Processor\Processor;
@@ -37,6 +38,7 @@ if (!isset($appConfigLocation)) {
     $appConfigLocation =  __DIR__;
 }
 $app->register(new YamlConfigServiceProvider($appConfigLocation . '/config.yml'));
+$app->register(new YamlConfigServiceProvider($appConfigLocation . '/users.yml'));
 
 /**
  * Turn debug on or off.
@@ -243,6 +245,12 @@ $app['iis.logger'] = $app->share(
     }
 );
 
+$app['iis.identification_factory'] = $app->share(
+    function (Application $app) {
+        return new IdentificationFactory($app['config']['kinepolis_terms']);
+    }
+);
+
 $app['iis.calendar_formatter'] = $app->share(
     function () {
         return new CalendarPlainTextFormatter();
@@ -268,7 +276,8 @@ $app['iis.file_processor'] = $app->share(
             $app['iis.time_factory'],
             $app['iis.category_factory'],
             $app['iis.calendar_factory'],
-            $app['iis.logger']);
+            $app['iis.logger'],
+            $app['iis.identification_factory']);
     }
 );
 

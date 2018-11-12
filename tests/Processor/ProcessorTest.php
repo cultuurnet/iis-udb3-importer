@@ -7,6 +7,7 @@ use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisherInterface;
 use CultuurNet\UDB3\IISImporter\Calendar\CalendarFactoryInterface;
 use CultuurNet\UDB3\IISImporter\CategorizationRules\CategorizationRulesInterface;
 use CultuurNet\UDB3\IISImporter\File\FileManagerInterface;
+use CultuurNet\UDB3\IISImporter\Identification\IdentificationFactoryInterface;
 use CultuurNet\UDB3\IISImporter\Media\MediaManagerInterface;
 use CultuurNet\UDB3\IISImporter\Parser\ParserInterface;
 use CultuurNet\UDB3\IISImporter\Time\TimeFactoryInterface;
@@ -79,6 +80,11 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
      */
     private $logger;
 
+    /**
+     * @var IdentificationFactoryInterface
+     */
+    private $identificationFactory;
+
     protected function setUp()
     {
         $this->fileManager = $this->createMock(FileManagerInterface::class);
@@ -103,6 +109,8 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
 
         $this->logger = $this->createMock(Logger::class);
 
+        $this->identificationFactory = $this->createMock(IdentificationFactoryInterface::class);
+
         $this->processor = new Processor(
             $this->fileManager,
             $this->parser,
@@ -114,7 +122,8 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
             $this->timeFactory,
             $this->flandersRegionFactory,
             $this->calendarFactory,
-            $this->logger
+            $this->logger,
+            $this->identificationFactory
         );
     }
 
