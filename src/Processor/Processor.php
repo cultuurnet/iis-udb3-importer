@@ -2,14 +2,11 @@
 
 namespace CultuurNet\UDB3\IISImporter\Processor;
 
-use CultureFeed_Cdb_Data_Calendar_PeriodList;
-use CultureFeed_Cdb_Data_Calendar_Permanent;
-use CultureFeed_Cdb_Data_Calendar_TimestampList;
-use CultuurNet\CalendarSummary\CalendarFormatterInterface;
 use CultuurNet\UDB3\IISImporter\AMQP\AMQPPublisherInterface;
 use CultuurNet\UDB3\IISImporter\Calendar\CalendarFactoryInterface;
 use CultuurNet\UDB3\IISImporter\CategorizationRules\CategorizationRulesInterface;
 use CultuurNet\UDB3\IISImporter\File\FileManagerInterface;
+use CultuurNet\UDB3\IISImporter\Identification\IdentificationFactoryInterface;
 use CultuurNet\UDB3\IISImporter\Media\MediaManagerInterface;
 use CultuurNet\UDB3\IISImporter\Parser\ParserInterface;
 use CultuurNet\UDB3\IISImporter\Time\TimeFactoryInterface;
@@ -78,6 +75,11 @@ class Processor implements ProcessorInterface
     protected $logger;
 
     /**
+     * @var IdentificationFactoryInterface
+     */
+    protected $identificationFactory;
+
+    /**
      * FileProcessor constructor.
      * @param FileManagerInterface $fileManager
      * @param ParserInterface $parser
@@ -90,6 +92,7 @@ class Processor implements ProcessorInterface
      * @param CategorizationRulesInterface $categoryFactory
      * @param CalendarFactoryInterface $calendarFactory
      * @param Logger $logger
+     * @param IdentificationFactoryInterface $identificationFactory
      */
     public function __construct(
         FileManagerInterface $fileManager,
@@ -102,7 +105,8 @@ class Processor implements ProcessorInterface
         TimeFactoryInterface $timeFactory,
         CategorizationRulesInterface $categoryFactory,
         CalendarFactoryInterface $calendarFactory,
-        Logger $logger
+        Logger $logger,
+        IdentificationFactoryInterface $identificationFactory
     ) {
         $this->fileManager = $fileManager;
         $this->parser = $parser;
@@ -115,6 +119,7 @@ class Processor implements ProcessorInterface
         $this->categoryFactory = $categoryFactory;
         $this->calendarFactory = $calendarFactory;
         $this->logger = $logger;
+        $this->identificationFactory = $identificationFactory;
     }
 
 
@@ -170,6 +175,20 @@ class Processor implements ProcessorInterface
         // Add cdbid to the event.
         $singleXml = simplexml_load_string($event);
         $singleXml->event[0]['cdbid'] = $cdbid->toNative();
+
+        // Match creator and modifier with UUID
+        if (isset($singleXml->event[0]['createdby'])) {
+            $createdbyUuid = $this->identificationFactory->getUserId($singleXml->event[0]['createdby']);
+            if (isset($createdbyUuid)) {
+                $singleXml->event[0]['createdby'] = $createdbyUuid->toNative();
+            }
+        }
+        if (isset($singleXml->event[0]['lastupdatedby'])) {
+            $lastupdatedbyUuid = $this->identificationFactory->getUserId($singleXml->event[0]['lastupdatedby']);
+            if (isset($lastupdatedbyUuid)) {
+                $singleXml->event[0]['lastupdatedby'] = $lastupdatedbyUuid->toNative();
+            }
+        }
 
         // Add wfstatus to autovalidate the event.
         if ($singleXml->event[0]['wfstatus'] != 'deleted') {
