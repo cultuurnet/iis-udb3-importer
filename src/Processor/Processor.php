@@ -180,13 +180,13 @@ class Processor implements ProcessorInterface
         if (isset($singleXml->event[0]['createdby'])) {
             $createdbyUuid = $this->identificationFactory->getUserId($singleXml->event[0]['createdby']);
             if (isset($createdbyUuid)) {
-                $singleXml->event[0]['createdby'] = $createdbyUuid;
+                $singleXml->event[0]['createdby'] = $createdbyUuid->toNative();
             }
         }
         if (isset($singleXml->event[0]['lastupdatedby'])) {
             $lastupdatedbyUuid = $this->identificationFactory->getUserId($singleXml->event[0]['lastupdatedby']);
             if (isset($lastupdatedbyUuid)) {
-                $singleXml->event[0]['lastupdatedby'] = $lastupdatedbyUuid;
+                $singleXml->event[0]['lastupdatedby'] = $lastupdatedbyUuid->toNative();
             }
         }
 

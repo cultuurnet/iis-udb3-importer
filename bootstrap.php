@@ -247,7 +247,7 @@ $app['iis.logger'] = $app->share(
 
 $app['iis.identification_factory'] = $app->share(
     function (Application $app) {
-        return new IdentificationFactory($app['config']['kinepolis_terms']);
+        return new IdentificationFactory($app['config']['users']);
     }
 );
 

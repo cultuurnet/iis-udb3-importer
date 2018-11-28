@@ -2,6 +2,8 @@
 
 namespace CultuurNet\UDB3\IISImporter\Identification;
 
+use ValueObjects\Identity\UUID;
+
 class IdentificationFactory implements IdentificationFactoryInterface
 {
     /**
@@ -23,6 +25,14 @@ class IdentificationFactory implements IdentificationFactoryInterface
      */
     public function getUserId($user)
     {
-        // TODO: Implement getUserId() method.
+        $result = array_search($user, array_column($this->users, 'name'));
+        if ($result) {
+            $userId = $this->users[$result]['id'];
+            $userUuid = UUID::fromNative($userId);
+            var_dump($userUuid);
+            return $userUuid;
+        } else {
+            return null;
+        }
     }
 }

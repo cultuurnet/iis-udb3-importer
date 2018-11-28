@@ -8,7 +8,7 @@ interface IdentificationFactoryInterface
 {
     /**
      * @param string $user
-     * @return UUID
+     * @return UUID | null
      */
     public function getUserId($user);
 }
