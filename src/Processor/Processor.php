@@ -206,15 +206,14 @@ class Processor implements ProcessorInterface
 
         // Remove legacy categories
         if (isset($singleXml->event[0]->categories[0])) {
-            $legacyCategories = array();
-            $legacyCategories[] = '1.3.0.0.0';
-            $legacyCategories[] = '1.8.0.0.0';
-            $legacyCategories[] = '1.9.0.0.0';
-
-            foreach ($singleXml->event[0]->categories[0]->category as $xmlCategory) {
-                if (in_array($xmlCategory['catid'], $legacyCategories)) {
-                    unset($xmlCategory);
+          foreach ($singleXml->event[0]->categories[0]->category as $xmlCategory) {
+                if ($xmlCategory['catid'] == '1.3.0.0.0' ||
+                    $xmlCategory['catid'] == '1.8.0.0.0' ||
+                    $xmlCategory['catid'] == '1.9.0.0.0') {
+                    $legacyCategory = dom_import_simplexml($xmlCategory);
+                    $legacyCategory->parentNode->removeChild($legacyCategory);
                 }
+
             }
         }
 
