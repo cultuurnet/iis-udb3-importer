@@ -204,6 +204,20 @@ class Processor implements ProcessorInterface
             }
         }
 
+        // Remove legacy categories
+        if (isset($singleXml->event[0]->categories[0])) {
+            $legacyCategories = array();
+            $legacyCategories[] = '1.3.0.0.0';
+            $legacyCategories[] = '1.8.0.0.0';
+            $legacyCategories[] = '1.9.0.0.0';
+
+            foreach ($singleXml->event[0]->categories[0]->category as $xmlCategory) {
+                if (in_array($xmlCategory['catid'], $legacyCategories)) {
+                    unset($xmlCategory);
+                }
+            }
+        }
+
         // Add agefrom for legacy importers
         if (!isset($singleXml->event[0]->agefrom)) {
             if (isset($singleXml->event[0]->categories[0])) {
