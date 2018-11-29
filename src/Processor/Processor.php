@@ -129,7 +129,7 @@ class Processor implements ProcessorInterface
     public function consumeFile(\SplFileInfo $file)
     {
         $this->logger->debug('Will consume file: ' . $file->getFilename());
-        $xmlString = file_get_contents($file->getPathname());
+        $xmlString = $this->cleanXmlString(file_get_contents($file->getPathname()));
 
         if ($this->parser->validate($xmlString)) {
             try {
@@ -201,19 +201,6 @@ class Processor implements ProcessorInterface
                 if ('Scholen' == (string) $xmlCategory) {
                     $singleXml->event[0]['private'] = 'true';
                 }
-            }
-        }
-
-        // Remove legacy categories
-        if (isset($singleXml->event[0]->categories[0])) {
-          foreach ($singleXml->event[0]->categories[0]->category as $xmlCategory) {
-                if ($xmlCategory['catid'] == '1.3.0.0.0' ||
-                    $xmlCategory['catid'] == '1.8.0.0.0' ||
-                    $xmlCategory['catid'] == '1.9.0.0.0') {
-                    $legacyCategory = dom_import_simplexml($xmlCategory);
-                    $legacyCategory->parentNode->removeChild($legacyCategory);
-                }
-
             }
         }
 
@@ -468,5 +455,17 @@ class Processor implements ProcessorInterface
             $isUpdate
         );
         $this->store->savePublished($cdbid, $now);
+    }
+
+    /**
+     * @param string $xmlString
+     * @return string
+     */
+    private function cleanXmlString($xmlString) {
+        $xmlString = str_replace('<category type="theme" catid="1.3.0.0.0">Theater</category>', '', $xmlString);
+        $xmlString = str_replace('<category type="theme" catid="1.8.0.0.0">Muziek</category>', '', $xmlString);
+        $xmlString = str_replace('<category type="theme" catid="1.9.0.0.0">Dans</category>', '', $xmlString);
+
+        return $xmlString;
     }
 }
