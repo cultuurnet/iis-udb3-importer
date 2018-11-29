@@ -461,7 +461,8 @@ class Processor implements ProcessorInterface
      * @param string $xmlString
      * @return string
      */
-    private function cleanXmlString($xmlString) {
+    private function cleanXmlString($xmlString)
+    {
         $xmlString = str_replace('<category type="theme" catid="1.3.0.0.0">Theater</category>', '', $xmlString);
         $xmlString = str_replace('<category type="theme" catid="1.8.0.0.0">Muziek</category>', '', $xmlString);
         $xmlString = str_replace('<category type="theme" catid="1.9.0.0.0">Dans</category>', '', $xmlString);
